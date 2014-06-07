@@ -204,6 +204,33 @@ root    321   2  -bash
     }
   }
 
+#elif defined(__MACH__)
+
+  f = popen("ps aux | sed '1 d'", "r");
+
+  if (!f) {
+    fprintf(stderr, "ERROR: pr_check could not open ps\n");
+    return;
+  }
+
+  /* Read in all process information.  Exclude the last process in the
+     list (the 'ps' we just ran). */
+
+  while (fgets(buf, 255, f)) {
+    if ( pid != 0 ) {
+       // Check for username validity before adding to pid list.
+       if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
+            !(in_ps_userlist(psnotuser_list_head, username)) ) {
+          add_to_pid_list(pid, namebuf, demon);
+       }
+    }
+    sscanf(buf, "%s %d %*f %*f %*d %*d %s %*4c %*s %*s %s",
+          username, &pid,              tty,            namebuf);
+    if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
+      demon = true;
+    else
+      demon = false;
+  }
 // ******************** UNSUPPORTED OS ********************
 #else
   fprintf(stderr, "ERROR: a version of 'ps' with the proper output formatting\n       is not available for this OS.\n");
