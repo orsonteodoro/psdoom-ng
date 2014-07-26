@@ -11,6 +11,7 @@ Quick guide:
 
  1. Install all dependencies: gcc, make, libsdl, sdl_mixer, sdl_net, python.
  2. `cd trunk && ./configure && make`
+ 4. Get a copy of Doom, to copy the file Doom2.wad.
  3. Action! `./src/psdoom`
 
 Find more information in:
@@ -37,9 +38,7 @@ services (AWS, heroku, vmware, etc).
 For that, you only need to override these environment variables:
 
  * PSDOOMPSCMD List the processes. The command must print one space separated 
-   line per process with the format: `<user> <pid> <processname> <is_daemon=[1|0]>
-
-   For example:
+   line per process with the format: `<user> <pid> <processname> <is_daemon=[1|0]>`
 
     keymon 29 web4 1
     keymon 30 web3 1
@@ -54,9 +53,9 @@ For that, you only need to override these environment variables:
 
 For example, in contrib you can find a script that interacts with cloudfoundry:
 
-    PSDOOMPSCMD="./psdoomctl-cf/psdoomctl ps" \
+    PSDOOMPSCMD="./contrib/psdoom-cf-ctl ps" \
     PSDOOMRENICECMD="true" \
-    PSDOOMKILLCMD="./psdoomctl-cf/psdoomctl kill" \
+    PSDOOMKILLCMD="./contrib/psdoom-cf-ctl kill" \
     ./trunk/src/psdoom
 
 
