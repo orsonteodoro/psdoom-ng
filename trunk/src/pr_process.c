@@ -95,6 +95,7 @@ void pr_check(void) {
   char namebuf[256];
   char tty[256];
   int demon = false;
+  char *custompscmd = NULL;
 
 // Bypass the 'ps' part of the program entirely if it's an add-on pack
 // to Doom 2 OR we're not on the correct level (e1m1 or map01).
@@ -114,130 +115,172 @@ void pr_check(void) {
 
 // Now that we know we should run 'ps', do it!
 
+  if ((custompscmd=getenv("PSDOOMPSCMD")) != NULL) { 
+  /* 
+    The external command must return one line per process with:
+
+    user pid processname daemon=1/0
+
+    For example:
+
+    keymon 29 web4 1
+    keymon 30 web3 1
+    keymon 31 adis3 1
+    keymon 32 core15 1
+    keymon 20 core2 1
+
+  */
+    f = popen(custompscmd, "r");
+
+    if (!f) {
+      fprintf(stderr, "ERROR: pr_check could not execute: '%s'\n", custompscmd);
+      return;
+    }
+
+    /* Read in all process information. */
+    while (fgets(buf, 255, f)) {
+       int read_fields = sscanf(buf, "%s %d %s %d",
+             username, &pid, namebuf, &demon);
+       if (read_fields == 4 && username && namebuf) {
+         // Check for username validity before adding to pid list.
+         if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
+              !(in_ps_userlist(psnotuser_list_head, username)) ) {
+            add_to_pid_list(pid, namebuf, demon);
+         }
+       } else {
+        fprintf(stderr, "ERROR: can not parse '%s'\n", buf);
+       }
+    }
+    pclose(f);
+
+  } else {
 // Split the running of 'ps' into operating system-specific sections to
 // account for the different output formats of the command:
-
 // ******************** LINUX ********************
 #if defined(__linux__)
 
-  /* 'ps' suppressing the header (h),
-          showing all users' processes (a),
-          showing processes without a controlling terminal (x),
-          in 'user' format (u),
-          sorted by process start time (OT).
-     Sample output:
+    /* 'ps' suppressing the header (h),
+            showing all users' processes (a),
+            showing processes without a controlling terminal (x),
+            in 'user' format (u),
+            sorted by process start time (OT).
+       Sample output:
 root       302  0.1  1.9  1304   756   1 S    19:55   0:00 pico pr_process.c
 root       321  0.2  2.1  1268   844   2 S    20:01   0:00 -bash
 root       334  0.0  1.2   848   476   2 R    20:06   0:00 ps h a x u OT
-  */
-  f = popen("ps h a x u OT", "r");
+    */
+    f = popen("ps h a x u OT", "r");
 
-  if (!f) {
-    fprintf(stderr, "ERROR: pr_check could not open ps\n");
-    return;
-  }
-
-  /* Read in all process information.  Exclude the last process in the
-     list (the 'ps' we just ran). */
-
-  while (fgets(buf, 255, f)) {
-    if ( pid != 0 ) {
-       // Check for username validity before adding to pid list.
-       if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
-            !(in_ps_userlist(psnotuser_list_head, username)) ) {
-          add_to_pid_list(pid, namebuf, demon);
-       }
+    if (!f) {
+      fprintf(stderr, "ERROR: pr_check could not open ps\n");
+      return;
     }
-    sscanf(buf, "%s %d %*f %*f %*d %*d %s %*4c %*s %*s %s",
-          username, &pid,              tty,            namebuf);
-    if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
-      demon = true;
-    else
-      demon = false;
-  }
+
+    /* Read in all process information.  Exclude the last process in the
+       list (the 'ps' we just ran). */
+
+    while (fgets(buf, 255, f)) {
+      if ( pid != 0 ) {
+         // Check for username validity before adding to pid list.
+         if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
+              !(in_ps_userlist(psnotuser_list_head, username)) ) {
+            add_to_pid_list(pid, namebuf, demon);
+         }
+      }
+      sscanf(buf, "%s %d %*f %*f %*d %*d %s %*4c %*s %*s %s",
+            username, &pid,              tty,            namebuf);
+      if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
+        demon = true;
+      else
+        demon = false;
+    }
+    pclose(f);
 
 // ******************** SOLARIS ********************
 #elif defined (__SVR4) && defined (__sun)
 
-  /* Solaris 2.6 (on my development machine, at least) had two versions of
-     'ps' installed.  One was in /usr/bin and the other in /usr/ucb.  The
-     version in /usr/bin seemed to have the better options of the two. */
-  /* 'ps' showing all processes (-A),
-          showing the username (-o user=),
-          showing the pid (-o pid=),
-          showing the tty (-o tty=),
-          showing the command (-o comm=).
-          headers are suppressed by appending an equal sign to the
-            display field name then starting another argument instead of
-            telling what header text to print.
-          unfortunately, there is no way to sort the processes, so we'll
-            just have to deal with spawning the process monster
-            representing 'ps' itself.
-     Sample output:
+    /* Solaris 2.6 (on my development machine, at least) had two versions of
+       'ps' installed.  One was in /usr/bin and the other in /usr/ucb.  The
+       version in /usr/bin seemed to have the better options of the two. */
+    /* 'ps' showing all processes (-A),
+            showing the username (-o user=),
+            showing the pid (-o pid=),
+            showing the tty (-o tty=),
+            showing the command (-o comm=).
+            headers are suppressed by appending an equal sign to the
+              display field name then starting another argument instead of
+              telling what header text to print.
+            unfortunately, there is no way to sort the processes, so we'll
+              just have to deal with spawning the process monster
+              representing 'ps' itself.
+       Sample output:
 root    302   1  pico
 root    334   2  ps
 root    321   2  -bash
-  */
+    */
 
-  f = popen("/usr/bin/ps -A -o user= -o pid= -o tty= -o comm=", "r");
+    f = popen("/usr/bin/ps -A -o user= -o pid= -o tty= -o comm=", "r");
 
-  if (!f) {
-    fprintf(stderr, "ERROR: pr_check could not open ps\n");
-    return;
-  }
-
-  /* Read in all process information.  Since we can't sort by process
-     start time, we can't tell which process is the 'ps' we just ran, so
-     that process will be spawned as a monster, too. */
-
-  while (fgets(buf, 255, f)) {
-    sscanf(buf, "%s %d %s %s",
-                 username, &pid, tty, namebuf);
-    if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
-      demon = true;
-    else
-      demon = false;
-    // Check for username validity before adding to pid list.
-    if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
-         !(in_ps_userlist(psnotuser_list_head, username)) ) {
-       add_to_pid_list(pid, namebuf, demon);
+    if (!f) {
+      fprintf(stderr, "ERROR: pr_check could not open ps\n");
+      return;
     }
-  }
+
+    /* Read in all process information.  Since we can't sort by process
+       start time, we can't tell which process is the 'ps' we just ran, so
+       that process will be spawned as a monster, too. */
+
+    while (fgets(buf, 255, f)) {
+      sscanf(buf, "%s %d %s %s",
+                   username, &pid, tty, namebuf);
+      if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
+        demon = true;
+      else
+        demon = false;
+      // Check for username validity before adding to pid list.
+      if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
+           !(in_ps_userlist(psnotuser_list_head, username)) ) {
+         add_to_pid_list(pid, namebuf, demon);
+      }
+    }
+    pclose(f);
 
 #elif defined(__MACH__)
 
-  f = popen("ps aux | sed '1 d'", "r");
+    f = popen("ps aux | sed '1 d'", "r");
 
-  if (!f) {
-    fprintf(stderr, "ERROR: pr_check could not open ps\n");
-    return;
-  }
-
-  /* Read in all process information.  Exclude the last process in the
-     list (the 'ps' we just ran). */
-
-  while (fgets(buf, 255, f)) {
-    if ( pid != 0 ) {
-       // Check for username validity before adding to pid list.
-       if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
-            !(in_ps_userlist(psnotuser_list_head, username)) ) {
-          add_to_pid_list(pid, namebuf, demon);
-       }
+    if (!f) {
+      fprintf(stderr, "ERROR: pr_check could not open ps\n");
+      return;
     }
-    sscanf(buf, "%s %d %*f %*f %*d %*d %s %*4c %*s %*s %s",
-          username, &pid,              tty,            namebuf);
-    if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
-      demon = true;
-    else
-      demon = false;
-  }
+
+    /* Read in all process information.  Exclude the last process in the
+       list (the 'ps' we just ran). */
+
+    while (fgets(buf, 255, f)) {
+      if ( pid != 0 ) {
+         // Check for username validity before adding to pid list.
+         if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
+              !(in_ps_userlist(psnotuser_list_head, username)) ) {
+            add_to_pid_list(pid, namebuf, demon);
+         }
+      }
+      sscanf(buf, "%s %d %*f %*f %*d %*d %s %*4c %*s %*s %s",
+            username, &pid,              tty,            namebuf);
+      if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
+        demon = true;
+      else
+        demon = false;
+    }
+
+    pclose(f);
+
 // ******************** UNSUPPORTED OS ********************
 #else
-  fprintf(stderr, "ERROR: a version of 'ps' with the proper output formatting\n       is not available for this OS.\n");
-  return;
+    fprintf(stderr, "ERROR: a version of 'ps' with the proper output formatting\n       is not available for this OS.\n");
+    return;
 #endif
-
-  pclose(f);
+  }
 
 }
 
@@ -820,11 +863,15 @@ boolean in_ps_userlist(ps_userlist_t *list_head, char *username) {
 // kills the process
 void pr_kill(int pid) {
   char buf[256];
+  char *cmd;
 // If -nopsact was on the command line, don't actually kill the process
   if ( nopsact ){
      return;
   }
-  sprintf(buf, "kill -9 %d", pid);
+  if ((cmd = getenv("PSDOOMKILLCMD")) == NULL) {
+    cmd = "kill -9";
+  }
+  sprintf(buf, "%s %d", cmd, pid);
   system(buf);
 }
 
@@ -832,10 +879,14 @@ void pr_kill(int pid) {
 // renices the process
 void pr_renice(int pid) {
   char buf[256];
+  char *cmd;
 // If -nopsact was on the command line, don't actually re-nice the process
   if ( nopsact ){
      return;
   }
-  sprintf(buf, "renice +5 %d", pid);
+  if ((cmd = getenv("PSDOOMRENICECMD")) == NULL) {
+    cmd = "renice +5 -9";
+  }
+  sprintf(buf, "%s %d", cmd, pid);
   system(buf);
 }
