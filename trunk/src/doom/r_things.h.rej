@@ -1,0 +1,10 @@
+--- src/doom/r_things.h	2016-01-14 10:28:08.784135759 -0800
++++ src/doom/r_things.h	2016-01-14 10:29:21.974909092 -0800
+@@ -2,6 +2,7 @@
+ //-----------------------------------------------------------------------------
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or

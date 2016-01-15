@@ -1,8 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,19 +12,15 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //  Nil.
 //    
-//-----------------------------------------------------------------------------
 
 
 #ifndef __M_ARGV__
 #define __M_ARGV__
+
+#include "doomtype.h"
 
 //
 // MISC
@@ -43,5 +37,13 @@ int M_CheckParm (char* check);
 int M_CheckParmWithArgs(char *check, int num_args);
 
 void M_FindResponseFile(void);
+
+// Parameter has been specified?
+
+boolean M_ParmExists(char *check);
+
+// Get name of executable used to run this program:
+
+char *M_GetExecutableName(void);
 
 #endif

@@ -1,8 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 1993-2008 Raven Software
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,15 +13,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //	System specific interface stuff.
 //
-//-----------------------------------------------------------------------------
 
 
 #ifndef __D_TICCMD__
@@ -35,14 +28,27 @@
 // and transmitted to other peers (multiplayer).
 // Mainly movements/button commands per game tick,
 // plus a checksum for internal state consistency.
+
 typedef struct
 {
     signed char	forwardmove;	// *2048 for move
     signed char	sidemove;	// *2048 for move
-    short	angleturn;	// <<16 for angle delta
-    byte	chatchar;
-    byte	buttons;
-    byte        consistancy;	// checks for net game
+    short angleturn;            // <<16 for angle delta
+    byte chatchar;
+    byte buttons;
+    // villsa [STRIFE] according to the asm,
+    // consistancy is a short, not a byte
+    byte consistancy;           // checks for net game
+
+    // villsa - Strife specific:
+
+    byte buttons2;
+    int inventory;
+   
+    // Heretic/Hexen specific:
+
+    byte lookfly;               // look/fly up/down/centering
+    byte arti;                  // artitype_t to use
 } ticcmd_t;
 
 

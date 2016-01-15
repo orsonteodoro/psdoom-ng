@@ -1,0 +1,7 @@
+#!/bin/bash
+if [[ -f /home/${USER}/.psdoom-ng/psdoom-ng.conf ]]; then
+	source /home/${USER}/.psdoom-ng/psdoom-ng.conf
+elif [[ -f /etc/psdoom-ng.conf ]]; then
+	source /etc/psdoom-ng.conf
+fi
+/usr/bin/psdoom-ng ${DEFAULT_ARGS} $@

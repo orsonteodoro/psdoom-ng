@@ -10,10 +10,6 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include <inttypes.h>
@@ -199,6 +195,7 @@ void DBOPL_InitTables( void );
 void Chip__Chip(Chip *self);
 void Chip__WriteReg(Chip *self, Bit32u reg, Bit8u val );
 void Chip__GenerateBlock2(Chip *self, Bitu total, Bit32s* output );
+void Chip__GenerateBlock3(Chip *self, Bitu total, Bit32s* output );
 
 // haleyjd 09/09/10: Not standard C.
 #ifdef _MSC_VER

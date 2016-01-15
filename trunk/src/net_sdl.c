@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,23 +11,18 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //     Networking module which uses SDL_net
 //
-//-----------------------------------------------------------------------------
 
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-#include "doomdef.h"
+#include "doomtype.h"
 #include "i_system.h"
 #include "m_argv.h"
+#include "m_misc.h"
 #include "net_defs.h"
 #include "net_io.h"
 #include "net_packet.h"
@@ -44,6 +37,7 @@
 
 #define DEFAULT_PORT 2342
 
+static boolean initted = false;
 static int port = DEFAULT_PORT;
 static UDPsocket udpsocket;
 static UDPpacket *recvpacket;
@@ -162,6 +156,9 @@ static boolean NET_SDL_InitClient(void)
 {
     int p;
 
+    if (initted)
+        return true;
+
     //!
     // @category net
     // @arg <n>
@@ -189,13 +186,18 @@ static boolean NET_SDL_InitClient(void)
     srand(time(NULL));
 #endif
 
+    initted = true;
+
     return true;
 }
 
 static boolean NET_SDL_InitServer(void)
 {
     int p;
-    
+
+    if (initted)
+        return true;
+
     p = M_CheckParmWithArgs("-port", 1);
     if (p > 0)
         port = atoi(myargv[p+1]);
@@ -213,6 +215,8 @@ static boolean NET_SDL_InitServer(void)
 #ifdef DROP_PACKETS
     srand(time(NULL));
 #endif
+
+    initted = true;
 
     return true;
 }
@@ -298,15 +302,27 @@ static boolean NET_SDL_RecvPacket(net_addr_t **addr, net_packet_t **packet)
 void NET_SDL_AddrToString(net_addr_t *addr, char *buffer, int buffer_len)
 {
     IPaddress *ip;
+    uint32_t host;
+    uint16_t port;
 
     ip = (IPaddress *) addr->handle;
-    
-    snprintf(buffer, buffer_len, 
-             "%i.%i.%i.%i",
-             ip->host & 0xff,
-             (ip->host >> 8) & 0xff,
-             (ip->host >> 16) & 0xff,
-             (ip->host >> 24) & 0xff);
+    host = SDLNet_Read32(&ip->host);
+    port = SDLNet_Read16(&ip->port);
+
+    M_snprintf(buffer, buffer_len, "%i.%i.%i.%i",
+               (host >> 24) & 0xff, (host >> 16) & 0xff,
+               (host >> 8) & 0xff, host & 0xff);
+
+    // If we are using the default port we just need to show the IP address,
+    // but otherwise we need to include the port. This is important because
+    // we use the string representation in the setup tool to provided an
+    // address to connect to.
+    if (port != DEFAULT_PORT)
+    {
+        char portbuf[10];
+        M_snprintf(portbuf, sizeof(portbuf), ":%i", port);
+        M_StringConcat(buffer, portbuf, buffer_len);
+    }
 }
 
 net_addr_t *NET_SDL_ResolveAddress(char *address)
@@ -321,7 +337,7 @@ net_addr_t *NET_SDL_ResolveAddress(char *address)
 
     if (colon != NULL)
     {
-	addr_hostname = strdup(address);
+	addr_hostname = M_StringDuplicate(address);
 	addr_hostname[colon - address] = '\0';
 	addr_port = atoi(colon + 1);
     }

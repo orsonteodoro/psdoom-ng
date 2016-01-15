@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,22 +11,38 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //     Definitions for use in networking code.
 //
-//-----------------------------------------------------------------------------
 
 #ifndef NET_DEFS_H
 #define NET_DEFS_H 
 
-#include "doomdef.h"
+#include <stdio.h>
+
 #include "doomtype.h"
 #include "d_ticcmd.h"
+#include "sha1.h"
+
+// Absolute maximum number of "nodes" in the game.  This is different to
+// NET_MAXPLAYERS, as there may be observers that are not participating
+// (eg. left/right monitors)
+
+#define MAXNETNODES 16
+
+// The maximum number of players, multiplayer/networking.
+// This is the maximum supported by the networking code; individual games
+// have their own values for MAXPLAYERS that can be smaller.
+
+#define NET_MAXPLAYERS 8
+
+// Maximum length of a player's name.
+
+#define MAXPLAYERNAME 30
+
+// Networking and tick handling related.
+
+#define BACKUPTICS 128
 
 typedef struct _net_module_s net_module_t;
 typedef struct _net_packet_s net_packet_t;
@@ -94,7 +108,7 @@ struct _net_addr_s
 
 // packet types
 
-typedef enum 
+typedef enum
 {
     NET_PACKET_TYPE_SYN,
     NET_PACKET_TYPE_ACK,
@@ -111,6 +125,7 @@ typedef enum
     NET_PACKET_TYPE_CONSOLE_MESSAGE,
     NET_PACKET_TYPE_QUERY,
     NET_PACKET_TYPE_QUERY_RESPONSE,
+    NET_PACKET_TYPE_LAUNCH,
 } net_packet_type_t;
 
 typedef enum
@@ -118,10 +133,34 @@ typedef enum
     NET_MASTER_PACKET_TYPE_ADD,
     NET_MASTER_PACKET_TYPE_ADD_RESPONSE,
     NET_MASTER_PACKET_TYPE_QUERY,
-    NET_MASTER_PACKET_TYPE_QUERY_RESPONSE
+    NET_MASTER_PACKET_TYPE_QUERY_RESPONSE,
+    NET_MASTER_PACKET_TYPE_GET_METADATA,
+    NET_MASTER_PACKET_TYPE_GET_METADATA_RESPONSE,
+    NET_MASTER_PACKET_TYPE_SIGN_START,
+    NET_MASTER_PACKET_TYPE_SIGN_START_RESPONSE,
+    NET_MASTER_PACKET_TYPE_SIGN_END,
+    NET_MASTER_PACKET_TYPE_SIGN_END_RESPONSE,
 } net_master_packet_type_t;
 
-typedef struct 
+// Settings specified when the client connects to the server.
+
+typedef struct
+{
+    int gamemode;
+    int gamemission;
+    int lowres_turn;
+    int drone;
+    int max_players;
+    int is_freedoom;
+    sha1_digest_t wad_sha1sum;
+    sha1_digest_t deh_sha1sum;
+    int player_class;
+} net_connect_data_t;
+
+// Game settings sent by client to server when initiating game start,
+// and received from the server by clients when the game starts.
+
+typedef struct
 {
     int ticdup;
     int extratics;
@@ -137,6 +176,18 @@ typedef struct
     int new_sync;
     int timelimit;
     int loadgame;
+    int random;  // [Strife only]
+
+    // These fields are only used by the server when sending a game
+    // start message:
+
+    int num_players;
+    int consoleplayer;
+
+    // Hexen player classes:
+
+    int player_classes[NET_MAXPLAYERS];
+
 } net_gamesettings_t;
 
 #define NET_TICDIFF_FORWARD      (1 << 0)
@@ -145,6 +196,8 @@ typedef struct
 #define NET_TICDIFF_BUTTONS      (1 << 3)
 #define NET_TICDIFF_CONSISTANCY  (1 << 4)
 #define NET_TICDIFF_CHATCHAR     (1 << 5)
+#define NET_TICDIFF_RAVEN        (1 << 6)
+#define NET_TICDIFF_STRIFE       (1 << 7)
 
 typedef struct
 {
@@ -158,8 +211,8 @@ typedef struct
 {
     signed int latency;
     unsigned int seq;
-    boolean playeringame[MAXPLAYERS];
-    net_ticdiff_t cmds[MAXPLAYERS];
+    boolean playeringame[NET_MAXPLAYERS];
+    net_ticdiff_t cmds[NET_MAXPLAYERS];
 } net_full_ticcmd_t;
 
 // Data sent in response to server queries
@@ -175,5 +228,21 @@ typedef struct
     char *description;
 } net_querydata_t;
 
-#endif /* #ifndef NET_DEFS_H */
+// Data sent by the server while waiting for the game to start.
 
+typedef struct
+{
+    int num_players;
+    int num_drones;
+    int ready_players;
+    int max_players;
+    int is_controller;
+    int consoleplayer;
+    char player_names[NET_MAXPLAYERS][MAXPLAYERNAME];
+    char player_addrs[NET_MAXPLAYERS][MAXPLAYERNAME];
+    sha1_digest_t wad_sha1sum;
+    sha1_digest_t deh_sha1sum;
+    int is_freedoom;
+} net_waitdata_t;
+
+#endif /* #ifndef NET_DEFS_H */

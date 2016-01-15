@@ -1,3 +1,427 @@
+2.2.1 (2015-09-10):
+
+    Chocolate Doom has not seen a great deal of "stable" patch
+    releases in its history. While the development tree sees major new
+    features and changes, the purpose of this release, and hopefully
+    others to follow like it, is to repair some deficiencies that
+    existed in 2.2.0.
+
+    General:
+    * Preferences for the OS X launcher are now stored with a unique
+      name to not conflict with other applications. (thanks Xeriphas1994)
+    * Unix desktop entry files are now brought up to full desktop
+      entry specification compliance. (thanks chungy, Fabian)
+    * Unix AppData entries are now included, allowing software centers
+      to display detailed information about the engines. (thanks chungy)
+    * Partial XDG base directory specification compliance on Unix
+      systems now exist to search for IWAD paths.  One benefit is that
+      $HOME/.local/share/games/doom is now a valid location to store
+      and automatically find IWADs. (thanks chungy)
+
+    Build systems:
+    * The Microsoft Visual Studio build system was not fully
+      functional in 2.2.0 and has been fixed. (thanks Linguica)
+    * The autoconf build system checks for windres only for Windows
+      toolchains.  Some Linux distributions mistakingly include the
+      program in their native toolchains. (thanks Fabian)
+    * A compiler hint for packed structs has been added, which
+      otherwise broke the games when built under recent GCC releases
+      for Windows. (thanks Fabian)
+
+    Doom:
+    * The GOG.com releases of The Ultimate Doom, Doom II, and Final
+      Doom are now detected and supported on Windows. (thanks chungy)
+    * An integer overflow was used in spawn angle calculation,
+      undefined C behavior which broke with Clang optimization.
+      (thanks David Majnemer for insight)
+
+    Setup tool:
+    * The help URL for the level warp menu now points to the proper
+      wiki page, rather than the multiplayer page.
+    * The manifest has been updated for Windows 10 compatibility.
+      (thanks chungy)
+
+2.2.0 (2015-06-09):
+
+     * The Hexen four level demo IWAD is now supported. Thanks to
+       Fabian Greffrath for his careful investigation and emulation of
+       the demo game's behavior in developing this.
+     * OPL music playback has been improved in a number of ways to
+       match the behavior of Vanilla Doom's DMX library much more
+       closely. OPL3 playback is also now supported. Thanks go to
+       Alexey Khokholov for his excellent research into the Vanilla
+       DMX library that enabled these improvements.
+     * New gamepad configurations:
+        - PS4 DualShock 4 (thanks Matt '3nT' Davis).
+        - Xbox One controller on Linux (thanks chungy).
+        - "Super Joy Box 7" USB/PC gameport adapter.
+     * The Doom reload hack has been added back. See the wiki for more
+       context on this: http://doomwiki.org/wiki/Reload_hack
+     * The IWAD file from Strife: Veteran Edition is now detected
+       automatically (thanks chungy).
+     * It's now possible to build outside of the source directory
+       (thanks Dave Murphy).
+     * MSVC project files were brought up to date (thanks dbrackett16).
+     * M_StringDuplicate() has been added as a safer replacement for
+       strdup() (thanks Quasar). M_StringCopy() now handles short
+       buffers more gracefully.
+     * The netgame discrepancy window is now dismissed by pressing
+       enter to proceed, not escape (thanks Alexandre-Xavier).
+     * A couple of source files that were in the previous release and
+       were GPL3 have been replaced by GPL2 equivalents. Previous
+       releases that included these files should be retroactively
+       considered GPL3.
+
+    Bug fixes:
+     * A long-standing bug that could cause every display frame to be
+       rendered twice was fixed (thanks Linguica, Harha, Alexandre-
+       Xavier).
+     * Lots of endianness fixes were integrated that were found by
+       Ronald Lasmanowicz during development of his Wii port of
+       Chocolate Doom, including a fix for a bug that could cause
+       monsters to become partially invisible.
+     * DeHackEd files without a newline character at the EOF are now
+       correctly parsed (thanks Fabian).
+     * An infinite loop that could occur in the weapon cycling code
+       was fixed (thanks raithe, Fabian).
+     * Mouse input triggered by cursor warp was fixed (thanks Super6-4).
+     * Loop tags in substitute music files are ignored if both of the
+       loop tags are equal to zero. This makes us consistent with
+       other source ports that support the tags.
+     * It's now possible to more conveniently play back demo .lmp
+       files with names that end in the all-caps '.LMP' (thanks Ioan
+       Chera).
+     * Some code that accessed memory after freeing it was fixed. Two
+       new parameters, -zonezero and -zonescan, were added to try to
+       help detect these cases.
+     * Mistaken assumptions about representations of booleans that
+       affected some ARM systems were fixed (thanks floppes).
+     * memcpy() uses on overlapping memory were changed to use
+       memmove(), fixing abort traps on OpenBSD (thanks ryan-sg).
+     * Hyphens in manpages were fixed (thanks chungy, Fabian).
+     * Lots of compiler build warnings were fixed (thanks Fabian).
+
+    Setup tool:
+     * The setup tool now has help buttons for its various different
+       screens, which link to articles on the wiki that give more
+       information (thanks to chungy for helping to put the wiki pages
+       together).
+     * A fix was applied for a buffer overrun that could occur if the
+       user had lots of IWAD files installed (thanks Fabian).
+     * A crash related to username lookup was fixed.
+     * It's now possible to connect via the setup tool to multiplayer
+       servers that are not listening on the default port (thanks
+       Alexandre-Xavier).
+
+    Doom:
+     * Sky transitions when emulating the id anthology version of the
+       Final Doom executable were fixed (thanks Alexandre-Xavier,
+       Fabian, chungy).
+     * Structure fields in the stair-building functions were fixed to
+       be deterministic, fixing a desync in mm09-512.lmp (thanks
+       Fabian).
+
+    Hexen:
+     * A bug with texture names that had long names was fixed (thanks
+       ETTiNGRiNDER).
+     * Minotaur spawn time is now stored in little endian format,
+       fixing a bug that affected compatibility with Vanilla savegames
+       on big endian systems.
+     * Code that starts ACS scripts is no longer compiler-dependent.
+
+    Strife (all these are thanks to Quasar):
+     * Sound priority was changed, so that the ticking sound that
+       Stalker enemies make while active matches Vanilla behavior
+       (thanks GeoffLedak).
+     * Minor fixes to game behavior to match Vanilla, discovered
+       during development of Strife: Veteran edition.
+     * Behavior of descending stairs was fixed to match Vanilla.
+     * Inventory items beyond the 8-bit range are now allowed in
+       netgames.
+     * Automap behavior better matches Vanilla now.
+     * Multiplayer name changes were fixed.
+     * Sound origin behavior for switches was fixed.
+     * Teleport beacon behavior was fixed.
+     * Default Strife skill level and screen size were changed to
+       match Vanilla.
+     * Bug was fixed where Rowan would not always take Beldin's ring.
+     * Totally-invisible objects are now displayed correctly, and a
+       Vanilla glitch with Shadow Acolytes is correctly emulated.
+     * The level name for MAP29 (Entity's Lair) was fixed (thanks
+       chungy).
+
+    libtextscreen:
+     * The main loop now exits immediately once all windows are closed
+       (thanks Alexander-Xavier).
+     * The large font is no longer selected based entirely on screen
+       size.
+
+2.1.0 (2014-10-22):
+
+    Chocolate Doom now supports high-quality substitute music packs
+    that are used in place of the original MIDI music tracks. I'm
+    hoping to put together high-quality recordings of the music for
+    all supported games using the Roland SC-55 synthesizer
+    originally used to compose Doom's music (thanks twipley and
+    MusicallyInspired).
+
+    Support for joysticks and gamepads has been significantly
+    improved in this version. Most gamepads should now work; if they
+    don't, please report a bug. A number of gamepads are now
+    automatically detected and configured automatically; if yours is
+    not, you can help by sending in details. See the following page:
+
+      http://www.chocolate-doom.org/wiki/index.php/Adding_your_gamepad
+
+    OPL MIDI playback has been significantly improved, and problems
+    with most tracks should now be resolved. Multi-track MIDI files now
+    play back properly, MIDI tempo meta events are now supported and
+    problems with stuttering when playing certain tracks have been
+    fixed. If you still have problems with OPL playback, let me know.
+
+    Also of note is that Chocolate Doom now has a document that
+    describes the philosophy of the project and the reasoning behind
+    its design (see PHILOSOPHY distributed with the source).
+
+    Other new features:
+     * There is now a -dehlump command line parameter to load Dehacked
+       files contained inside WAD files (thanks Fabian Greffrath).
+     * PNG format screenshots are now supported, and there is a
+       dedicated key binding for taking screenshots without needing to
+       always use -devparm (thanks Fabian Greffrath). The PrintScreen
+       key can be used as a key binding (thanks Alexandre-Xavier).
+     * There is now a config file variable (snd_maxslicetime_ms) to
+       control the sound buffer size, and the default is more precise
+       to reduce sound latency (thanks Holering).
+     * You can now use an external command for music playback (thanks
+       Holering).
+     * All games now detect if you're tring to play using the wrong
+       type of IWAD (doom.wad with Hexen, etc.) and exit with a
+       helpful error message. A couple of users made this mistake
+       after the 2.0 release introduced support for the new games.
+     * The OS X app now associates with .hhe and .seh files.
+     * There is now a -nodes parameter that automatically starts a
+       netgame when a desired number of players have joined the game.
+     * There is now more extensive documentation about music
+       configuration (README.Music).
+     * On Linux, a GUI pop-up is used when the game quits with an
+       error to show the error message (thanks Willy Barro).
+     * There are now Linux .desktop files for all supported games
+       (thanks Mike Swanson).
+     * The -geometry command line parameter can now be used to specify
+       fullscreen or windowed modes, eg. -geometry 640x480w or
+       -geometry 1024x768f. (thanks Mike Swanson)
+
+    Doom:
+     * Minor workarounds were added to allow the BFG Edition IWADs to
+       be used without crashing the game (thanks Fabian Greffrath).
+     * GUS patch files included with the BFG Edition are now
+       automatically detected.
+     * The 'no fog on spawn west' Vanilla bug is now correctly
+       emulated (thanks xttl).
+     * Behavior of older versions of Doom back to v1.666 can now be
+       emulated.
+     * The new Freedoom IWAD names are now recognized and supported.
+     * Freedoom's DEHACKED lump can now be parsed and is automatically
+       loaded when a Freedoom IWAD file is used (thanks Fabian
+       Greffrath). A new command line parameter, -nodeh, can be used
+       to prevent this from being loaded.
+     * Behavior of the M_EPI4 menu item is now correctly emulated
+       based on game version (thanks Alexandre-Xavier).
+     * IDCLEV up to MAP40 is now supported, to match Vanilla (thanks
+       Alexandre-Xavier).
+     * Level warping on the command line (-warp) to episodes higher
+       than 4 is possible, matching Vanilla behavior (thanks plumsinus).
+     * The -cdrom command line parameter writes savegames to the
+       correct directory now, matching Vanilla Doom behavior (thanks
+       Alexandre-Xavier).
+     * The Doom II mission pack to use can now be specified manually on
+       the command line with the -pack parameter (thanks chungy)
+
+    Heretic:
+     * Weapon cycling keys for mouse and joystick were fixed (thanks
+       Sander van Dijk).
+     * The -timedemo parameter has been fixed, and -playdemo now
+       handles full paths correctly.
+     * A bug when panning the map was fixed (thanks Chris Fielder).
+     * A savegame bug where plat_t structures were not restored
+       correctly was fixed (thanks romeroyakovlev).
+     * Rebinding of the pause key was fixed (thanks Fabian Greffrath).
+
+    Hexen:
+     * Music workarounds have been added so that it is possible to
+       play using the Mac version of the Hexen IWAD file.
+     * Weapon cycling keys for mouse and joystick were fixed (thanks
+       Sander van Dijk).
+     * The -timedemo parameter has been fixed, and -playdemo now
+       handles full paths correctly.
+     * There are now key bindings to allow the artifact keys to be
+       rebound (thanks Fabian Greffrath).
+     * Rebinding of the pause key was fixed (thanks Fabian Greffrath).
+     * Maximum level number was extended to MAP60, allowing
+       multiplayer games using the Deathkings add-on.
+     * The startup screen can now be aborted by pressing escape, like
+       in Vanilla.
+     * Desync when playing back DEMO1 was fixed (thanks alexey.lysiuk).
+
+    Strife:
+     * 'Show mission' key is configured properly in setup (thanks
+       Sander van Dijk).
+     * Default music volume level now matches Vanilla (thanks
+       Alexandre-Xavier).
+     * Teleport beacon allegiance was fixed to match Vanilla (thanks
+       Quasar).
+     * The stair building code now more closely matches Vanilla
+       (thanks Quasar).
+     * Torpedo weapon changing behavior now matches Vanilla (thanks
+       Quasar).
+
+   Cleanups:
+     * The copyright headers at the top of all source files have been
+       vastly simplified.
+     * Unsafe string functions have been eliminated from the codebase.
+       Thanks to Theo de Raadt for calling out Chocolate Doom by name
+       (alongside many other packages) for still using unsafe functions
+       like strcpy: http://marc.info/?l=openbsd-tech&m=138733933417096
+     * vldoor_e enum values are now namespaced to avoid potential
+       conflicts with POSIX standard functions.
+
+   Bug fixes:
+     * WAD and Dehacked checksums are now sent to clients and checked
+       correctly when setting up netgames.
+     * A bug was fixed that caused sound not to work in multiplayer
+       games (thanks to everyone who reported this, and for
+       Alexandre-Xavier and Quasar for help in fixing it).
+     * The "D_DDTBLU disease" bug affecting certain MIDI files has
+       been fixed (thanks plumsinus, Brad Harding and Quasar).
+     * Calculation of the -devparm 'ticker' dots was fixed to match
+       Vanilla behavior (thanks _bruce_ and Alexandre-Xavier).
+     * The PC speaker code now supports the full range of sound
+       frequencies (thanks Gez).
+     * Annoying "jumping" behavior when grabbing the mouse cursor was
+       fixed.
+     * The screen is now initialized at the native bit depth by
+       default, to avoid problems with systems that don't handle 8-bit
+       screenbuffers very well any more.
+     * The --docdir argument to the configure script is now honored
+       (thanks Jan Engelhardt).
+     * Various issues with the build were fixed (thanks Jan
+       Engelhardt and Fabian Greffrath).
+     * Backwards parameters were fixed in the sound code (thanks
+       proteal).
+     * A crash was fixed when running fullscreen with the -2 parameter
+       (thanks Fabian Greffrath).
+     * A crash when using large values of snd_channels was fixed
+       (thanks Alexandre-Xavier).
+     * A resource leak in the BSD PC speaker code was fixed (thanks
+       Edward-san).
+     * Windows resource files were fixed for Windows 7 (thanks Brad
+       Harding).
+     * A hard to trigger crash caused by a realloc() in the WAD code
+       was fixed (thanks Fabian Greffrath for debugging).
+     * A bug has been fixed where Chocolate Doom would stay running
+       in the background on Windows after quitting. SDL_Quit() is
+       called now (thanks johnsirett, Brad Harding, Quasar).
+     * String replacements in dehacked lumps can now be overridden
+       if a subsequent dehacked patch replaces the same string.
+
+    libtextscreen:
+     * Clicking on scrollbars now jumps to the correct position
+       (thanks Alexandre-Xavier).
+     * A use-after-free bug has been fixed where a click in a window
+       that causes the window to close could lead to a crash (thanks
+       DuClare).
+     * Characters that are unprintable in the Extended ASCII chart
+       are just ignored when they're typed, rather than appearing as
+       an upside-down question mark (thanks Alexandre-Xavier).
+
+2.0.0 (2013-12-09):
+
+    This is version 2.0 of Chocolate Doom! This new major version is
+    released to celeberate the 20th anniversary of the first release
+    of Doom in 1993. Happy Birthday Doom!
+
+    This new version has some major changes compared to the 1.0 series:
+
+     * The codebase now includes Chocolate Heretic and Chocolate
+       Hexen. These are based on the GPL source code released by
+       Raven Software.
+     * Also included is Chocolate Strife. This was developed through a
+       mammoth four year reverse engineering project conducted by
+       James "Quasar" Haley and Samuel "Kaiser" Villareal. The result
+       is the most accurate reproduction of Strife to date, including
+       full demo and savegame compatibility. See README.Strife for
+       more information.
+
+    Minor features that are nonetheless worth mentioning:
+     * Chocolate Doom now includes a -statdump command line option,
+       which emulates the output of the statdump.exe tool. This is
+       used to implement a form of regression testing (statcheck) that
+       directly compares against the Vanilla behavior.
+     * Chocolate Heretic includes HHE patch file support, and I
+       believe is the first Heretic port to include this feature.
+     * GUS "pseudo-emulation" is now supported. This does not fully
+       emulate a GUS, but Doom's DMXGUS lump can be used to generate
+       a Timidity configuration file that plays music using the GUS
+       patch set.
+     * The setup tool now includes a built-in server browser, for use
+       when selecting a server to join.
+
+    Version 2.0 of Chocolate Doom has been in development for a long
+    time, and there have been many bugs fixed over this time, too many
+    to list here. Thanks to all the people who have tested it and
+    diligently reported bugs over this time, and to all the people who
+    have tested the beta releases over the past couple of months.
+    Your contributions have been essential and invaluable.
+
+1.7.0 (2012-06-09):
+
+     * Fixed gnome-screensaver desktop file (thanks Rahul Sundaram).
+     * Updated COPYING to current version of GPL2 (thanks Rahul
+       Sundaram).
+     * Running servers now re-resolve the address of the master server
+       occasionally, to adapt to DNS address changes.
+     * Error dialog is no longer shown on OS X when running from the
+       console.
+     * The Makefiles no longer use GNU make extensions, so the package
+       builds on OpenBSD.
+     * There is now an OPL MIDI debug option (-opldev), useful for
+       when developing GENMIDI lumps.
+     * A workaround for SDL mouse lag is now only used on Windows
+       (where it is needed), and not on other systems. This fixes
+       Chocolate Doom on AmigaOS (thanks Timo Sievänen).
+     * UTF-8 usernames are supported, and Windows usernames with
+       non-ASCII characters are now supported (thanks Alexandre
+       Xavier).
+
+    Compatibility:
+     * Palette accuracy is reduced to 6 bits per channel, to more
+       accurately emulate the PC VGA hardware (thanks GhostlyDeath).
+     * Fixed teleport behavior when emulating the alternate Final Doom
+       executable (-gameversion final2) (thanks xttl).
+
+    Bugs fixed:
+     * Fixed weapon cycling keys when playing in Shareware Doom and using
+       the IDKFA cheat (thanks Alexandre Xavier).
+     * Fixed the default mouse buttons in the setup tool (thanks
+       Alexandre Xavier).
+     * Chat macros now work when vanilla_keyboard_mapping is turned
+       off.
+     * Default chat macros were fixed in the setup tool.
+     * Ping time calculation was fixed for LAN search, and made more
+       accurate for all searches.
+     * Fixed bug with detection of IWAD type by filename (thanks mether).
+
+    libtextscreen:
+     * There is now limited UTF-8 text support in the textscreen
+       library, used in the label and input box widgets.
+     * Scroll bar behavior was fixed (thanks Alexandre Xavier).
+     * Input boxes stop editing and save when they lose their focus,
+       correcting a previous counterintuitive behavior (thanks
+       Twelve).
+     * The numeric keypad now works properly when entering text values
+       (thanks Twelve).
+
 1.6.0 (2011-05-17):
 
      * The instructions in the INSTALL file are now customized for

@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2009 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,20 +11,15 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //     Demonstration program for OPL library to play back DRO
 //     format files.
 //
-//-----------------------------------------------------------------------------
 
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "SDL.h"
 
@@ -147,7 +140,7 @@ void TimerCallback(void *data)
 
     // Schedule the next timer callback.
 
-    OPL_SetCallback(delay, TimerCallback, timer_data);
+    OPL_SetCallback(delay * OPL_MS, TimerCallback, timer_data);
 }
 
 void PlayFile(char *filename)
@@ -191,7 +184,7 @@ void PlayFile(char *filename)
         running = timer_data.running;
         OPL_Unlock();
 
-        SDL_Delay(100);
+        SDL_Delay(100 * OPL_MS);
     } while (running);
 
     fclose(timer_data.fstream);

@@ -1,0 +1,1 @@
+DEFAULT_ARGS="-iwad /usr/share/games/doom-data/doom.wad -psuser ${USER} -episode 1"

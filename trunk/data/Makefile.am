@@ -9,13 +9,14 @@ EXTRA_DIST=              \
         setup.png        \
         convert-icon
 
-iconsdir = $(prefix)/share/icons
-icons_DATA = @PROGRAM_PREFIX@doom.png   \
-             @PROGRAM_PREFIX@setup.png
+#iconsdir = $(prefix)/share/icons
+#icons_DATA = @PROGRAM_PREFIX@doom.png   \
+#             @PROGRAM_PREFIX@setup.png
 
 @PROGRAM_PREFIX@doom.png : doom.png
-	cp $^ $@
+	cp $(top_srcdir)/data/doom.png $@
 
 @PROGRAM_PREFIX@setup.png : setup.png
-	cp $^ $@
+	cp $(top_srcdir)/data/setup.png $@
 
+CLEANFILES = $(icons_DATA)

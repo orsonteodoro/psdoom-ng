@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,11 +10,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
 //
 
 #include <stdarg.h>
@@ -264,6 +257,48 @@ static int FindSelectableColumn(txt_table_t *table, int row, int start_col)
     return -1;
 }
 
+// Change the selected widget.
+
+static void ChangeSelection(txt_table_t *table, int x, int y)
+{
+    txt_widget_t *cur_widget;
+    txt_widget_t *new_widget;
+    int i;
+
+    // No change?
+
+    if (x == table->selected_x && y == table->selected_y)
+    {
+        return;
+    }
+
+    // Unfocus current widget:
+
+    i = table->selected_y * table->columns + table->selected_x;
+
+    if (i < table->num_widgets)
+    {
+        cur_widget = table->widgets[i];
+
+        if (table->widget.focused && cur_widget != NULL)
+        {
+            TXT_SetWidgetFocus(cur_widget, 0);
+        }
+    }
+
+    // Focus new widget.
+
+    new_widget = table->widgets[y * table->columns + x];
+
+    table->selected_x = x;
+    table->selected_y = y;
+
+    if (table->widget.focused && new_widget != NULL)
+    {
+        TXT_SetWidgetFocus(new_widget, 1);
+    }
+}
+
 static int TXT_TableKeyPress(TXT_UNCAST_ARG(table), int key)
 {
     TXT_CAST_ARG(txt_table_t, table);
@@ -300,8 +335,7 @@ static int TXT_TableKeyPress(TXT_UNCAST_ARG(table), int key)
             {
                 // Found a selectable widget in this column!
 
-                table->selected_x = new_x;
-                table->selected_y = new_y;
+                ChangeSelection(table, new_x, new_y);
 
                 return 1;
             }
@@ -317,13 +351,12 @@ static int TXT_TableKeyPress(TXT_UNCAST_ARG(table), int key)
         for (new_y = table->selected_y - 1; new_y >= 0; --new_y)
         {
             new_x = FindSelectableColumn(table, new_y, table->selected_x);
-                            
+
             if (new_x >= 0)
             {
                 // Found a selectable widget in this column!
 
-                table->selected_x = new_x;
-                table->selected_y = new_y;
+                ChangeSelection(table, new_x, new_y);
 
                 return 1;
             }
@@ -342,7 +375,7 @@ static int TXT_TableKeyPress(TXT_UNCAST_ARG(table), int key)
             {
                 // Found a selectable widget!
 
-                table->selected_x = new_x;
+                ChangeSelection(table, new_x, table->selected_y);
 
                 return 1;
             }
@@ -361,7 +394,7 @@ static int TXT_TableKeyPress(TXT_UNCAST_ARG(table), int key)
             {
                 // Found a selectable widget!
 
-                table->selected_x = new_x;
+                ChangeSelection(table, new_x, table->selected_y);
 
                 return 1;
             }
@@ -388,8 +421,7 @@ static void CheckValidSelection(txt_table_t *table)
         {
             // Found a selectable column.
 
-            table->selected_x = new_x;
-            table->selected_y = new_y;
+            ChangeSelection(table, new_x, new_y);
 
             break;
         }
@@ -502,25 +534,20 @@ static void TXT_TableLayout(TXT_UNCAST_ARG(table))
     free(row_heights);
     free(column_widths);
 }
-                
-static void TXT_TableDrawer(TXT_UNCAST_ARG(table), int selected)
+
+static void TXT_TableDrawer(TXT_UNCAST_ARG(table))
 {
     TXT_CAST_ARG(txt_table_t, table);
     txt_widget_t *widget;
-    int selected_cell;
     int i;
-    
+
     // Check the table's current selection points at something valid before
     // drawing.
 
     CheckValidSelection(table);
 
-    // Find the index of the currently-selected widget.
-
-    selected_cell = table->selected_y * table->columns + table->selected_x;
-    
     // Draw all cells
-    
+
     for (i=0; i<table->num_widgets; ++i)
     {
         widget = table->widgets[i];
@@ -528,7 +555,7 @@ static void TXT_TableDrawer(TXT_UNCAST_ARG(table), int selected)
         if (widget != NULL)
         {
             TXT_GotoXY(widget->x, widget->y);
-            TXT_DrawWidget(widget, selected && i == selected_cell);
+            TXT_DrawWidget(widget);
         }
     }
 }
@@ -558,8 +585,8 @@ static void TXT_TableMousePress(TXT_UNCAST_ARG(table), int x, int y, int b)
 
                 if (TXT_SelectableWidget(widget))
                 {
-                    table->selected_x = i % table->columns;
-                    table->selected_y = i / table->columns;
+                    ChangeSelection(table, i % table->columns,
+                                           i / table->columns);
                 }
 
                 // Propagate click
@@ -593,8 +620,7 @@ static int TXT_TableSelectable(TXT_UNCAST_ARG(table))
         if (table->widgets[i] != NULL
          && TXT_SelectableWidget(table->widgets[i]))
         {
-            table->selected_x = i % table->columns;
-            table->selected_y = i / table->columns;
+            ChangeSelection(table, i % table->columns, i / table->columns);
             return 1;
         }
     }
@@ -602,6 +628,24 @@ static int TXT_TableSelectable(TXT_UNCAST_ARG(table))
     // No selectable widgets exist within the table.
 
     return 0;
+}
+
+// Need to pass through focus changes to the selected child widget.
+
+static void TXT_TableFocused(TXT_UNCAST_ARG(table), int focused)
+{
+    TXT_CAST_ARG(txt_table_t, table);
+    int i;
+
+    i = table->selected_y * table->columns + table->selected_x;
+
+    if (i < table->num_widgets)
+    {
+        if (table->widgets[i] != NULL)
+        {
+            TXT_SetWidgetFocus(table->widgets[i], focused);
+        }
+    }
 }
 
 txt_widget_class_t txt_table_class =
@@ -613,6 +657,7 @@ txt_widget_class_t txt_table_class =
     TXT_TableDestructor,
     TXT_TableMousePress,
     TXT_TableLayout,
+    TXT_TableFocused,
 };
 
 void TXT_InitTable(txt_table_t *table, int columns)
@@ -757,17 +802,16 @@ int TXT_SelectWidget(TXT_UNCAST_ARG(table), TXT_UNCAST_ARG(widget))
         {
             continue;
         }
-        
+
         if (table->widgets[i] == widget)
         {
             // Found the item!  Select it and return.
-            
-            table->selected_x = i % table->columns;
-            table->selected_y = i / table->columns;
+
+            ChangeSelection(table, i % table->columns, i / table->columns);
 
             return 1;
         }
-        
+
         if (table->widgets[i]->widget_class == &txt_table_class)
         {
             // This item is a subtable.  Recursively search this table.
@@ -776,8 +820,7 @@ int TXT_SelectWidget(TXT_UNCAST_ARG(table), TXT_UNCAST_ARG(widget))
             {
                 // Found it in the subtable.  Select this subtable and return.
 
-                table->selected_x = i % table->columns;
-                table->selected_y = i / table->columns;
+                ChangeSelection(table, i % table->columns, i / table->columns);
 
                 return 1;
             }
@@ -874,8 +917,7 @@ int TXT_PageTable(TXT_UNCAST_ARG(table), int pagex, int pagey)
                 // Found a selectable widget in this column!
                 // Select it anyway in case we don't find something better.
 
-                table->selected_x = new_x;
-                table->selected_y = new_y;
+                ChangeSelection(table, new_x, new_y);
                 changed = 1;
 
                 // ...but is it far enough away?

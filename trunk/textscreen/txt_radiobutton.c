@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,11 +10,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
 //
 
 #include <stdlib.h>
@@ -40,15 +33,16 @@ static void TXT_RadioButtonSizeCalc(TXT_UNCAST_ARG(radiobutton))
     radiobutton->widget.h = 1;
 }
 
-static void TXT_RadioButtonDrawer(TXT_UNCAST_ARG(radiobutton), int selected)
+static void TXT_RadioButtonDrawer(TXT_UNCAST_ARG(radiobutton))
 {
     TXT_CAST_ARG(txt_radiobutton_t, radiobutton);
+    txt_saved_colors_t colors;
     int i;
     int w;
 
     w = radiobutton->widget.w;
 
-    TXT_BGColor(TXT_WINDOW_BACKGROUND, 0);
+    TXT_SaveColors(&colors);
     TXT_FGColor(TXT_COLOR_BRIGHT_CYAN);
     TXT_DrawString("(");
 
@@ -67,11 +61,11 @@ static void TXT_RadioButtonDrawer(TXT_UNCAST_ARG(radiobutton), int selected)
 
     TXT_DrawString(") ");
 
-    TXT_SetWidgetBG(radiobutton, selected);
-    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
+    TXT_RestoreColors(&colors);
+    TXT_SetWidgetBG(radiobutton);
 
     TXT_DrawString(radiobutton->label);
-    
+
     for (i=strlen(radiobutton->label); i < w-5; ++i)
     {
         TXT_DrawString(" ");

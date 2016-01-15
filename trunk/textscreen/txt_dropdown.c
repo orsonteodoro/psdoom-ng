@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,11 +10,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
 //
 
 #include <stdlib.h>
@@ -49,14 +42,29 @@ static int ValidSelection(txt_dropdown_list_t *list)
 
 static int SelectorWindowY(txt_dropdown_list_t *list)
 {
+    int result;
+
     if (ValidSelection(list))
     {
-        return list->widget.y - 1 - *list->variable;
+        result = list->widget.y - 1 - *list->variable;
     }
     else
     {
-        return list->widget.y - 1 - (list->num_values / 2);
+        result = list->widget.y - 1 - (list->num_values / 2);
     }
+
+    // Keep dropdown inside the screen.
+
+    if (result < 1)
+    {
+        result = 1;
+    }
+    else if (result + list->num_values > (TXT_SCREEN_H - 3))
+    {
+        result = TXT_SCREEN_H - list->num_values - 3;
+    }
+
+    return result;
 }
 
 // Called when a button in the selector window is pressed
@@ -206,7 +214,7 @@ static void TXT_DropdownListSizeCalc(TXT_UNCAST_ARG(list))
     list->widget.h = 1;
 }
 
-static void TXT_DropdownListDrawer(TXT_UNCAST_ARG(list), int selected)
+static void TXT_DropdownListDrawer(TXT_UNCAST_ARG(list))
 {
     TXT_CAST_ARG(txt_dropdown_list_t, list);
     unsigned int i;
@@ -214,8 +222,7 @@ static void TXT_DropdownListDrawer(TXT_UNCAST_ARG(list), int selected)
 
     // Set bg/fg text colors.
 
-    TXT_SetWidgetBG(list, selected);
-    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
+    TXT_SetWidgetBG(list);
 
     // Select a string to draw from the list, if the current value is
     // in range.  Otherwise fall back to a default.

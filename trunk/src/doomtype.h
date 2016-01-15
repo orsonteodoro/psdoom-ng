@@ -1,8 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,26 +12,54 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //	Simple basic typedefs, isolated here to make it easier
 //	 separating modules.
 //    
-//-----------------------------------------------------------------------------
 
 
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
-// Windows CE is missing some vital ANSI C functions.  We have to
-// use our own replacements.
+#if defined(_MSC_VER) && !defined(__cplusplus)
+#define inline __inline
+#endif
 
-#ifdef _WIN32_WCE
-#include "libc_wince.h"
+// #define macros to provide functions missing in Windows.
+// Outside Windows, we use strings.h for str[n]casecmp.
+
+
+#ifdef _WIN32
+
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+
+#else
+
+#include <strings.h>
+
+#endif
+
+
+//
+// The packed attribute forces structures to be packed into the minimum 
+// space necessary.  If this is not done, the compiler may align structure
+// fields differently to optimize memory access, inflating the overall
+// structure size.  It is important to use the packed attribute on certain
+// structures where alignment is important, particularly data read/written
+// to disk.
+//
+
+#ifdef __GNUC__
+
+#ifdef __clang__
+#define PACKEDATTR __attribute__((packed))
+#else
+#define PACKEDATTR __attribute__((packed,gcc_struct))
+#endif
+
+#else
+#define PACKEDATTR
 #endif
 
 // C99 integer types; with gcc we just use this.  Other compilers 
@@ -69,11 +95,13 @@ typedef uint8_t byte;
 #ifdef _WIN32
 
 #define DIR_SEPARATOR '\\'
+#define DIR_SEPARATOR_S "\\"
 #define PATH_SEPARATOR ';'
 
 #else
 
 #define DIR_SEPARATOR '/'
+#define DIR_SEPARATOR_S "/"
 #define PATH_SEPARATOR ':'
 
 #endif

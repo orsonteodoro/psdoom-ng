@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,11 +10,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
 //
 
 #ifndef TXT_DESKTOP_H
@@ -30,12 +23,15 @@
 
 #include "txt_window.h"
 
+typedef void (*TxtIdleCallback)(void *user_data);
+
 void TXT_AddDesktopWindow(txt_window_t *win);
 void TXT_RemoveDesktopWindow(txt_window_t *win);
 void TXT_DrawDesktop(void);
 void TXT_DispatchEvents(void);
-void TXT_DrawWindow(txt_window_t *window, int selected);
-void TXT_WindowKeyPress(txt_window_t *window, int c);
+void TXT_DrawWindow(txt_window_t *window);
+void TXT_SetWindowFocus(txt_window_t *window, int focused);
+int TXT_WindowKeyPress(txt_window_t *window, int c);
 
 /**
  * Set the title displayed at the top of the screen.
@@ -72,6 +68,41 @@ void TXT_GUIMainLoop(void);
 
 txt_window_t *TXT_GetActiveWindow(void);
 
-#endif /* #ifndef TXT_DESKTOP_H */
+/**
+ * Set a callback function to be invoked periodically by the main
+ * loop code.
+ *
+ * @param callback      The callback to invoke, or NULL to cancel
+ *                      an existing callback.
+ * @param user_data     Extra data to pass to the callback.
+ * @param period        Maximum time between invoking each callback.
+ *                      eg. a value of 200 will cause the callback
+ *                      to be invoked at least once every 200ms.
+ */
 
+void TXT_SetPeriodicCallback(TxtIdleCallback callback,
+                             void *user_data,
+                             unsigned int period);
+
+/**
+ * Raise the z-position of the given window relative to other windows.
+ *
+ * @param window        The window to raise.
+ * @return              Non-zero if the window was raised successfully,
+ *                      or zero if the window could not be raised further.
+ */
+
+int TXT_RaiseWindow(txt_window_t *window);
+
+/**
+ * Lower the z-position of the given window relative to other windows.
+ *
+ * @param window        The window to make inactive.
+ * @return              Non-zero if the window was lowered successfully,
+ *                      or zero if the window could not be lowered further.
+ */
+
+int TXT_LowerWindow(txt_window_t *window);
+
+#endif /* #ifndef TXT_DESKTOP_H */
 

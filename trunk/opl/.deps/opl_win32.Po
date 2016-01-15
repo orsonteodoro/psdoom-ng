@@ -1,3 +1,0 @@
-opl_win32.o: opl_win32.c ../config.h
-
-../config.h:

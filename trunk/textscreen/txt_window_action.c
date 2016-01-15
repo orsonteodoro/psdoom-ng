@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,14 +11,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "doomkeys.h"
 
@@ -35,7 +29,7 @@ static void TXT_WindowActionSizeCalc(TXT_UNCAST_ARG(action))
     TXT_CAST_ARG(txt_window_action_t, action);
     char buf[10];
 
-    TXT_GetKeyDescription(action->key, buf);
+    TXT_GetKeyDescription(action->key, buf, sizeof(buf));
 
     // Width is label length, plus key description length, plus '='
     // and two surrounding spaces.
@@ -44,20 +38,16 @@ static void TXT_WindowActionSizeCalc(TXT_UNCAST_ARG(action))
     action->widget.h = 1;
 }
 
-static void TXT_WindowActionDrawer(TXT_UNCAST_ARG(action), int selected)
+static void TXT_WindowActionDrawer(TXT_UNCAST_ARG(action))
 {
     TXT_CAST_ARG(txt_window_action_t, action);
     char buf[10];
 
-    TXT_GetKeyDescription(action->key, buf);
+    TXT_GetKeyDescription(action->key, buf, sizeof(buf));
 
     if (TXT_HoveringOverWidget(action))
     {
         TXT_BGColor(TXT_COLOR_BLACK, 0);
-    }
-    else
-    {
-        TXT_BGColor(TXT_WINDOW_BACKGROUND, 0);
     }
 
     TXT_DrawString(" ");

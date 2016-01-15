@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006-2009 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,19 +11,12 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 //
 // Example program: GUI test program
 //
 // Demonstrates all the main textscreen widgets in use and shows how
 // a simple textscreen program can be written.
 //
-//-----------------------------------------------------------------------------
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,10 +30,13 @@ enum
     RADIO_VALUE_MUSHROOM,
     RADIO_VALUE_SNAKE,
 };
+char *extensions[] = { "wad", "lmp", "txt", NULL };
 char *radio_values[] = { "Badger", "Mushroom", "Snake" };
 char *textbox_value = NULL;
 int numbox_value = 0;
 int radiobutton_value;
+char *file_path = NULL;
+char *dir_path = NULL;
 txt_label_t *value_label;
 txt_window_t *firstwin;
 int cheesy;
@@ -73,13 +67,13 @@ void UpdateLabel(TXT_UNCAST_ARG(widget), void *user_data)
 {
     char buf[40];
     
-    strcpy(buf, " Current value: ");
+    TXT_StringCopy(buf, " Current value: ", sizeof(buf));
     if (cheesy)
     {
-        strcat(buf, "Cheesy ");
+        TXT_StringConcat(buf, "Cheesy ", sizeof(buf));
     }
-    strcat(buf, radio_values[radiobutton_value]);
-    strcat(buf, "\n");
+    TXT_StringConcat(buf, radio_values[radiobutton_value], sizeof(buf));
+    TXT_StringConcat(buf, "\n", sizeof(buf));
 
     TXT_SetLabel(value_label, buf);
 }
@@ -102,6 +96,8 @@ void SetupWindow(void)
     
     window = TXT_NewWindow("Window test");
 
+    TXT_SetWindowHelpURL(window, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
     TXT_AddWidget(window, TXT_NewSeparator("Main section"));
     table = TXT_NewTable(3);
 
@@ -116,11 +112,11 @@ void SetupWindow(void)
 
     for (i=0; i<5; ++i)
     {
-        sprintf(buf, "Option %i in a table:", i + 1);
+        TXT_snprintf(buf, sizeof(buf), "Option %i in a table:", i + 1);
         TXT_AddWidget(table, TXT_NewLabel(buf));
-        sprintf(buf, " Button %i-1 ", i + 1);
+        TXT_snprintf(buf, sizeof(buf), " Button %i-1 ", i + 1);
         TXT_AddWidget(table, TXT_NewButton(buf));
-        sprintf(buf, " Button %i-2 ", i + 1);
+        TXT_snprintf(buf, sizeof(buf), " Button %i-2 ", i + 1);
         TXT_AddWidget(table, TXT_NewButton(buf));
     }
 
@@ -179,16 +175,28 @@ void Window2(void)
                    NULL);
 
     TXT_AddWidget(unselectable_table, TXT_NewLabel("* Unselectable table *"));
+    TXT_AddWidget(unselectable_table, TXT_NewLabel(
+        "This is a UTF-8 string:\n"
+        "\xc3\x80 bient\xc3\xb4t na\xc3\xaet "
+        "\xc3\xa9v\xc3\xaaque \xc3\xa0 l'\xc5\x93uvre p\xc3\xa8re."));
 
     TXT_AddWidget(window, TXT_NewSeparator("Input boxes"));
     table = TXT_NewTable(2);
     TXT_AddWidget(window, table);
-    TXT_AddWidget(table, TXT_NewLabel("String: "));
-    TXT_AddWidget(table, TXT_NewInputBox(&textbox_value, 20));
-    TXT_AddWidget(table, TXT_NewLabel("Int: "));
-    TXT_AddWidget(table, TXT_NewIntInputBox(&numbox_value, 10));
-    TXT_AddWidget(table, TXT_NewLabel("Spin control:"));
-    TXT_AddWidget(table, TXT_NewSpinControl(&numbox_value, 0, 15));
+    TXT_AddWidgets(table,
+                   TXT_NewLabel("String: "),
+                   TXT_NewInputBox(&textbox_value, 20),
+                   TXT_NewLabel("Int: "),
+                   TXT_NewIntInputBox(&numbox_value, 10),
+                   TXT_NewLabel("Spin control:"),
+                   TXT_NewSpinControl(&numbox_value, 0, 15),
+                   TXT_NewLabel("File:"),
+                   TXT_NewFileSelector(&file_path, 28, "Select file:",
+                                       extensions),
+                   TXT_NewLabel("Directory:"),
+                   TXT_NewFileSelector(&dir_path, 28, "Select directory:",
+                                       TXT_DIRECTORY),
+                   NULL);
 
     TXT_AddWidget(window, TXT_NewSeparator("Scroll pane test"));
     scrollpane = TXT_NewScrollPane(40, 5, TXT_NewLabel(

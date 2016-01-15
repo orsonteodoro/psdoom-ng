@@ -1,8 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,15 +12,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //	System specific interface stuff.
 //
-//-----------------------------------------------------------------------------
 
 
 #ifndef __I_SYSTEM__
@@ -32,6 +24,7 @@
 #include "d_event.h"
 
 
+typedef void (*atexit_func_t)(void);
 
 // Called by DoomMain.
 void I_Init (void);
@@ -43,23 +36,6 @@ byte*	I_ZoneBase (int *size);
 
 boolean I_ConsoleStdout(void);
 
-
-// Called by D_DoomLoop,
-// called before processing any tics in a frame
-// (just after displaying a frame).
-// Time consuming syncronous operations
-// are performed here (joystick reading).
-// Can call D_PostEvent.
-//
-void I_StartFrame (void);
-
-
-//
-// Called by D_DoomLoop,
-// called before processing each tic in a frame.
-// Quick syncronous operations are performed here.
-// Can call D_PostEvent.
-void I_StartTic (void);
 
 // Asynchronous interrupt functions should maintain private queues
 // that are read by the synchronous functions
@@ -76,17 +52,33 @@ ticcmd_t* I_BaseTiccmd (void);
 // Clean exit, displays sell blurb.
 void I_Quit (void);
 
-
-// Allocates from low memory under dos,
-// just mallocs under unix
-byte* I_AllocLow (int length);
+void I_Error (char *error, ...);
 
 void I_Tactile (int on, int off, int total);
 
-
-void I_Error (char *error, ...);
-
 boolean I_GetMemoryValue(unsigned int offset, void *value, int size);
+
+// Schedule a function to be called when the program exits.
+// If run_if_error is true, the function is called if the exit
+// is due to an error (I_Error)
+
+void I_AtExit(atexit_func_t func, boolean run_if_error);
+
+// Add all system-specific config file variable bindings.
+
+void I_BindVariables(void);
+
+// Print startup banner copyright message.
+
+void I_PrintStartupBanner(char *gamedescription);
+
+// Print a centered text banner displaying the given string.
+
+void I_PrintBanner(char *text);
+
+// Print a dividing line for startup banners.
+
+void I_PrintDivider(void);
 
 #endif
 

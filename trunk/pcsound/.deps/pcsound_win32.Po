@@ -1,1 +1,0 @@
-pcsound_win32.o: pcsound_win32.c

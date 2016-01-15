@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,24 +11,21 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 // Handles merging of PWADs, similar to deutex's -merge option
 //
 // Ideally this should work exactly the same as in deutex, but trying to
 // read the deutex source code made my brain hurt.
 //
-//-----------------------------------------------------------------------------
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-#include "doomdef.h"
+#include "doomtype.h"
 #include "i_system.h"
+#include "m_misc.h"
 #include "w_merge.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -157,6 +152,31 @@ static void InitSpriteList(void)
     num_sprite_frames = 0;
 }
 
+static boolean ValidSpriteLumpName(char *name)
+{
+    if (name[0] == '\0' || name[1] == '\0'
+     || name[2] == '\0' || name[3] == '\0')
+    {
+        return false;
+    }
+
+    // First frame:
+
+    if (name[4] == '\0' || !isdigit(name[5]))
+    {
+        return false;
+    }
+
+    // Second frame (optional):
+
+    if (name[6] != '\0' && !isdigit(name[7]))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 // Find a sprite frame
 
 static sprite_frame_t *FindSpriteFrame(char *name, int frame)
@@ -214,6 +234,11 @@ static boolean SpriteLumpNeeded(lumpinfo_t *lump)
     sprite_frame_t *sprite;
     int angle_num;
     int i;
+
+    if (!ValidSpriteLumpName(lump->name))
+    {
+        return true;
+    }
 
     // check the first frame
 
@@ -273,6 +298,11 @@ static void AddSpriteLump(lumpinfo_t *lump)
     sprite_frame_t *sprite;
     int angle_num;
     int i;
+
+    if (!ValidSpriteLumpName(lump->name))
+    {
+        return;
+    }
     
     // first angle
 
@@ -681,7 +711,7 @@ void W_NWTDashMerge(char *filename)
             // Replace this entry with an empty string.  This is what
             // nwt -merge does.
 
-            strcpy(iwad_sprites.lumps[i].name, "");
+            M_StringCopy(iwad_sprites.lumps[i].name, "", 8);
         }
     }
 

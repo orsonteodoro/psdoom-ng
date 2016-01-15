@@ -1,8 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,24 +12,29 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //      Configuration file interface.
 //    
-//-----------------------------------------------------------------------------
 
 
 #ifndef __M_CONFIG__
 #define __M_CONFIG__
 
+#include "doomtype.h"
+
 void M_LoadDefaults(void);
 void M_SaveDefaults(void);
-void M_SetConfigDir(void);
-void M_ApplyPlatformDefaults(void);
+void M_SaveDefaultsAlternate(char *main, char *extra);
+void M_SetConfigDir(char *dir);
+void M_BindIntVariable(char *name, int *variable);
+void M_BindFloatVariable(char *name, float *variable);
+void M_BindStringVariable(char *name, char **variable);
+boolean M_SetVariable(char *name, char *value);
+int M_GetIntVariable(char *name);
+const char *M_GetStringVariable(char *name);
+float M_GetFloatVariable(char *name);
+void M_SetConfigFilenames(char *main_config, char *extra_config);
+char *M_GetSaveGameDir(char *iwadname);
 
 extern char *configdir;
 

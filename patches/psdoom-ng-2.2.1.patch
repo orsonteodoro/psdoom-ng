@@ -1,0 +1,3856 @@
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/CHANGELOG.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/CHANGELOG.psdoom-ng
+--- chocolate-doom-chocolate-doom-2.2.1.orig/CHANGELOG.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/CHANGELOG.psdoom-ng	2016-01-14 10:53:59.417096129 -0800
+@@ -0,0 +1,194 @@
++Changelog for psDooM:
++
++Release 2012.02.05 - Migrate psDooM into Chocoloate Doom
++  -Merge 2000.05.03-2000.05.03b psDooM patches into Chocolate Doom 1.6.0 
++   but reject branding, save file changes, xd-launch, versioning 
++   from psDooM.
++  -Rebrand Chocolate Doom to psdoom
++  -Fix linux detection broken by 2000.05.03a.  Solaris needs testing.
++
++Release 2000.05.03.b - Changes since 2000.05.03.a
++  -Changed shell scripts in 'contrib' dir to shorten command length when
++    displayed with 'ps'.
++  -Use ~/.psdoom rather than ~/.xdoom for savegames, config files, etc.
++    Users need to copy current .doomrc and .xdlaunchrc files to ~/.psdoom.
++  -Added references to psDooM in startup header text, X resources, and
++    window title bar.
++  -Modified xdlaunch (ps-xdlaunch) to run ps-xdoom.
++  -Added ability to pass psDooM-specific command line flags to ps-xdoom
++    through ps-xdlaunch.
++
++Release 2000.05.03.a - Changes since 2000.05.03
++  -Support for Solaris' version of 'ps'.
++  -Added command line flag that allows pid monsters to be damaged by
++    things other than the player.  This is the original behavior of the
++    program. (-nopssafety)
++    
++Release 2000.05.03 - Changes since 2000.02.21
++  -Moved project to SourceForge. (http://psdoom.sourceforge.net/)
++  -Changed distribution format and file name:
++    psdoom-YYYY.MM.DD-patch.tar.gz == patch to apply to latest XDoom.
++    psdoom-YYYY.MM.DD-src.tar.gz == source of the entire psDooM tree.
++    psdoom-YYYY.MM.DD-bin.tar.gz == linux-x86 psDooM binaries.
++    psdoom-YYYY.MM.DD-data.tar.gz == custom ps-management levels for use
++     with registered Doom, Ultimate Doom, or Doom ][.
++  -Executibles are now called ps-*doom (ie. ps-sxdoom) rather than
++    *doom.ps (ie. sxdoom.ps).
++  -'make install-<platform>' now installs psDooM.
++  -Installs into /usr/local/games/psdoom/ rather than into XDoom's
++    /usr/local/games/xdoom/
++  -Created install script for binary distribution.
++  -Created some psDooM documentation and a directory for it (psdoomdoc).
++  -Based on the 20000305 release of XDoom.
++  -Added command line flag to entirely disable 'ps' portion of the
++    program. (-nopsmon)
++  -Added command line flag to disable actual re-nice and kill of processes
++    for program interface demonstration purposes. (-nopsact)
++  -Added command line flag to make 'no monsters' persistant across new
++    games and level warping. (-nomonsters.) == no monsters, period :-)
++  -Pid monster spawning is not affected by the '-nomonsters' or 
++    '-nomonsters.' command line flags.
++  -Added command line flag to respawn items like in -altdeath games.
++    (-respawnitems)  It has no effect when recording or playing a demo.
++  -Added command line flag to cause every username to be added to
++    the list of users whose processes to display. (-psallusers)
++  -Added command line flag to cause specified usernames to be added to the
++    list of users whose processes to display.  Without any supplied
++    username(s), assume current user. (-psuser [username1[ username2...]])
++  -Added command line flag to cause specified usernames to be added to the
++    list of users whose processes not to display.  Without any supplied
++    username(s), assume current user.
++    (-psnotuser [username1[ username2...]])
++  -If none of the userlist-related command line flags are given, the
++    program defaults to showing only the current user's processes if not
++    running the program as root.  The root user sees all processes by
++    default.  The current username is determined by looking at the
++    environment variables PSDOOMUSER, LOGNAME, USER, and USERNAME in that
++    order.
++  -Demo playing and recording on E1M1 or MAP01 bypass the 'ps' portion
++    of the program.
++  -Fixed a bug that caused trouble with the first automatic demo after
++    ending a game from the menu (Options -> End Game).
++
++Release 2000.02.21 - Changes since 2000.02.01
++  -Save and restore is handled better now.  Pid monsters are not saved
++    to file and are properly respawned upon level load.
++  -Moved more code around.  Un-hid the call to cleanup_pid_list() within
++    the pr_check() routine.  Now, all calls to pr_check() are immediately
++    followed by a call to cleanup_pid_list().  Also, pr_check() is not
++    called if leveltime == 0.  That caused it to be called twice upon
++    level start: once for the level initialization and once for the first
++    gametick.
++  -Made custom levels for registered Doom 1, Ultimate Doom, and Doom 2.
++    *Any* level that has 3 1024x1024 areas for monster spawning such that
++    the bottom left coordinates of the squares are at (0,0); (2048,0); and
++    (4096,0), respectively, will work.
++  -The level loads automatically as the first map (either E1M1 or MAP01).
++    The custom Doom 1 map must be named psdoom1.wad and the custom Doom 2
++    map named psdoom2.wad for the automatic load to happen.
++  -Command line switch to suppress automatic loading of a custom process
++    management level.  Manage processes on default E1M1 or MAP01.
++    (-nopslev)
++  -If you're playing Doom 1, Ultimate Doom, or Doom 2, but DON'T have the
++    custom level loaded, pid monsters are spawned in the courtyard on the
++    first level (either E1M1 or MAP01).
++  -If you're not playing on the first map, and/or you're using add-on
++    maps 'Plutonia Experiment' or 'TNT - Evilution', the 'ps' portion of
++    the program is not used.
++  -Pid monsters spawn at least one radius inside the edge of their 
++    1024x1024 box on custom levels.  This prevents them from spawning
++    in the 'void space' outside the custom level map.
++
++Release 2000.02.01 - Changes since 2000.01.26
++  -Finished implementation of resurrecting pid monsters that died in
++    XDoom, but not on the machine.  It does an archvile-type respawn on
++    the monster if possible, or removes the body and does a respawn
++    otherwise.  This does NOT require the Doom ][ wad since we just use
++    the archvile's code; not its sprites.
++  -Fixed a bug that caused Doom to sometimes crash when it started a level
++    after pid monsters had been spawned.  cleanup_pid_list() tried
++    operating on memory that may have changed during the load.
++  -Began handling save and restore gracefully.  It's highly recommended
++    that you do *not* use save/restore yet.
++
++Release 2000.01.26 - Changes since 2000.01.18
++  -Made the 'ps' call include the 'a' and 'x' flags to doublecheck
++    for *all* machine processes (all users/no terminal). 
++  -Allowed the process manager itself to be spawned as a pid monster.
++  -Fixed pid monster kill % calculation.  I broke it when I moved
++    pid-specific code from P_SpawnMapThing() to add_new_process().
++  -Advanced process management implemented:
++    If a process is killed/removed outside XDoom, it is removed from
++     XDoom.
++    Update process names on exec() call (same pid, different name).
++     (ie. mingetty --> -bash after login)
++    Framework is there for implementing resurrection of a pid monster
++     who's represented process didn't die on the machine (it trapped the
++     kill signal or user doesn't have permission to kill it).
++  -Pid monsters don't spawn in/on other things.  Period.  If a newly
++    spawned monster would collide with something else after all the
++    repositioning (below), it is not spawned.  The next update of the
++    process list will try spawning again after whatever was blocking it
++    moved (hopefully).
++
++Release 2000.01.18 - Changes since 2000.01.14
++  -Only call pr_renice() on the monster's first damage.  Since subsequent
++    calls re-niced from +5 to +5, CPU cycles were being wasted.
++  -Pid monsters can only be damaged and killed by a player.  They
++    still act as if they were damaged by targeting whatever hit them.
++  -Put back the pid monster variety now that they can't kill each
++    other off. (daemons spawn as demons, others spawn as sargents)
++
++Release 2000.01.14 - Changes since 2000.01.04
++  -Moved pid-specific mobj initialization from P_SpawnMapThing() to
++    add_new_process().  This allows us to get rid of the pid-specific
++    enhancements to the mapthing_ext_t type, also.
++  -Better replacement code for mobj collisions in add_new_process().
++    Now, the monster is placed by altering its x,y by its radius and twice
++    its radius until it does not collide.  Spawn at original location if
++    the alternate placements don't work out.  Stupid ASCII art
++    representation:
++     y   y   y
++       x x x
++     y x X x y
++       x x x
++     y   y   y
++    (X is original location, x are tested first, then y are tested)
++
++Release 2000.01.04 - Changes since 1999.12.29
++  -Do not draw the monster's pid info if the whole monster is blocked
++    (by anything: wall, floor, and/or ceiling).
++  -Draw the monster's pid info at the top of the monster's sprite rather
++    than in the center of the screen.
++  -Don't consider the pid monsters in the end-of-level total kill %.
++  -Pass the mobj back to add_new_process() for further operations on it.
++  -In add_new_process(), check the newly created mobj for collisions.
++    If it is colliding, try re-positioning it to the north, east,
++    west, and south by the mobj's radius, respectively, until no
++    collisions are found.  Spawn at original location if the alternate 
++    placements don't work out.  Stupid ASCII art representation:
++       x
++     x X x
++       x
++    (X is original location, x are the tested locations)
++
++Release 1999.12.29 - Changes since 0.01d
++  -Fixed a compiler warning about modifying a const variable.
++  -Fixed a bug in pr_poll() which prevented new processes from
++    being spawned.
++  -Temporarily made all pid monsters spawn as demons to prevent them
++    from killing each other off while trying to develop code.
++  -Moved the call to pr_renice() after the check to see if pr_kill()
++    should be called.  After all, what's the point of re-nicing the
++    process if we're going to kill it anyway?
++  -Display the last 7 characters of the process name rather than the
++    first 7.  ie: '/sbin/mingetty' would appear as 'ingetty' rather
++    than '/sbin/m' 
++  -Do not draw the monster's pid info if the whole monster is blocked
++    by a wall or column that extends from floor to ceiling.
++
++Release 0.01d - Changes since 0.01c (???)
++  -Added process names in addition to the pid numbers.
++  -Don't draw the monster's pid info if the monster is too far away.
++  -Don't draw the monster's pid info if the monster is too close to
++    the edge of the screen.
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/config.h chocolate-doom-chocolate-doom-2.2.1/config.h
+--- chocolate-doom-chocolate-doom-2.2.1.orig/config.h	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/config.h	2016-01-14 11:23:08.283914008 -0800
+@@ -0,0 +1,89 @@
++/* config.h.  Generated from config.hin by configure.  */
++/* config.hin.  Generated from configure.in by autoheader.  */
++
++/* Define to 1 if you have the <dev/isa/spkrio.h> header file. */
++/* #undef HAVE_DEV_ISA_SPKRIO_H */
++
++/* Define to 1 if you have the <dev/speaker/speaker.h> header file. */
++/* #undef HAVE_DEV_SPEAKER_SPEAKER_H */
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the `ioperm' function. */
++#define HAVE_IOPERM 1
++
++/* Define to 1 if you have the `amd64' library (-lamd64). */
++/* #undef HAVE_LIBAMD64 */
++
++/* Define to 1 if you have the `i386' library (-li386). */
++/* #undef HAVE_LIBI386 */
++
++/* Define to 1 if you have the `m' library (-lm). */
++#define HAVE_LIBM 1
++
++/* Define to 1 if you have the `samplerate' library (-lsamplerate). */
++/* #undef HAVE_LIBSAMPLERATE */
++
++/* Define to 1 if you have the <linux/kd.h> header file. */
++#define HAVE_LINUX_KD_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `mmap' function. */
++#define HAVE_MMAP 1
++
++/* Define to 1 if you have the `sched_setaffinity' function. */
++#define HAVE_SCHED_SETAFFINITY 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Name of package */
++#define PACKAGE "psdoom-ng"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "orsonteodoro@yahoo.com"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "psdoom-ng"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "psdoom-ng 2.2.1"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "psdoom-ng"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL ""
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "2.2.1"
++
++/* Change this when you create your awesome forked version */
++#define PROGRAM_PREFIX "psdng"
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Version number of package */
++#define VERSION "2.2.1"
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/configure.ac chocolate-doom-chocolate-doom-2.2.1/configure.ac
+--- chocolate-doom-chocolate-doom-2.2.1.orig/configure.ac	2016-01-14 10:46:30.929028015 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/configure.ac	2016-01-14 13:11:43.844773899 -0800
+@@ -1,12 +1,12 @@
+-AC_INIT(Chocolate Doom, 2.2.1, fraggle@gmail.com, chocolate-doom)
++AC_INIT(psdoom-ng, 2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
+ 
+ PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
+-PACKAGE_SHORTDESC="Conservative source port"
+-PACKAGE_COPYRIGHT="Copyright (C) 1993-2015"
++PACKAGE_SHORTDESC="psdoom-ng based on Chocolate Doom and psDooM"
++PACKAGE_COPYRIGHT="Copyright (C) 1993-2016"
+ PACKAGE_LICENSE="GNU General Public License, version 2"
+-PACKAGE_MAINTAINER="Simon Howard"
+-PACKAGE_URL="http://www.chocolate-doom.org/"
+-PACKAGE_ISSUES="https://github.com/chocolate-doom/chocolate-doom/issues"
++PACKAGE_MAINTAINER="Orson Teodoro"
++PACKAGE_URL="https://github.com/orsonteodoro/psdoom-ng"
++PACKAGE_ISSUES="https://github.com/orsonteodoro/psdoom-ng"
+ 
+ AC_CONFIG_AUX_DIR(autotools)
+ 
+@@ -169,6 +169,7 @@
+ rpm.spec
+ data/Makefile
+ src/Makefile
++src/psdoom-ng.appdata.xml
+ src/doom.appdata.xml
+ src/doom.desktop
+ src/doom-screensaver.desktop
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/COPYING.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/COPYING.psdoom-ng
+--- chocolate-doom-chocolate-doom-2.2.1.orig/COPYING.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/COPYING.psdoom-ng	2016-01-14 10:53:59.418096167 -0800
+@@ -0,0 +1,339 @@
++		    GNU GENERAL PUBLIC LICENSE
++		       Version 2, June 1991
++
++ Copyright (C) 1989, 1991 Free Software Foundation, Inc.
++                          675 Mass Ave, Cambridge, MA 02139, USA
++ Everyone is permitted to copy and distribute verbatim copies
++ of this license document, but changing it is not allowed.
++
++			    Preamble
++
++  The licenses for most software are designed to take away your
++freedom to share and change it.  By contrast, the GNU General Public
++License is intended to guarantee your freedom to share and change free
++software--to make sure the software is free for all its users.  This
++General Public License applies to most of the Free Software
++Foundation's software and to any other program whose authors commit to
++using it.  (Some other Free Software Foundation software is covered by
++the GNU Library General Public License instead.)  You can apply it to
++your programs, too.
++
++  When we speak of free software, we are referring to freedom, not
++price.  Our General Public Licenses are designed to make sure that you
++have the freedom to distribute copies of free software (and charge for
++this service if you wish), that you receive source code or can get it
++if you want it, that you can change the software or use pieces of it
++in new free programs; and that you know you can do these things.
++
++  To protect your rights, we need to make restrictions that forbid
++anyone to deny you these rights or to ask you to surrender the rights.
++These restrictions translate to certain responsibilities for you if you
++distribute copies of the software, or if you modify it.
++
++  For example, if you distribute copies of such a program, whether
++gratis or for a fee, you must give the recipients all the rights that
++you have.  You must make sure that they, too, receive or can get the
++source code.  And you must show them these terms so they know their
++rights.
++
++  We protect your rights with two steps: (1) copyright the software, and
++(2) offer you this license which gives you legal permission to copy,
++distribute and/or modify the software.
++
++  Also, for each author's protection and ours, we want to make certain
++that everyone understands that there is no warranty for this free
++software.  If the software is modified by someone else and passed on, we
++want its recipients to know that what they have is not the original, so
++that any problems introduced by others will not reflect on the original
++authors' reputations.
++
++  Finally, any free program is threatened constantly by software
++patents.  We wish to avoid the danger that redistributors of a free
++program will individually obtain patent licenses, in effect making the
++program proprietary.  To prevent this, we have made it clear that any
++patent must be licensed for everyone's free use or not licensed at all.
++
++  The precise terms and conditions for copying, distribution and
++modification follow.
++
++		    GNU GENERAL PUBLIC LICENSE
++   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
++
++  0. This License applies to any program or other work which contains
++a notice placed by the copyright holder saying it may be distributed
++under the terms of this General Public License.  The "Program", below,
++refers to any such program or work, and a "work based on the Program"
++means either the Program or any derivative work under copyright law:
++that is to say, a work containing the Program or a portion of it,
++either verbatim or with modifications and/or translated into another
++language.  (Hereinafter, translation is included without limitation in
++the term "modification".)  Each licensee is addressed as "you".
++
++Activities other than copying, distribution and modification are not
++covered by this License; they are outside its scope.  The act of
++running the Program is not restricted, and the output from the Program
++is covered only if its contents constitute a work based on the
++Program (independent of having been made by running the Program).
++Whether that is true depends on what the Program does.
++
++  1. You may copy and distribute verbatim copies of the Program's
++source code as you receive it, in any medium, provided that you
++conspicuously and appropriately publish on each copy an appropriate
++copyright notice and disclaimer of warranty; keep intact all the
++notices that refer to this License and to the absence of any warranty;
++and give any other recipients of the Program a copy of this License
++along with the Program.
++
++You may charge a fee for the physical act of transferring a copy, and
++you may at your option offer warranty protection in exchange for a fee.
++
++  2. You may modify your copy or copies of the Program or any portion
++of it, thus forming a work based on the Program, and copy and
++distribute such modifications or work under the terms of Section 1
++above, provided that you also meet all of these conditions:
++
++    a) You must cause the modified files to carry prominent notices
++    stating that you changed the files and the date of any change.
++
++    b) You must cause any work that you distribute or publish, that in
++    whole or in part contains or is derived from the Program or any
++    part thereof, to be licensed as a whole at no charge to all third
++    parties under the terms of this License.
++
++    c) If the modified program normally reads commands interactively
++    when run, you must cause it, when started running for such
++    interactive use in the most ordinary way, to print or display an
++    announcement including an appropriate copyright notice and a
++    notice that there is no warranty (or else, saying that you provide
++    a warranty) and that users may redistribute the program under
++    these conditions, and telling the user how to view a copy of this
++    License.  (Exception: if the Program itself is interactive but
++    does not normally print such an announcement, your work based on
++    the Program is not required to print an announcement.)
++
++These requirements apply to the modified work as a whole.  If
++identifiable sections of that work are not derived from the Program,
++and can be reasonably considered independent and separate works in
++themselves, then this License, and its terms, do not apply to those
++sections when you distribute them as separate works.  But when you
++distribute the same sections as part of a whole which is a work based
++on the Program, the distribution of the whole must be on the terms of
++this License, whose permissions for other licensees extend to the
++entire whole, and thus to each and every part regardless of who wrote it.
++
++Thus, it is not the intent of this section to claim rights or contest
++your rights to work written entirely by you; rather, the intent is to
++exercise the right to control the distribution of derivative or
++collective works based on the Program.
++
++In addition, mere aggregation of another work not based on the Program
++with the Program (or with a work based on the Program) on a volume of
++a storage or distribution medium does not bring the other work under
++the scope of this License.
++
++  3. You may copy and distribute the Program (or a work based on it,
++under Section 2) in object code or executable form under the terms of
++Sections 1 and 2 above provided that you also do one of the following:
++
++    a) Accompany it with the complete corresponding machine-readable
++    source code, which must be distributed under the terms of Sections
++    1 and 2 above on a medium customarily used for software interchange; or,
++
++    b) Accompany it with a written offer, valid for at least three
++    years, to give any third party, for a charge no more than your
++    cost of physically performing source distribution, a complete
++    machine-readable copy of the corresponding source code, to be
++    distributed under the terms of Sections 1 and 2 above on a medium
++    customarily used for software interchange; or,
++
++    c) Accompany it with the information you received as to the offer
++    to distribute corresponding source code.  (This alternative is
++    allowed only for noncommercial distribution and only if you
++    received the program in object code or executable form with such
++    an offer, in accord with Subsection b above.)
++
++The source code for a work means the preferred form of the work for
++making modifications to it.  For an executable work, complete source
++code means all the source code for all modules it contains, plus any
++associated interface definition files, plus the scripts used to
++control compilation and installation of the executable.  However, as a
++special exception, the source code distributed need not include
++anything that is normally distributed (in either source or binary
++form) with the major components (compiler, kernel, and so on) of the
++operating system on which the executable runs, unless that component
++itself accompanies the executable.
++
++If distribution of executable or object code is made by offering
++access to copy from a designated place, then offering equivalent
++access to copy the source code from the same place counts as
++distribution of the source code, even though third parties are not
++compelled to copy the source along with the object code.
++
++  4. You may not copy, modify, sublicense, or distribute the Program
++except as expressly provided under this License.  Any attempt
++otherwise to copy, modify, sublicense or distribute the Program is
++void, and will automatically terminate your rights under this License.
++However, parties who have received copies, or rights, from you under
++this License will not have their licenses terminated so long as such
++parties remain in full compliance.
++
++  5. You are not required to accept this License, since you have not
++signed it.  However, nothing else grants you permission to modify or
++distribute the Program or its derivative works.  These actions are
++prohibited by law if you do not accept this License.  Therefore, by
++modifying or distributing the Program (or any work based on the
++Program), you indicate your acceptance of this License to do so, and
++all its terms and conditions for copying, distributing or modifying
++the Program or works based on it.
++
++  6. Each time you redistribute the Program (or any work based on the
++Program), the recipient automatically receives a license from the
++original licensor to copy, distribute or modify the Program subject to
++these terms and conditions.  You may not impose any further
++restrictions on the recipients' exercise of the rights granted herein.
++You are not responsible for enforcing compliance by third parties to
++this License.
++
++  7. If, as a consequence of a court judgment or allegation of patent
++infringement or for any other reason (not limited to patent issues),
++conditions are imposed on you (whether by court order, agreement or
++otherwise) that contradict the conditions of this License, they do not
++excuse you from the conditions of this License.  If you cannot
++distribute so as to satisfy simultaneously your obligations under this
++License and any other pertinent obligations, then as a consequence you
++may not distribute the Program at all.  For example, if a patent
++license would not permit royalty-free redistribution of the Program by
++all those who receive copies directly or indirectly through you, then
++the only way you could satisfy both it and this License would be to
++refrain entirely from distribution of the Program.
++
++If any portion of this section is held invalid or unenforceable under
++any particular circumstance, the balance of the section is intended to
++apply and the section as a whole is intended to apply in other
++circumstances.
++
++It is not the purpose of this section to induce you to infringe any
++patents or other property right claims or to contest validity of any
++such claims; this section has the sole purpose of protecting the
++integrity of the free software distribution system, which is
++implemented by public license practices.  Many people have made
++generous contributions to the wide range of software distributed
++through that system in reliance on consistent application of that
++system; it is up to the author/donor to decide if he or she is willing
++to distribute software through any other system and a licensee cannot
++impose that choice.
++
++This section is intended to make thoroughly clear what is believed to
++be a consequence of the rest of this License.
++
++  8. If the distribution and/or use of the Program is restricted in
++certain countries either by patents or by copyrighted interfaces, the
++original copyright holder who places the Program under this License
++may add an explicit geographical distribution limitation excluding
++those countries, so that distribution is permitted only in or among
++countries not thus excluded.  In such case, this License incorporates
++the limitation as if written in the body of this License.
++
++  9. The Free Software Foundation may publish revised and/or new versions
++of the General Public License from time to time.  Such new versions will
++be similar in spirit to the present version, but may differ in detail to
++address new problems or concerns.
++
++Each version is given a distinguishing version number.  If the Program
++specifies a version number of this License which applies to it and "any
++later version", you have the option of following the terms and conditions
++either of that version or of any later version published by the Free
++Software Foundation.  If the Program does not specify a version number of
++this License, you may choose any version ever published by the Free Software
++Foundation.
++
++  10. If you wish to incorporate parts of the Program into other free
++programs whose distribution conditions are different, write to the author
++to ask for permission.  For software which is copyrighted by the Free
++Software Foundation, write to the Free Software Foundation; we sometimes
++make exceptions for this.  Our decision will be guided by the two goals
++of preserving the free status of all derivatives of our free software and
++of promoting the sharing and reuse of software generally.
++
++			    NO WARRANTY
++
++  11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
++FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
++OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
++PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
++OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
++TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
++PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
++REPAIR OR CORRECTION.
++
++  12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
++WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
++REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
++INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
++OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
++TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
++YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
++PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
++POSSIBILITY OF SUCH DAMAGES.
++
++		     END OF TERMS AND CONDITIONS
++
++	Appendix: How to Apply These Terms to Your New Programs
++
++  If you develop a new program, and you want it to be of the greatest
++possible use to the public, the best way to achieve this is to make it
++free software which everyone can redistribute and change under these terms.
++
++  To do so, attach the following notices to the program.  It is safest
++to attach them to the start of each source file to most effectively
++convey the exclusion of warranty; and each file should have at least
++the "copyright" line and a pointer to where the full notice is found.
++
++    <one line to give the program's name and a brief idea of what it does.>
++    Copyright (C) 19yy  <name of author>
++
++    This program is free software; you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++    the Free Software Foundation; either version 2 of the License, or
++    (at your option) any later version.
++
++    This program is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++    GNU General Public License for more details.
++
++    You should have received a copy of the GNU General Public License
++    along with this program; if not, write to the Free Software
++    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++
++Also add information on how to contact you by electronic and paper mail.
++
++If the program is interactive, make it output a short notice like this
++when it starts in an interactive mode:
++
++    Gnomovision version 69, Copyright (C) 19yy name of author
++    Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
++    This is free software, and you are welcome to redistribute it
++    under certain conditions; type `show c' for details.
++
++The hypothetical commands `show w' and `show c' should show the appropriate
++parts of the General Public License.  Of course, the commands you use may
++be called something other than `show w' and `show c'; they could even be
++mouse-clicks or menu items--whatever suits your program.
++
++You should also get your employer (if you work as a programmer) or your
++school, if any, to sign a "copyright disclaimer" for the program, if
++necessary.  Here is a sample; alter the names:
++
++  Yoyodyne, Inc., hereby disclaims all copyright interest in the program
++  `Gnomovision' (which makes passes at compilers) written by James Hacker.
++
++  <signature of Ty Coon>, 1 April 1989
++  Ty Coon, President of Vice
++
++This General Public License does not permit incorporating your program into
++proprietary programs.  If your program is a subroutine library, you may
++consider it more useful to permit linking proprietary applications with the
++library.  If this is what you want to do, use the GNU Library General
++Public License instead of this License.
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/CREDITS.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/CREDITS.psdoom-ng
+--- chocolate-doom-chocolate-doom-2.2.1.orig/CREDITS.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/CREDITS.psdoom-ng	2016-01-14 10:53:59.418096167 -0800
+@@ -0,0 +1,27 @@
++This list of credits for psDooM is in no particular order, save for id
++Software coming first.  I'll try to keep it more or less cronological.
++
++id Software: http://www.idsoftware.com
++
++  --For writing Doom in the first place.
++  --For giving eager programmers the GPL'd source.
++
++Udo Munk: um@compuserve.com
++
++  --For programming XDoom and maintaining it.
++
++<Everyone listed in Udo's CREDITS file>
++
++  --For helping out with XDoom.
++
++Dennis Chao: dlchao@cs.unm.edu
++
++  --For coming up with the brilliant idea of using Doom for process
++    management and wading through the XDoom code to implement it.
++
++Mark H. Hamilton: mark.h.hamilton@gtemail.net
++
++  --For coming up with the psDooM moniker "DooM for Sys A's".
++
++psDooM is currently maintained by:
++David Koppenhofer (djk@users.sourceforge.net)
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/data/Makefile.am chocolate-doom-chocolate-doom-2.2.1/data/Makefile.am
+--- chocolate-doom-chocolate-doom-2.2.1.orig/data/Makefile.am	2016-01-14 10:46:30.929028015 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/data/Makefile.am	2016-01-14 17:15:05.387151023 -0800
+@@ -9,9 +9,9 @@
+         setup.png        \
+         convert-icon
+ 
+-iconsdir = $(prefix)/share/icons
+-icons_DATA = @PROGRAM_PREFIX@doom.png   \
+-             @PROGRAM_PREFIX@setup.png
++#iconsdir = $(prefix)/share/icons
++#icons_DATA = @PROGRAM_PREFIX@doom.png   \
++#             @PROGRAM_PREFIX@setup.png
+ 
+ @PROGRAM_PREFIX@doom.png : doom.png
+ 	cp $(top_srcdir)/data/doom.png $@
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/.lvimrc chocolate-doom-chocolate-doom-2.2.1/.lvimrc
+--- chocolate-doom-chocolate-doom-2.2.1.orig/.lvimrc	2016-01-14 10:46:30.928027977 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/.lvimrc	1969-12-31 16:00:00.000000000 -0800
+@@ -1,32 +0,0 @@
+-" Local vimrc configuration file.  Install the localvimrc.vim vim script.
+-set expandtab
+-set tabstop=8
+-set softtabstop=4
+-set shiftwidth=4
+-
+-" Add all tag files to tags path.
+-
+-let topdir = findfile("configure.in", ".;")
+-let topdir = substitute(topdir, "configure.in", "", "")
+-
+-" Check tags file in current dir:
+-set tags+=tags
+-
+-" Add tag files in parent directories:
+-let tagfiles = findfile("tags", ".;", -1)
+-
+-" Add tag files for libraries:
+-call add(tagfiles, topdir . "opl/tags")
+-call add(tagfiles, topdir . "pcsound/tags")
+-call add(tagfiles, topdir . "textscreen/tags")
+-
+-for tagfile in tagfiles
+-    " Don't go beyond the project top level when adding parent dirs:
+-    if stridx(tagfile, topdir) >= 0
+-        exec "set tags+=" . tagfile
+-    endif
+-endfor
+-
+-unlet topdir
+-unlet tagfiles
+-
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/Makefile.am chocolate-doom-chocolate-doom-2.2.1/Makefile.am
+--- chocolate-doom-chocolate-doom-2.2.1.orig/Makefile.am	2016-01-14 10:46:30.928027977 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/Makefile.am	2016-01-14 22:07:39.653061468 -0800
+@@ -50,17 +50,27 @@
+         TODO                            \
+         rpm.spec
+ 
+-doomdocsdir = ${docdir}/../${PROGRAM_PREFIX}doom
+-doomdocs_DATA = $(DOC_FILES) NOT-BUGS
++PSDO0M_DOC_FILES=                       \
++        CHANGELOG.psdoom-ng             \
++        COPYING.psdoom-ng               \
++        CREDITS.psdoom-ng               \
++        README.psdoom-ng                \
++        TODO.psdoom-ng
++
++psdoomngdocsdir = ${docdir}/../psdoom-ng
++psdoomngdocs_DATA = $(DOC_FILES) $(PSDO0M_DOC_FILES)
++
++#doomdocsdir = ${docdir}/../${PROGRAM_PREFIX}doom
++#doomdocs_DATA = $(DOC_FILES) NOT-BUGS
+ 
+-hereticdocsdir = ${docdir}/../${PROGRAM_PREFIX}heretic
+-hereticdocs_DATA = $(DOC_FILES)
++#hereticdocsdir = ${docdir}/../${PROGRAM_PREFIX}heretic
++#hereticdocs_DATA = $(DOC_FILES)
+ 
+-hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
+-hexendocs_DATA = $(DOC_FILES)
++#hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
++#hexendocs_DATA = $(DOC_FILES)
+ 
+-strifedocsdir = ${docdir}/../${PROGRAM_PREFIX}strife
+-strifedocs_DATA = $(DOC_FILES) README.Strife
++#strifedocsdir = ${docdir}/../${PROGRAM_PREFIX}strife
++#strifedocs_DATA = $(DOC_FILES) README.Strife
+ 
+ MAINTAINERCLEANFILES =  $(AUX_DIST_GEN)
+ 
+@@ -76,3 +86,11 @@
+ 
+ endif
+ 
++psdoomngcfgdir = ${prefix}/share/psdoom-ng
++psdoomngcfg_DATA = psdoom-ng.conf.example
++
++psdoomngwrapperdir = ${prefix}/bin
++psdoomngwrapper_PROGRAMS = psd
++
++psd : psd.in
++	cp psd.in psd
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/man/Makefile.am chocolate-doom-chocolate-doom-2.2.1/man/Makefile.am
+--- chocolate-doom-chocolate-doom-2.2.1.orig/man/Makefile.am	2016-01-14 10:46:30.930028053 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/man/Makefile.am	2016-01-14 16:58:46.734745004 -0800
+@@ -8,6 +8,7 @@
+                     default.cfg.template  \
+                     extra.cfg.template
+ 
++psdoomngdocsdir = ${docdir}/../psdoom-ng
+ doomdocsdir = ${docdir}/../${PROGRAM_PREFIX}doom
+ hereticdocsdir = ${docdir}/../${PROGRAM_PREFIX}heretic
+ hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
+@@ -35,19 +36,22 @@
+            @PROGRAM_PREFIX@hexen-setup.6   \
+            @PROGRAM_PREFIX@strife-setup.6
+ 
+-man_MANS = chocolate-server.6             \
+-           chocolate-setup.6              \
+-           $(GENERATED_MAN_PAGES)         \
+-           $(SETUP_MAN_PAGES)
+-
+-doomdocs_DATA    = INSTALL.doom    CMDLINE.doom
+-hereticdocs_DATA = INSTALL.heretic CMDLINE.heretic
+-hexendocs_DATA   = INSTALL.hexen   CMDLINE.hexen
+-strifedocs_DATA  = INSTALL.strife  CMDLINE.strife
++man_MANS = psdoom-ng.1
++# chocolate-server.6             \
++#           chocolate-setup.6              \
++#           $(GENERATED_MAN_PAGES)         \
++#           $(SETUP_MAN_PAGES)
++
++psdoomngdocs_DATA = INSTALL.psdoom-ng CMDLINE.psdoom-ng
++#doomdocs_DATA    = INSTALL.doom    CMDLINE.doom
++#hereticdocs_DATA = INSTALL.heretic CMDLINE.heretic
++#hexendocs_DATA   = INSTALL.hexen   CMDLINE.hexen
++#strifedocs_DATA  = INSTALL.strife  CMDLINE.strife
+ 
+ CLEANFILES = $(GENERATED_MAN_PAGES) $(SETUP_MAN_PAGES) \
+-             $(doomdocs_DATA) $(hereticdocs_DATA) \
+-             $(hexendocs_DATA) $(strifedocs_DATA)
++              $(psdoomdocsdir_DATA)
++#             $(doomdocs_DATA) $(hereticdocs_DATA) \
++#             $(hexendocs_DATA) $(strifedocs_DATA)
+ MANDIR = $(top_srcdir)/man
+ DOCGEN = $(MANDIR)/docgen
+ 
+@@ -65,6 +69,12 @@
+ 	$(DOCGEN) -g doom -m extra.cfg.template \
+                  -c extended $(top_srcdir)/src/m_config.c > $@
+ 
++CMDLINE.psdoom-ng : $(MANDIR)/CMDLINE.template $(top_srcdir)/src $(top_srcdir)/src/doom
++	$(DOCGEN) -p $(MANDIR)/CMDLINE.template $(top_srcdir)/src/ $(top_srcdir)/src/doom/ > $@
++
++INSTALL.psdoom-ng: $(MANDIR)/INSTALL.template
++	$(MANDIR)/simplecpp -DDOOM -DPRECOMPILED < $(MANDIR)/INSTALL.template > $@
++
+ CMDLINE.doom : $(MANDIR)/CMDLINE.template $(top_srcdir)/src $(top_srcdir)/src/doom
+ 	$(DOCGEN) -p $(MANDIR)/CMDLINE.template $(top_srcdir)/src/ $(top_srcdir)/src/doom/ > $@
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/man/psdoom-ng.1 chocolate-doom-chocolate-doom-2.2.1/man/psdoom-ng.1
+--- chocolate-doom-chocolate-doom-2.2.1.orig/man/psdoom-ng.1	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/man/psdoom-ng.1	2016-01-14 21:29:16.892301250 -0800
+@@ -0,0 +1,208 @@
++.TH psdoom-ng 1
++.SH NAME
++psdoom-ng \- a process killer and monitor that personifies processes
++.SH SYNOPSIS
++.B psdoom-ng [\fIOPTIONS\fR] -iwad <path-to-wad-file>
++.SH DESCRIPTION
++.PP
++psdoom-ng is a process killer and monitor based on psDooM.  Much of psDooM has been ported to Chocolate Doom since XDoom is no longer maintained.  The command psd is the wrapper script used to automatically run psdoom-ng.
++.PP
++Wounding a monster renices a process by +5.  Killing a monster sends a "kill -9."  The floating text infront of it corresponds to the process identifier (PID).
++
++.SH MONSTER LOCATIONS
++.PP
++Locations of the 'pid monsters' within the levels are as follows:
++.PP
++For shareware Doom 1, and registered Doom 1 or Ultimite Doom without the custom level:
++.RS
++psdoom-ng spawns the 'pid monsters' in the 'hidden' courtyard on E1M1. To get there, go through the room with the zig-zag floor with poison around it and open the miscolored wall on the right, before the door to leave that room.
++.RE
++.PP
++For Doom 2 without the custom level:
++.RS
++psdoom-ng spawns the 'pid monsters' in the 'hidden' courtyard on MAP01. To get there, activate the switch to (and get on) the lift in the room before the exit.  Then, once the lift raises, activate the rear wall and walk into that secret alcove. When you leave the lift, a door to the courtyard will have opened on the right side of the room, past the window on the right.
++.RE
++.PP
++For the custom levels:
++.RS
++psdoom-ng spawns you in a room with equiptment and weapons.  The switch ahead of you exits the level, and the three doors take you to rooms containing 'pid monsters'.
++.RE
++
++.SH NOTES
++.PP
++Using killing processes in DWM or any other tiling manager may screw up the game visually.  You will need to run in window mode to prevent this problem.  
++.PP
++The custom maps may not spawn the pid monsters in a reachable place.  You will need to edit the source code.
++
++.SH OPTIONS
++.PP
++-nopssafety
++.RS
++Causes the 'pid monsters' to not be protected against damage from each other, normal Doom monsters, and the environment.  Normally, only the player may inflict damage on 'pid monsters'.
++.RE
++.PP
++-psallusers
++.RS
++Effectively adds every username to the list of users whose processes to show.
++.RE
++.PP
++-psuser [username [username]...]
++.RS
++Adds username(s) to the list of users whose processes to show.  If no username is specified, the current username (as determined by the environment variables listed above) is added to this list.
++.RE
++.PP
++-psnotuser [username [username]...]
++.RS
++Adds username(s) to the list of users whose processes NOT to show.  If no username is specified, the current username (as determined by the environment variables listed above) is added to this list.
++.RE
++.PP
++-nopslev
++.RS
++Suppresses the automatic loading of the custom level psdoom*.wad and makes psDooM assume pid monster coordinates for the stock E1M1 or MAP01.  It has no effect if you don't have the custom level or if you're using shareware Doom 1.
++.RE
++.PP
++-nopsmon
++.RS
++Disables process monitoring entirely.  Nice if you want to play an E1M1 or MAP01 level that isn't set up for process monitoring.
++.RE
++.PP
++-nopsact
++.RS
++Disables the system calls to 'renice' and 'kill' when 'pid monsters' are wounded and killed.  This is good if you only want to monitor processes, not manage them.
++.RE
++.PP
++-nomonsters.
++.RS
++Yes, there is a period at the end of this command.  It does the same thing as the '-nomonsters' flag, but is persistant across new games and level warps. NOTE: 'pid monsters' are NOT affected by the '-nomonsters' and '-nomonsters.' flags; use -nopsmon to turn them off instead.
++.RE
++.PP
++-respawnitems
++.RS
++Like you think it may work, this flag causes items to respawn as they do in '-altdeath' games (Invun, Invis, and dropped items don't respawn; everything else does).  This flag has no effect when recording or playing a demo because it messes up timing.
++.RE
++.PP
++-fullscreen
++.RS
++Runs psdoom-ng into full screen mode.
++.RE
++.PP
++-window
++.RS
++Runs psdoom-ng into windowed screen mode.
++.RE
++.PP
++-iwad
++.RS
++Loads the main wad file.  You need to specify one
++.RE
++.PP
++-merge
++.RS
++Appends total conversion wad file.  You can specify more than one file.
++.RE
++.PP
++-nosound
++.RS
++Disables all sound.
++.RE
++.PP
++-nosfx
++.RS
++Disables sound effects.
++.RE
++.PP
++-nomusic
++.RS
++Disables music
++.RE
++.PP
++-warp [ x y | xy ]
++.RS
++Start immediately in ExMy or MAPxy
++.RE
++.PP
++-grabmouse
++.RS
++Grab mouse in windowed mode.
++.RE
++.PP
++-nograbmouse
++.RS
++Disables mouse grab in window mode.
++.RE
++.PP
++-geometry WxH[wf]
++.RS
++Sets the size of the window's width (W) and height (H).  Optional w appended runs in window mode and f means fullscreen mode.
++.RE
++
++.SH EXAMPLES
++.PP
++psdoom-ng -psallusers -iwad /usr/share/psdoom-ng/doom.wad
++.RS
++This command will show every user's processes.
++.RE
++.PP
++psdoom-ng -psallusers -psuser jschmoe jdoe -iwad /usr/share/psdoom-ng/doom.wad
++.RS
++The '-psuser jschmoe jdoe' is extraneous here; users jschmoe and jdoe are included in '-psallusers'.
++.RE
++.PP
++psdoom-ng -psallusers -psnotuser -iwad /usr/share/psdoom-ng/doom.wad
++.RS
++This will show everybody's processes except your own.  Remember, your username is determined automatically by psdoom-ng according to what PSDOOMUSER, LOGNAME, USER, or USERNAME is set to in the environment.
++.RE
++.PP
++psdoom-ng -psnotuser jdoe -iwad /usr/share/psdoom-ng/doom.wad
++.RS
++This will show no processes, even if you're running psDooM as root. Remember, specifying any 'userlist' command line option causes the defaults to not be us
++.RE
++.PP
++psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom.wad -merge /usr/share/psdoom-ng/psdoom1.wad
++.RS
++This will show process belonging to orson and the psDooM custom level for Doom 1 or Ultimate Doom.
++.RE
++.PP
++psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom2.wad -merge /usr/share/psdoom-ng/psdoom2.wad
++.RS
++This will show process belonging to orson and the psDooM custom level for Doom 2.
++.RE
++
++.SH CONFIGURATION
++.PP
++/etc/psdoom-ng.conf
++.RS
++Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.
++.RE
++.PP
++/home/${USER}/.psdoom-ng/psdoom-ng.conf
++.RS
++Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  The user options override the system options.
++.RE
++
++.br
++.SH AUTHOR
++.PP
++Dennis Chao came up with the original idea and wrote much of the mod.
++.PP
++David Koppenhofer was the previous maintainer of mod.
++.PP
++Simon Howard wrote Chocolate Doom.
++.SH MAINTAINER
++.PP
++Orson Teodoro is the maintainer of psdoom-ng.
++.SH COPYRIGHT
++.PP
++Copyright \(co id Software Inc.
++.PP
++Copyright \(co 1999 Dennis Chao
++.PP
++Copyright \(co 2000 David Koppenhofer
++.PP
++Copyright \(co 2005-2013 Simon Howard.
++.PP
++Copyright \(co 2012-2016 Orson Teodoro.
++.PP
++.br
++This is free software.  You may redistribute copies of it under the terms of the GNU General Public License <http://www.gnu.org/licenses/gpl.html>. There is NO WARRANTY, to the extent permitted by law.
++
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/pkg/config.make chocolate-doom-chocolate-doom-2.2.1/pkg/config.make
+--- chocolate-doom-chocolate-doom-2.2.1.orig/pkg/config.make	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/pkg/config.make	2016-01-14 11:25:08.153506186 -0800
+@@ -0,0 +1,29 @@
++# Shared file included by the makefiles used to build packages.
++# This contains various information needed by the makefiles,
++# and is autogenerated by configure to include various
++# necessary details.
++
++# Tools needed:
++
++CC = gcc
++STRIP = strip
++
++# Package name and version number:
++
++PROGRAM_PREFIX = psdng
++PACKAGE = psdoom-ng
++PACKAGE_NAME = psdoom-ng
++PACKAGE_STRING = psdoom-ng 2.2.1
++PACKAGE_TARNAME = psdoom-ng
++PACKAGE_VERSION = 2.2.1
++
++# Documentation files to distribute with packages.
++
++DOC_FILES = README       \
++            COPYING      \
++            ChangeLog    \
++            NEWS         \
++            NOT-BUGS     \
++            CMDLINE      \
++            TODO
++
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info-gnustep.plist chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info-gnustep.plist
+--- chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info-gnustep.plist	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info-gnustep.plist	2016-01-14 11:18:43.776779498 -0800
+@@ -0,0 +1,36 @@
++{
++    ApplicationName = "psdoom-ng";
++    ApplicationDescription = "psdoom-ng based on psDooM and Chocolate Doom";
++    ApplicationIcon = app.png;
++    ApplicationRelease = 2.2.1;
++    ApplicationURL = "https://github.com/orsonteodoro/psdoom-ng/";
++    Authors = (
++        "Orson Teodoro <orsonteodoro@yahoo.com>"
++    );
++    Copyright = "Copyright (C) 1993-2016";
++    CopyrightDescription = "GNU General Public License, version 2";
++    FullVersionID = 2.2.1;
++    GSMainMarkupFile = "";
++    NSExecutable = "launcher";
++    NSIcon = app.png;
++    NSMainNibFile = launcher.nib;
++    NSPrincipalClass = NSApplication;
++    NSRole = Application;
++    NSTypes = (
++        {
++            NSHumanReadableName = "Doom WAD file";
++            NSUnixExtensions = ( wad );
++            NSRole = Viewer;
++            NSMimeTypes = (
++                "application/x-doom"
++            );
++            NSIcon = "wadfile.png";
++        },
++        {
++            NSHumanReadableName = "Dehacked patch";
++            NSUnixExtensions = ( deh );
++            NSRole = Viewer;
++            NSIcon = "wadfile.png";
++        }
++    );
++}
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info.plist chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info.plist
+--- chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info.plist	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info.plist	2016-01-14 11:25:53.321236459 -0800
+@@ -0,0 +1,60 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++	<key>CFBundleDevelopmentRegion</key>
++	<string>English</string>
++	<key>CFBundleDisplayName</key>
++	<string>psdoom-ng</string>
++	<key>CFBundleExecutable</key>
++	<string>launcher</string>
++	<key>CFBundleGetInfoString</key>
++	<string>psdoom-ng 2.2.1</string>
++	<key>CFBundleIconFile</key>
++	<string>app.icns</string>
++	<key>CFBundleInfoDictionaryVersion</key>
++	<string>6.0</string>
++	<key>CFBundleName</key>
++	<string>psdoom-ng</string>
++	<key>CFBundlePackageType</key>
++	<string>APPL</string>
++	<key>CFBundleShortVersionString</key>
++	<string>2.2.1</string>
++	<key>CFBundleVersion</key>
++	<string>2.2.1</string>
++	<key>NSPrincipalClass</key>
++	<string>NSApplication</string>
++	<key>NSMainNibFile</key>
++	<string>launcher</string>
++
++        <!-- file associations: -->
++
++        <key>CFBundleDocumentTypes</key>
++        <array>
++                <dict>
++                        <key>CFBundleTypeName</key>
++                        <string>Doom WAD file</string>
++                        <key>CFBundleTypeIconFile</key>
++                        <string>wadfile.icns</string>
++                        <key>CFBundleTypeRole</key>
++                        <string>Viewer</string>
++                        <key>CFBundleTypeExtensions</key>
++                        <array>
++                                <string>wad</string>
++                        </array>
++                </dict>
++                <dict>
++                        <key>CFBundleTypeName</key>
++                        <string>Dehacked patch</string>
++                        <key>CFBundleTypeIconFile</key>
++                        <string>wadfile.icns</string>
++                        <key>CFBundleTypeRole</key>
++                        <string>Viewer</string>
++                        <key>CFBundleTypeExtensions</key>
++                        <array>
++                                <string>deh</string>
++                        </array>
++                </dict>
++        </array>
++</dict>
++</plist>
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/psd.in chocolate-doom-chocolate-doom-2.2.1/psd.in
+--- chocolate-doom-chocolate-doom-2.2.1.orig/psd.in	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/psd.in	2016-01-14 21:28:25.756319474 -0800
+@@ -0,0 +1,7 @@
++#!/bin/bash
++if [[ -f /home/${USER}/.psdoom-ng/psdoom-ng.conf ]]; then
++	source /home/${USER}/.psdoom-ng/psdoom-ng.conf
++elif [[ -f /etc/psdoom-ng.conf ]]; then
++	source /etc/psdoom-ng.conf
++fi
++/usr/bin/psdoom-ng ${DEFAULT_ARGS} $@
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/psdoom-ng.conf.example chocolate-doom-chocolate-doom-2.2.1/psdoom-ng.conf.example
+--- chocolate-doom-chocolate-doom-2.2.1.orig/psdoom-ng.conf.example	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/psdoom-ng.conf.example	2016-01-14 21:40:52.639801381 -0800
+@@ -0,0 +1 @@
++DEFAULT_ARGS="-iwad /usr/share/games/doom-data/doom.wad -psuser ${USER} -episode 1"
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/README.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/README.psdoom-ng
+--- chocolate-doom-chocolate-doom-2.2.1.orig/README.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/README.psdoom-ng	2016-01-14 10:53:59.418096167 -0800
+@@ -0,0 +1,311 @@
++psDooM is a process monitor and manager for *nix systems.
++It could be considered a graphical interface to the 'ps', 'renice', and
++'kill' commands.
++psDooM is based on XDoom, which is based on id Software's 'Doom'.
++
++This project started out as a proof-of-concept program for the web page
++"Doom as a tool for system administration" at
++http://www.cs.unm.edu/~dlchao/flake/doom by Dennis Chao at the University
++of New Mexico.  Dennis took the GPL'd sources of XDoom and added code so
++that processes running on the system would be instantiated as monsters,
++and wounding and killing them corresponds to renicing and killing the
++processes.
++
++I (David Koppenhofer) loved the idea of combining two of my favorite
++computer subjects (Linux and Doom).  Therefore, I began to enhance and
++customize the program.
++
++Goals of this project include:
++1) Add even more functionality to the process manager such as the ability
++   to send various kill signals and a way to shut down the machine
++   _cleanly_ from the program.
++2) Add networking support so multiple admins can work the machine at the
++   same time and/or remotely administer a machine.
++3) Everything else in the TODO file.
++4) Possibly make other interfaces besides one to 'ps', such as a file
++   management module.
++5) Make psDooM the de-facto standard for graphical process manipulation
++   on the *nix platform. :-)
++
++------------------------------------------------------------------------
++Supported Platforms
++------------------------------------------------------------------------
++
++psDooM has been tested on the following platforms:
++
++    Linux x86 2.0.x, X11, and [S]VGA
++    Solaris SPARC 2.6, X11
++
++psDooM can probably be made to work on any version of UNIX which runs
++XDoom.  It uses several system commands in order to do its work: 'ps',
++'renice', and 'kill'.  Formats of the commands _must_ be as follows:
++
++*** LINUX 'ps' ***
++ps h a x u OT  ==  no header, list other user's processes, list processes
++                   without a controlling terminal, in 'user format',
++                   sorted by process start time.  example output follows:
++root         1  0.0  0.9   764   388  ?  S    18:39   0:01 init
++root         2  0.0  0.0     0     0  ?  SW   18:39   0:00 (kflushd)
++root         3  0.0  0.0     0     0  ?  SW<  18:39   0:00 (kswapd)
++root        28  0.0  0.8   736   348  ?  S    18:39   0:00 /sbin/kerneld
++root       143  0.0  1.2   816   472  ?  S    18:39   0:00 syslogd
++root       152  0.0  1.3   896   528  ?  S    18:39   0:00 klogd
++daemon     163  0.0  1.0   784   404  ?  S    18:39   0:00 /usr/sbin/atd
++david      218  0.0  2.1  1280   856   1 S    18:39   0:00 -bash
++root       221  0.0  0.7   724   296   4 S    18:39   0:00 /sbin/mingetty tty4
++david      598  0.0  1.2   844   472   2 R    22:14   0:00 ps h a x u OT
++
++*** SOLARIS 'ps' ***
++/usr/bin/ps -A -o user= -o pid= -o tty= -o comm=
++     list all processes, show username, show process id, show terminal,
++     show user's command, suppress headers.  example output follows:
++root       1  ?  init
++root      28  ?  /sbin/kerneld
++root       2  ?  (kflushd)
++root       3  ?  (kswapd)
++root     152  ?  klogd
++root     143  ?  syslogd
++daemon   163  ?  /usr/sbin/atd
++david    598  2  ps
++david    218  1  -bash
++root     221  4  /sbin/mingetty
++
++renice +5 <pid>  == renices process number <pid> to +5 priority.
++
++kill -9 <pid>  == sends a SIGKILL to process number <pid>.
++
++------------------------------------------------------------------------
++Obtaining the Source
++------------------------------------------------------------------------
++
++The latest version of psDooM can be found on the homepage at:
++
++    http://psdoom.sourceforge.net/
++
++------------------------------------------------------------------------
++Problem Reports
++------------------------------------------------------------------------
++
++If you find a problem with psDooM, you can e-mail me at
++djk@users.sourceforge.net.  You could also go to the psDooM SourceForge
++Project Page at http://sourceforge.net/project/?group_id=3418
++and use the facilities there (like 'bug report', 'support request', etc).
++However, please be sure that it is a psDooM problem rather than an XDoom
++issue.  The easiest way to tell the difference is to run XDoom with the
++same level and options (if at all possible).  If the problem occurs there
++as well, it's XDoom's fault, not psDooM's.  Obviously, if the problem
++involves any of the psDooM-specific command line flags or 'pid monsters',
++it is a psDooM-related issue. :-)  I cannot guarantee that I can solve
++your problem.  I'm doing this in my spare time for the fun of it; this
++software is provided on AS IS basis.
++
++------------------------------------------------------------------------
++Building psDooM from Source
++------------------------------------------------------------------------
++
++If you're reading this file from the binary distribution, you don't need
++to know how to build psDooM from source.  Go on to the next section. :-)
++
++If you're intrested in building psDooM from source and you're reading
++this file, you've either untarred the psDooM sources or have successfully
++applied the psDooM patch to XDoom.
++See Udo's "INSTALL" file in ../xdoomsrc/doc for details on building from
++here on.
++
++Changes to the XDoom code are generally denoted by '*** PID BEGIN ***'
++and '*** PID END ***' in the source files.  The files pr_process.c and
++pr_process.h are new files for psDooM.
++
++------------------------------------------------------------------------
++Executing psDooM
++------------------------------------------------------------------------
++
++NOTE: Throughout the explanation, I'll refer to the program as 'psDooM',
++even though the executable you actually run will likely be called
++something else (like ps-sxdoom).
++
++If you can run XDoom, you're well on your way to running psDooM.
++Be sure to see the XDoom docs (and other Doom-related material) in
++../xdoomsrc/doc/ (or ../xdoomdoc/ if you're using the binary
++distribution), as it applies to psDooM also, with a few cavaets:
++* I have yet to test demo recording compatability with XDoom and other
++  Doom ports.
++* Save games aren't compatable with XDoom (and other ports, I imagine).
++* Netgames won't work on levels that have pid monsters in them, due to
++  consistancy check errors.  Netgames on levels without pid monsters
++  should work, but this is untested as well.
++* psDooM is installed into the directory /usr/local/games/psdoom rather
++  than /usr/local/games/xdoom.  Shell scripts are still installed in
++  /usr/local/bin.
++* psDooM looks for its default configuration files (.doomrc, .xdlaunchrc)
++  and savegame files (doomsav?.dsg) in ~/.psdoom rather than in ~/.xdoom.
++
++Now, with those out of the way, we can get to the good stuff. :-)
++
++psDooM can monitor processes with shareware Doom 1, registered Doom 1,
++Ultimate Doom, or Doom 2.  'Plutonia Experiment' and 'TNT - Evilution'
++will run, but no process monitoring will be done.
++
++The first level (either E1M1 or MAP01), and only the first level, will
++contain monsters that represent processes currently running on the machine
++('pid monsters').  The machine's process list is checked at regular
++intervals.  Processes that are new since the last check are spawned as new
++monsters, while processes no longer running on the machine are removed
++from the level.  Process monitoring is not done if playing on a level
++other than the first one or while recording/playing a demo.
++
++A 'pid monster' is identified by the text 'floating' in front of it.  This
++text denotes its process id number and the last 7 characters of the
++process name.  The text is not shown if the monster is too far away from
++the player or too close to the edge of the screen.
++
++Wounding a 'pid monster' corresponds to executing a 'renice +5' on the
++associated process.  Killing a 'pid monster' sends a 'kill -9' to the
++associated process.  Since the renice and kill actions are done by a
++system call, they are governed by the permissions of the user running
++psDooM.  For example, if a normal user, 'jschmoe', kills a 'pid monster'
++whose real process is owned by 'jdoe', nothing would happen to the
++underlying process on the machine because jschmoe doesn't have the rights
++to alter jdoe's processes.  The 'pid monster' that jschmoe killed will be
++resurrected in psDooM during the next process check.  The resurrection
++denotes that the process on the machine never really went away; its Doom
++representation was only temporarily stopped from moving around.
++
++In the original implementation of the program, 'pid monsters' could be
++killed not only by the program's user, but also by other 'pid monsters'
++and normal Doom monsters on the level.  The reasoning behind this behavior
++was that "on very heavily-loaded machines, it is not uncommon for the
++OS to kill random processes."  Unfortunately, the number of monsters
++in a given area must be depressingly small in order for them to avoid both
++intentional infighting and friendly fire.  Since monsters would tend to
++kill each other off until only a few remained in the area, the user was
++severely hampered in the ability to orderly control processes on the
++machine.  Therefore, the default behavior of psDooM is to ensure the
++player is the only character in the game who can wound and kill 'pid
++monsters'.  This avoids accidental process deaths from monster infighting.
++Unfortunately, it doesn't prevent accidental process deaths from a user's
++poor aim. ;-}  The original behavior of 'pid monsters' being as vunerable
++as other monsters may be enabled with the command line flag:
++
++ -nopssafety
++   Causes the 'pid monsters' to not be protected against damage from each
++   other, normal Doom monsters, and the environment.  Normally, only the
++   player may inflict damage on 'pid monsters'.
++
++Which processes are represented by default depends on whether you're
++running psDooM as the root user or not.  If you are root, then all
++processes are shown.  Normal users see only their own processes by
++default.  The current username is determined by looking at the environment
++variables PSDOOMUSER, LOGNAME, USER, and USERNAME (in that order).
++Changing these variables will _not_ change the permissions of your
++username with regard to process renicing and killing; they're just used to
++determine username for the 'userlist'-related options.  The default
++'userlist' behavior may be nullified by giving some command line arguments
++to psDooM.
++NOTE: specifying _any_ of these options will cause psDooM to ignore the
++default settings for the current username.  The list of users whose
++processes to show will start out empty.
++
++ -psallusers
++   Effectively adds every username to the list of users whose processes
++   to show.
++ -psuser [username [username]...]
++   Adds username(s) to the list of users whose processes to show.  If no
++   username is specified, the current username (as determined by the
++   environment variables listed above) is added to this list.
++ -psnotuser [username [username]...]
++   Adds username(s) to the list of users whose processes NOT to show.  If
++   no username is specified, the current username (as determined by the
++   environment variables listed above) is added to this list.
++
++Examples of 'userlist' command line flags:
++%ps-xdoom -psallusers
++   This command will show every user's processes.
++
++%ps-xdoom -psallusers -psuser jschmoe jdoe
++   The '-psuser jschmoe jdoe' is extraneous here; users jschmoe and jdoe
++   are included in '-psallusers'.
++
++%ps-xdoom -psallusers -psnotuser
++   This will show everybody's processes except your own.  Remember, your
++   username is determined automatically by psDooM according to what
++   PSDOOMUSER, LOGNAME, USER, or USERNAME is set to in the environment.
++
++%ps-xdoom -psnotuser jdoe
++   This will show no processes, even if you're running psDooM as root.
++   Remember, specifying any 'userlist' command line option causes the
++   defaults to not be used; the list of users whose processes to show
++   starts out empty.
++
++The 'pid monster' locations depend on what version of Doom you're using
++and whether you have the custom process management levels (available on
++the psDooM web site).
++
++If you have registered Doom 1, Ultimite Doom, or Doom 2, you can use a
++custom level designed for process management.  There is one level designed
++for Doom 1 (psdoom1.wad) and another designed for Doom 2 (psdoom2.wad).
++If those files are present (or linked to) in the program's directory and
++have the correct name (as given above), the level will automatically load
++as E1M1 or MAP01, unless suppressed with the command line flag:
++
++ -nopslev
++   Suppresses the automatic loading of the custom level psdoom*.wad and
++   makes psDooM assume pid monster coordinates for the stock E1M1 or
++   MAP01.  It has no effect if you don't have the custom level or if
++   you're using shareware Doom 1.
++
++NOTE: The command 'ps-xdoom -nopslev -file psdoom1.wad' will not work for
++process management.  While the custom level will be loaded, psDooM would
++assume E1M1 coordinates for the 'pid monster' placement.  The E1M1
++coordinates do not correlate to anywhere meaningful on the psdoom*.wad
++maps.
++
++Locations of the 'pid monsters' within the levels are as follows:
++
++For shareware Doom 1, and registered Doom 1 or Ultimite Doom without the
++custom level:
++  psDooM spawns the 'pid monsters' in the 'hidden' courtyard on E1M1.
++  To get there, go through the room with the zig-zag floor with poison
++  around it and open the miscolored wall on the right, before the door to
++  leave that room.
++
++For Doom 2 without the custom level:
++  psDooM spawns the 'pid monsters' in the 'hidden' courtyard on MAP01.
++  To get there, activate the switch to (and get on) the lift in the room
++  before the exit.  Then, once the lift raises, activate the rear wall and
++  walk into that secret alcove. When you leave the lift, a door to the
++  courtyard will have opened on the right side of the room, past the
++  window on the right.
++
++For the custom levels:
++  psDooM spawns you in a room with equiptment and weapons.  The switch
++  ahead of you exits the level, and the three doors take you to rooms
++  containing 'pid monsters'.
++
++There are several other command line flags that affect how psDooM runs:
++ -nopsmon
++   Disables process monitoring entirely.  Nice if you want to play an E1M1
++   or MAP01 level that isn't set up for process monitoring.
++ -nopsact
++   Disables the system calls to 'renice' and 'kill' when 'pid monsters'
++   are wounded and killed.  This is good if you only want to monitor
++   processes, not manage them.
++ -nomonsters.
++   Yes, there is a period at the end of this command.  It does the same
++   thing as the '-nomonsters' flag, but is persistant across new games and
++   level warps.
++   NOTE: 'pid monsters' are NOT affected by the '-nomonsters' and
++         '-nomonsters.' flags; use -nopsmon to turn them off instead.
++ -respawnitems
++   Like you think it may work, this flag causes items to respawn as they
++   do in '-altdeath' games (Invun, Invis, and dropped items don't 
++   respawn; everything else does).  This flag has no effect when recording
++   or playing a demo because it messes up timing.
++
++The XDoom distribution includes a graphical front-end to xdoom, called
++xdlaunch.  It allows the user to specify XDoom command line flags by
++clicking option boxes and using dropdown lists.  This utility has been
++renamed to ps-xdlaunch and modified to run psDooM.  Also, a place in the
++front-end was added so a user can manually type additional command line
++flags to pass to ps-xdoom.  psDooM-specific options can be shown by
++pressing a button in ps-xdlaunch.  This utility requires TCL/TK.
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/setup/setup-manifest.xml chocolate-doom-chocolate-doom-2.2.1/setup/setup-manifest.xml
+--- chocolate-doom-chocolate-doom-2.2.1.orig/setup/setup-manifest.xml	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/setup/setup-manifest.xml	2016-01-14 10:53:59.419096205 -0800
+@@ -0,0 +1,33 @@
++<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
++
++<!-- Magic manifest file that should make Windows Vista/7 not
++     attempt to gain elevated privileges for chocolate-setup.
++     
++     Based on:
++     
++     http://www.cygwin.com/ml/cygwin/2006-12/msg00580.html
++  -->
++
++<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
++  <!-- The "name" field in this tag should be the same as the executable's
++       name -->
++  <assemblyIdentity version="0.0.0.0" processorArchitecture="X86"
++                    name="pssetup.exe" type="win32"/>
++  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
++    <security>
++      <requestedPrivileges>
++        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
++      </requestedPrivileges>
++    </security>
++  </trustInfo>
++
++  <!-- Stop the Program Compatibility Assistant appearing: -->
++
++  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
++    <application>
++      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/> <!-- 7 -->
++      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/> <!-- Vista -->
++    </application>
++  </compatibility>
++</assembly>
++
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/d_main.c chocolate-doom-chocolate-doom-2.2.1/src/doom/d_main.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/d_main.c	2016-01-14 10:46:30.938028358 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/d_main.c	2016-01-14 11:01:26.897129750 -0800
+@@ -1,5 +1,6 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -75,6 +76,21 @@
+ 
+ #include "d_main.h"
+ 
++// *** PID BEGIN ***
++// Need the flags and routines
++#include "pr_process.h"
++
++boolean ps_level_loaded = false;
++boolean nopsmon;  // checkparm for -nopsmon
++boolean nopsact;  // checkparm for -nopsact
++boolean psallusers;  // checkparm for -psallusers
++boolean nopssafety;  // checkparm for -nopssafety
++
++// To automagically add psdoom1.wad and psdoom2.wad upon load.
++static char *psdoom1wad;
++static char *psdoom2wad;
++// *** PID END ***
++
+ //
+ // D-DoomLoop()
+ // Not a globally visible function,
+@@ -94,6 +110,15 @@
+ 
+ char *          iwadfile;
+ 
++// *** PID BEGIN ***
++// This makes a 'no monsters' that is persistant across new games
++// and level warps.
++boolean		nomonstersperiod; // checkparm of '-nomonsters.'
++
++// This makes items respawn as in -altdeath (ie. no dropped items,
++// no invis, no invun)
++boolean  respawnitems;  // checkparm of -respawnitems
++// *** PID END ***
+ 
+ boolean		devparm;	// started game with -devparm
+ boolean         nomonsters;	// checkparm of -nomonsters
+@@ -593,6 +618,18 @@
+ {
+     gameaction = ga_nothing;
+     demosequence = -1;
++// *** PID BEGIN ***
++// Print status message.
++    fprintf(stderr, "***** start title: *****\n");
++
++// Get rid of possible pid mobjs before starting any demos (this only
++// matters here if this routine is called because of EndGame from a
++// level where there were pid monsters).
++// Left-over pid mobjs were being cleared in the level setup for
++// the demo, and that was screwing up the demo timing.
++    cleanup_pid_list(NULL);
++// *** PID END ***
++
+     D_AdvanceDemo ();
+ }
+ 
+@@ -1165,6 +1202,15 @@
+     char file[256];
+     char demolumpname[9];
+     int numiwadlumps;
++// *** PID BEGIN ***
++    // Pointer to environment variable string to determine username.
++    char	*whoami = NULL;
++
++    // Value to check whether there were any userlist-related flags
++    // given on the command line.  Used to determine whether to
++    // set up default userlist parameters.
++    boolean	userlist_arg_given = false;
++// *** PID END ***
+ 
+     I_AtExit(D_Endoom, false);
+ 
+@@ -1242,6 +1288,145 @@
+ 	
+     nomonsters = M_CheckParm ("-nomonsters");
+ 
++// *** PID BEGIN ***
++// This keeps a 'no monsters' that is persistant across new games
++// and level warps.
++    if ( (nomonstersperiod = M_CheckParm("-nomonsters.") ) ) {
++       nomonsters = true;
++    }
++
++// This makes items respawn as in -altdeath (ie. no dropped items,
++// no invis, no invun)
++    respawnitems = M_CheckParm("-respawnitems");
++
++// Get flag to determine whether to run the 'ps' portion of the program.
++    nopsmon = M_CheckParm("-nopsmon");
++
++// Get flag to determine whether to execute the actual re-nice and kill
++// of processes.
++    nopsact = M_CheckParm("-nopsact");
++
++// Get flag to determine whether pid monsters can be hurt and killed by
++// things other than a player.  They can be hurt if this flag is true.
++    nopssafety = M_CheckParm("-nopssafety");
++
++// Get flag to tell if we show all users' processes.  userlist_arg_given
++// is assigned so we don't set defaults later on since we specified
++// at least one user-related option.
++    psallusers = userlist_arg_given = M_CheckParm("-psallusers");
++
++// Set up list of users whose processes to include.
++    p = M_CheckParm("-psuser");
++    if (p)
++    {
++        // Keeps track if any specific usernames are given.  If not,
++        // use the current user's name.
++        boolean		user_name_given = false;
++
++        userlist_arg_given = true;  // Don't set defaults later on...
++
++	// the parms after p are user names,
++	// until end of parms or another - preceded parm
++	while (++p != myargc && myargv[p][0] != '-') {
++           user_name_given = true;
++           add_to_ps_userlist(psuser, myargv[p]);
++        }
++
++        // If there were no arguments to the -psuser flag,
++        // add current username to the list
++        if ( !user_name_given ) {
++
++           if ( whoami == NULL ) {  // Need to get username
++              // Get username of the person running the program.
++              // PSDOOMUSER, LOGNAME, USER, and USERNAME in the environment
++              // are checked with getenv(), in that order.  If none of
++              // these are set, abort with a message to set one of them.
++              if ( (whoami=getenv("PSDOOMUSER")) == NULL )
++                 if ( (whoami=getenv("LOGNAME")) == NULL )
++                    if ( (whoami=getenv("USER")) == NULL )
++                       if ( (whoami=getenv("USERNAME")) == NULL ) {
++                          // Error!  Need to have at least one of these set in
++                          // the environment so we can determine current username.
++                          I_Error("Could not determine your username.\nNeed to have PSDOOMUSER, LOGNAME, USER, or USERNAME set in the environment.\n");
++                       }
++           }  // end 'if whoami is not set'
++
++           add_to_ps_userlist(psuser, whoami);
++
++        }  // end 'if we default in current username'
++    }  // end -psuser
++
++// Set up list of users whose processes to exclude.
++    p = M_CheckParm("-psnotuser");
++    if (p)
++    {
++        // Keeps track if any specific usernames are given.  If not,
++        // use the current user's name.
++        boolean		user_name_given = false;
++
++        userlist_arg_given = true;  // Don't set defaults later on...
++
++	// the parms after p are user names,
++	// until end of parms or another - preceded parm
++	while (++p != myargc && myargv[p][0] != '-') {
++           user_name_given = true;
++           add_to_ps_userlist(psnotuser, myargv[p]);
++        }
++
++        // If there were no arguments to the -psnotuser flag,
++        // add current username to the list
++        if ( !user_name_given ) {
++
++           if ( whoami == NULL ) {  // Need to get username
++              // Get username of the person running the program.
++              // PSDOOMUSER, LOGNAME, USER, and USERNAME in the environment
++              // are checked with getenv(), in that order.  If none of
++              // these are set, abort with a message to set one of them.
++              if ( (whoami=getenv("PSDOOMUSER")) == NULL )
++                 if ( (whoami=getenv("LOGNAME")) == NULL )
++                    if ( (whoami=getenv("USER")) == NULL )
++                       if ( (whoami=getenv("USERNAME")) == NULL ) {
++                          // Error!  Need to have at least one of these set in
++                          // the environment so we can determine current username.
++                          I_Error("Could not determine your username.\nNeed to have PSDOOMUSER, LOGNAME, USER, or USERNAME set in the environment.\n");
++                       }
++           }  // end 'if whoami is not set'
++
++           add_to_ps_userlist(psnotuser, whoami);
++
++        }  // end 'if we default in the current username'
++    }  // end -psnotuser
++
++// If none of the user-related flags were given on the command line,
++// set defaults depending on whether the current user is root or not.
++    if ( !userlist_arg_given ) {
++
++       if ( whoami == NULL ) {  // Need to get username
++          // Get username of the person running the program.
++          // PSDOOMUSER, LOGNAME, USER, and USERNAME in the environment
++          // are checked with getenv(), in that order.  If none of
++          // these are set, abort with a message to set one of them.
++          if ( (whoami=getenv("PSDOOMUSER")) == NULL )
++             if ( (whoami=getenv("LOGNAME")) == NULL )
++                if ( (whoami=getenv("USER")) == NULL )
++                   if ( (whoami=getenv("USERNAME")) == NULL ) {
++                      // Error!  Need to have at least one of these set in
++                      // the environment so we can determine current username.
++                      I_Error("Could not determine your username.\nNeed to have PSDOOMUSER, LOGNAME, USER, or USERNAME set in the environment.\n");
++                   }
++       }  // end 'if whoami is not set'
++
++       if ( !strcmp(whoami,"root") ) {
++          // username is "root".  show all user processes.
++          psallusers = true;
++       } else {
++          // username is not "root".  show only current user's processes.
++          add_to_ps_userlist(psuser, whoami);
++       }
++
++    }  // end if !userlist_arg_given
++// *** PID END ***
++
+     //!
+     // @vanilla
+     //
+@@ -1361,6 +1546,10 @@
+ 
+     // Find main IWAD file and load it.
+     iwadfile = D_FindIWAD(IWAD_MASK_DOOM, &gamemission);
++// *** PID BEGIN ***
++    psdoom1wad = D_FindWADByName("psdoom1.wad");
++    psdoom2wad = D_FindWADByName("psdoom2.wad");
++// *** PID END ***
+ 
+     // None found?
+ 
+@@ -1375,6 +1564,29 @@
+     DEH_printf("W_Init: Init WADfiles.\n");
+     D_AddFile(iwadfile);
+     numiwadlumps = numlumps;
++   
++// *** PID BEGIN ***
++// If the command-line flag to suppress auto-loading of custom
++// ps management levels is *not* there, load the appropriate level.
++    p = M_CheckParm ("-nopslev");
++    if (p)
++    {
++// Add psdoom1.wad if this is registered (Doom 1) or retail (Ultimite Doom).
++// If we loaded it, set the flag to true so we can place the monsters in the
++// correct positions.
++		if ( gamemode == registered || gamemode == retail ){
++			D_AddFile(iwadfile);
++			ps_level_loaded = true;
++		}
++// Add psdoom2.wad if this is commercial (Doom 2) and not an add-on pack.
++// If we loaded it, set the flag to true so we can place the monsters in the
++// correct positions.
++		if ( gamemode == commercial && gamemission == doom2 ) {
++			D_AddFile(iwadfile);
++			ps_level_loaded = true;
++		}
++    }
++// *** PID END ***
+ 
+     W_CheckCorrectIWAD(doom);
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/doomstat.h chocolate-doom-chocolate-doom-2.2.1/src/doom/doomstat.h
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/doomstat.h	2016-01-14 10:46:30.939028396 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/doomstat.h	2016-01-14 10:58:21.268063215 -0800
+@@ -1,5 +1,6 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -44,6 +45,17 @@
+ // Command line parameters.
+ //
+ extern  boolean	nomonsters;	// checkparm of -nomonsters
++
++// *** PID BEGIN ***
++// This makes a 'no monsters' that is persistant across save games
++// and level warps.
++extern  boolean	nomonstersperiod; // checkparm of '-nomonsters.'
++
++// This makes items respawn as in -altdeath (ie. no dropped items,
++// no invis, no invun)
++extern  boolean	respawnitems;  // checkparm of -respawnitems
++// *** PID END ***
++
+ extern  boolean	respawnparm;	// checkparm of -respawn
+ extern  boolean	fastparm;	// checkparm of -fast
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/g_game.c chocolate-doom-chocolate-doom-2.2.1/src/doom/g_game.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/g_game.c	2016-01-14 10:46:30.939028396 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/g_game.c	2016-01-14 10:57:56.132106386 -0800
+@@ -1,5 +1,6 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright (C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -132,6 +133,14 @@
+ boolean         longtics;               // cph's doom 1.91 longtics hack
+ boolean         lowres_turn;            // low resolution turning for longtics
+ boolean         demoplayback; 
++
++// *** PID BEGIN ***
++// Need a variable to hold 'demoplayback' because G_InitNew()
++// wipes it out before pr_check() is called.  Therefore, pid mobjs
++// are spawned on level load for a demo and messes it all up.
++boolean                isreallyademo;
++// *** PID END ***
++
+ boolean		netdemo; 
+ byte*		demobuffer;
+ byte*		demo_p;
+@@ -651,7 +660,23 @@
+ 	memset (players[i].frags,0,sizeof(players[i].frags)); 
+     } 
+ 		 
+-    P_SetupLevel (gameepisode, gamemap, 0, gameskill);    
++// *** PID BEGIN ***
++// Here's where we need to temporarily set demoplayback.
++// pr_check() is called from P_SetupLevel().
++    if ( isreallyademo ){
++       demoplayback = true;
++    }
++// *** PID END ***
++		 
++    P_SetupLevel (gameepisode, gamemap, 0, gameskill); 
++
++// *** PID BEGIN ***
++// Here's where we set demoplayback back if changed above.
++    if ( isreallyademo ){
++       demoplayback = false;
++    }
++// *** PID END ***
++       
+     displayplayer = consoleplayer;		// view the guy you are playing    
+     gameaction = ga_nothing; 
+     Z_CheckHeap ();
+@@ -1690,13 +1715,27 @@
+ void G_DoNewGame (void) 
+ {
+     demoplayback = false; 
++
++// *** PID BEGIN ***
++// This is a new game, not a demo, so set the holding flag to false.
++    isreallyademo = false;
++// *** PID END ***
++
++    
+     netdemo = false;
+     netgame = false;
+     deathmatch = false;
+     playeringame[1] = playeringame[2] = playeringame[3] = 0;
+     respawnparm = false;
+     fastparm = false;
+-    nomonsters = false;
++
++// *** PID BEGIN ***
++// Make '-nomonsters.' persistant across new games/warps.
++    nomonsters = nomonstersperiod;
++// old code:
++//    nomonsters = false;
++// *** PID END ***
++
+     consoleplayer = 0;
+     G_InitNew (d_skill, d_episode, d_map); 
+     gameaction = ga_nothing; 
+@@ -2158,6 +2197,12 @@
+ 	netdemo = true;
+     }
+ 
++// *** PID BEGIN ***
++// Before we init the level, set the flag to hold the fact
++// that this is a demo.
++    isreallyademo = true;
++// *** PID END ***
++
+     // don't spend a lot of time in loadlevel 
+     precache = false;
+     G_InitNew (skill, episode, map); 
+@@ -2230,7 +2275,12 @@
+ 	playeringame[1] = playeringame[2] = playeringame[3] = 0;
+ 	respawnparm = false;
+ 	fastparm = false;
+-	nomonsters = false;
++// *** PID BEGIN ***
++// Make '-nomonsters.' persistant across new games/warps.
++        nomonsters = nomonstersperiod;
++// old code:
++//        nomonsters = false;
++// *** PID END ***
+ 	consoleplayer = 0;
+         
+         if (singledemo) 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/Makefile.am chocolate-doom-chocolate-doom-2.2.1/src/doom/Makefile.am
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/Makefile.am	2016-01-14 10:46:30.938028358 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/Makefile.am	2016-01-14 10:57:34.676289655 -0800
+@@ -43,6 +43,7 @@
+ p_telept.c                      \
+ p_tick.c           p_tick.h     \
+ p_user.c                        \
++pr_process.c       pr_process.h \
+ r_bsp.c            r_bsp.h      \
+ r_data.c           r_data.h     \
+                    r_defs.h     \
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_inter.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_inter.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_inter.c	2016-01-14 10:46:30.940028434 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_inter.c	2016-01-14 10:56:46.405452220 -0800
+@@ -1,5 +1,7 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright (C) 1999 by Dennis Chao
++// Copyright (C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -39,6 +41,9 @@
+ 
+ #include "p_inter.h"
+ 
++// *** PID BEGIN ***
++#include "pr_process.h"
++// *** PID END *** 
+ 
+ #define BONUSADD	6
+ 
+@@ -671,6 +676,22 @@
+     mobjtype_t	item;
+     mobj_t*	mo;
+ 	
++// *** PID BEGIN ***
++// The only time the delete flag is 'false' here is if we called
++// P_KillMobj() from cleanup_pid_list(). Skip the actual kill if
++// this mobj is not a pid monster or this routine was called from
++// cleanup_pid_list(). -- (If called from cleanup_pid_list(), the
++// process represented by this mobj is already dead; we're just
++// removing the monster from the game engine now.)
++    if (target->m_pid != 0 && target->m_del_from_pid_list == true) {
++       fprintf(stderr, "kill process %d\n", target->m_pid);
++       pr_kill(target->m_pid);
++
++       target->m_draw_pid_info = false; /* set to false so corpse
++                                           doesn't have pid      */
++    }
++// *** PID END ***
++	
+     target->flags &= ~(MF_SHOOTABLE|MF_FLOAT|MF_SKULLFLY);
+ 
+     if (target->type != MT_SKULL)
+@@ -736,6 +757,15 @@
+         return;
+     }
+ 
++// *** PID BEGIN ***
++// Don't drop anything if this was called from cleanup_pid_list().  Use
++// similar criteria as above to determine whether this was called from
++// that routine.
++    if (target->m_pid != 0 && target->m_del_from_pid_list == false) {
++       return;
++    }
++// *** PID END ***
++
+     // Drop stuff.
+     // This determines the kind of object spawned
+     // during the death frame of a thing.
+@@ -789,6 +819,41 @@
+     fixed_t	thrust;
+     int		temp;
+ 	
++// *** PID BEGIN ***
++// gather info about what's damaging what:
++/*
++    fprintf(stderr, "************\n");
++    fprintf(stderr, "* target->type %d\n", target->type);
++if (inflictor != NULL )
++    fprintf(stderr, "* inflictor->type %d\n", inflictor->type);
++if (source != NULL )
++    fprintf(stderr, "* source->type %d\n", source->type);
++    fprintf(stderr, "* damage %d\n", damage);
++    fprintf(stderr, "************\n");
++*/
++
++// If the target is a pid monster, make it only take damage from
++// a player.  Keeps monsters (and environment) from killing off
++// processes when we don't want them to.
++// If the nopssafety flag was given, let the pid mobjs be damaged
++// normally.
++// Note: If we 'return' in this case, the monster takes no damage, but
++// also doesn't target its attacker.  I like it better if the pid monsters
++// behave as if they are damaged.  Change the 'damage' statement back to the
++// 'return' statement if they should not even react to damage from others.
++    if (target->m_pid != 0 && !nopssafety) {
++       if (source && !source->player) {
++          damage = 0;
++//          return;
++       }
++       if (!source) {
++          damage = 0;
++//          return;
++       }
++    }
++// *** PID END ***
++
++	
+     if ( !(target->flags & MF_SHOOTABLE) )
+ 	return;	// shouldn't happen...
+ 		
+@@ -895,6 +960,31 @@
+ 	P_KillMobj (source, target);
+ 	return;
+     }
++    
++
++// *** PID BEGIN ***
++// Re-nice the process here, after the possible kill.
++
++// If this is a pid mobj...
++    if (target->m_pid != 0) {
++
++// Add a check to see if this is the first damage taken by
++// the pid monster.  If so, re-nice it.  Otherwise, don't re-nice.
++       if (target->health + damage == target->info->spawnhealth) {
++
++// Also check to see if there is any damage.  Earlier in the routine,
++// we ensure that pid monsters do not take damage (unless inflicted
++// by a player) by setting the damage to 0.  Before the following
++// condition was added, pid monsters were constantly re-niced as they
++// fought, because they always had their original health.
++// That behavior slowed things down a lot.
++          if (damage) {
++             fprintf(stderr, "renice process %d\n", target->m_pid);
++             pr_renice(target->m_pid);
++          }
++       }
++    }
++// *** PID END ***
+ 
+     if ( (P_Random () < target->info->painchance)
+ 	 && !(target->flags&MF_SKULLFLY) )
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.c	2016-01-14 10:46:30.940028434 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.c	2016-01-14 10:56:29.702816444 -0800
+@@ -1,5 +1,6 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -33,9 +34,19 @@
+ 
+ #include "doomstat.h"
+ 
+-
++// *** PID BEGIN ***
++#include <string.h>
++// *** PID END ***
+ void G_PlayerReborn (int player);
+-void P_SpawnMapThing (mapthing_t*	mthing);
++
++// *** PID BEGIN ***
++// Have this routine return a pointer to the pid mobj it creates.
++// Return NULL if nothing is created.
++// Also accept a parameter to tell if it is spawning a pid mobj.
++mobj_t *P_SpawnMapThing (mapthing_t*	mthing, boolean is_pid_mobj);
++// old code:
++// void P_SpawnMapThing (mapthing_t*	mthing);
++// *** PID END ***
+ 
+ 
+ //
+@@ -616,6 +627,24 @@
+     // only respawn items in deathmatch
+     if (deathmatch != 2)
+ 	return;	// 
++// *** PID BEGIN ***
++    // Don't respawn items if not in altdeath AND
++    // if -respawnitems wasn't given.
++    // Also don't respawn because of -respawnitems if we're in
++    // demo recording or playback; it messes up the timing.
++    if (deathmatch != 2 && ( !respawnitems ||
++                             demorecording ||
++                             demoplayback ||
++                             (gamestate == GS_DEMOSCREEN)
++                           )
++       )
++	return;
++
++// old code:
++//    // only respawn items in deathmatch
++//    if (deathmatch != 2)
++//	return;
++// *** PID END ***
+ 
+     // nothing left to respawn?
+     if (iquehead == iquetail)
+@@ -736,7 +765,14 @@
+ // The fields of the mapthing should
+ // already be in host byte order.
+ //
+-void P_SpawnMapThing (mapthing_t* mthing)
++// *** PID BEGIN ***
++// Have this routine return a pointer to the pid mobj it creates.
++// Return NULL if nothing is created.
++// Also accept a parameter to tell if it is spawning a pid mobj.
++mobj_t* P_SpawnMapThing (mapthing_t* mthing, boolean is_pid_mobj)
++// old code:
++//void P_SpawnMapThing (mapthing_t* mthing)
++// *** PID END ***
+ {
+     int			i;
+     int			bit;
+@@ -744,7 +780,7 @@
+     fixed_t		x;
+     fixed_t		y;
+     fixed_t		z;
+-		
++
+     // count deathmatch start positions
+     if (mthing->type == 11)
+     {
+@@ -753,7 +789,13 @@
+ 	    memcpy (deathmatch_p, mthing, sizeof(*mthing));
+ 	    deathmatch_p++;
+ 	}
+-	return;
++
++// *** PID BEGIN ***
++// Return NULL here.
++	return NULL;
++// old code:
++//	return;
++// *** PID END ***
+     }
+ 
+     if (mthing->type <= 0)
+@@ -761,7 +803,12 @@
+         // Thing type 0 is actually "player -1 start".  
+         // For some reason, Vanilla Doom accepts/ignores this.
+ 
+-        return;
++// *** PID BEGIN ***
++// Return NULL here.
++	return NULL;
++// old code:
++//	return;
++// *** PID END ***
+     }
+ 	
+     // check for players specially
+@@ -772,12 +819,22 @@
+ 	if (!deathmatch)
+ 	    P_SpawnPlayer (mthing);
+ 
+-	return;
++// *** PID BEGIN ***
++// Return NULL here.
++	return NULL;
++// old code:
++//	return;
++// *** PID END ***
+     }
+ 
+     // check for apropriate skill level
+     if (!netgame && (mthing->options & 16) )
+-	return;
++// *** PID BEGIN ***
++// Return NULL here.
++	return NULL;
++// old code:
++//	return;
++// *** PID END ***
+ 		
+     if (gameskill == sk_baby)
+ 	bit = 1;
+@@ -786,8 +843,14 @@
+     else
+ 	bit = 1<<(gameskill-1);
+ 
+-    if (!(mthing->options & bit) )
+-	return;
++// *** PID BEGIN ***
++//bug: Code here does not spawn monsters for psdoom
++//    if (!(mthing->options & bit) )
++// Return NULL here.
++//	return NULL;
++// old code:
++//	return;
++// *** PID END ***
+ 	
+     // find which type to spawn
+     for (i=0 ; i< NUMMOBJTYPES ; i++)
+@@ -801,16 +864,31 @@
+ 		
+     // don't spawn keycards and players in deathmatch
+     if (deathmatch && mobjinfo[i].flags & MF_NOTDMATCH)
+-	return;
++// *** PID BEGIN ***
++// Return NULL here.
++       return NULL;
++// old code:
++//     return;
+ 		
+     // don't spawn any monsters if -nomonsters
+     if (nomonsters
+ 	&& ( i == MT_SKULL
+ 	     || (mobjinfo[i].flags & MF_COUNTKILL)) )
+     {
+-	return;
++          // Return NULL here.
++          return NULL;
+     }
+     
++// old code:
++    // don't spawn any monsters if -nomonsters
++    //if (nomonsters
++	//&& ( i == MT_SKULL
++	//     || (mobjinfo[i].flags & MF_COUNTKILL)) )
++    //{
++	//return;
++    //}    
++// *** PID END ***
++    
+     // spawn it
+     x = mthing->x << FRACBITS;
+     y = mthing->y << FRACBITS;
+@@ -833,6 +911,10 @@
+     mobj->angle = ANG45 * (mthing->angle/45);
+     if (mthing->options & MTF_AMBUSH)
+ 	mobj->flags |= MF_AMBUSH;
++
++// *** PID BEGIN ***
++   return mobj;
++// *** PID END ***
+ }
+ 
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.h chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.h
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.h	2016-01-14 10:46:30.940028434 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.h	2016-01-14 10:56:10.566088020 -0800
+@@ -1,5 +1,7 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright (C) 1999 by Dennis Chao
++// Copyright (C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -276,7 +278,23 @@
+ 
+     // Thing being chased/attacked for tracers.
+     struct mobj_s*	tracer;	
+-    
++
++// *** PID BEGIN ***
++    // the process id (0 if not a process)
++    int                 m_pid;
++    char                m_pname[8];
++
++    // Need more variables for advanced process management:
++
++    // Pointers for a linked list of pid mobj's.
++    struct mobj_s	*npid;
++    struct mobj_s	*ppid;
++    // A flag to tell whether to draw the pid info and another to
++    // denote pending deletion from the pid mobj list.
++    boolean		m_draw_pid_info;
++    boolean		m_del_from_pid_list;
++// *** PID END ***
++
+ } mobj_t;
+ 
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.c chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.c	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.c	2016-01-14 10:53:59.425096434 -0800
+@@ -0,0 +1,814 @@
++/* pr_process.c
++ * by Dennis Chao
++ * modified by David Koppenhofer
++ */
++// Copyright (C) 1999 by Dennis Chao
++// Copyright (C) 2000 by David Koppenhofer
++
++#include <stdlib.h>
++#include <math.h>
++#include <unistd.h>
++
++#include "doomstat.h"
++#include "info.h"
++#include "doomdef.h"
++#include "pr_process.h"
++
++#if defined(SCOOS5) || defined(SCOUW2) || defined(SCOUW7)
++#include "strcmp.h"
++#endif
++
++// Have this routine return a pointer to the pid mobj it creates.
++// Return NULL if nothing is created.
++// Also accept a parameter to tell if it is spawning a pid mobj.
++mobj_t *P_SpawnMapThing(mapthing_t*	mthing, boolean is_pid_mobj); /* from p_mobj.c */
++
++// Use this to see if the newly created pid mobj is colliding
++// with anything.
++// True if OK, False if collision.
++boolean P_CheckPosition(mobj_t *thing, fixed_t x, fixed_t y); /* from p_map.c */
++
++// Use this to remove the mobj without killing it (thus leaving a body).
++// Pass S_NULL as the state to do this.
++boolean P_SetMobjState(mobj_t *mobj, statenum_t state); /* from p_mobj.c */
++
++// Use this to kill off the mobj when it is still in Doom, but the
++// corresponding process is not running.
++void P_KillMobj(mobj_t *source, mobj_t *target); /* from p_inter.c */
++
++// This routine does quite a bit of stuff.  See the description later
++// in this file.
++void add_to_pid_list(int pid, const char *name, int demon);
++
++// Need to return the newly created mobj_t from this routine now.
++mobj_t *add_new_process(int pid, const char *pname, int demon);
++
++// This routine is called for custom level processing only.
++// It guarantees the mt_ext.x and mt_ext.y are at least
++// the monster's radius inside its bounding spawn box.
++// The last argument is the lowest x coordinate for that
++// particular process' area.
++void clip_to_spawnbox(short *x, short *y, int radius, int box_min_x);
++
++// Structure to hold linked list of usernames.
++typedef struct ps_userlist_s
++{
++        char                    name[256];
++        struct ps_userlist_s*   next;
++
++} ps_userlist_t;
++
++// Head of the list of users to include.
++static ps_userlist_t *psuser_list_head = NULL;
++
++// Head of the list of users to exclude.
++static ps_userlist_t *psnotuser_list_head = NULL;
++
++// This routine loops over the userlist pointed to by its first
++// argument looking for a username matching that pointed to
++// by its second argument.  Returns true if it finds the username.
++boolean in_ps_userlist(ps_userlist_t *list_head, char *username);
++
++// Need some pointers to the linked list of pid mobjs.
++// (head, tail, and current position)
++// Probably could have done a circular linked list ... oh well. :-)
++static mobj_t *pid_list_head = NULL;
++static mobj_t *pid_list_tail = NULL;
++static mobj_t *pid_list_pos = NULL;
++
++
++// pr_check
++// This routine replaces both pr_init() and pr_poll().  I used some code
++// from those routines to make this one, though.
++// Called at the start of a game/level and periodically throughout the
++// playing of the level.  It runs 'ps', capturing certain info about each
++// process except for 'ps' itself.
++void pr_check(void) {
++
++// Don't open 'ps' right away; see if we're on the right level first,
++// amongst other criteria.
++  FILE *f = NULL;
++
++  char buf[256];
++  char username[256];
++  int pid = 0;
++  char namebuf[256];
++  char tty[256];
++  int demon = false;
++
++// Bypass the 'ps' part of the program entirely if it's an add-on pack
++// to Doom 2 OR we're not on the correct level (e1m1 or map01).
++// Also bypass if we're recording or viewing a demo.
++// Also bypass if the -nopsmon flag was given on the command line.
++  if ( (gamemap != 1) ||
++       (gameepisode > 1) ||
++       (gamemission != doom && gamemission != doom2) ||
++       (demorecording) ||
++       (demoplayback) || 
++       (gamestate == GS_DEMOSCREEN) ||
++       (nopsmon)
++     )
++  {
++     return;
++  }
++
++// Now that we know we should run 'ps', do it!
++
++// Split the running of 'ps' into operating system-specific sections to
++// account for the different output formats of the command:
++
++// ******************** LINUX ********************
++#if defined(__linux__)
++
++  /* 'ps' suppressing the header (h),
++          showing all users' processes (a),
++          showing processes without a controlling terminal (x),
++          in 'user' format (u),
++          sorted by process start time (OT).
++     Sample output:
++root       302  0.1  1.9  1304   756   1 S    19:55   0:00 pico pr_process.c
++root       321  0.2  2.1  1268   844   2 S    20:01   0:00 -bash
++root       334  0.0  1.2   848   476   2 R    20:06   0:00 ps h a x u OT
++  */
++  f = popen("ps h a x u OT", "r");
++
++  if (!f) {
++    fprintf(stderr, "ERROR: pr_check could not open ps\n");
++    return;
++  }
++
++  /* Read in all process information.  Exclude the last process in the
++     list (the 'ps' we just ran). */
++
++  while (fgets(buf, 255, f)) {
++    if ( pid != 0 ) {
++       // Check for username validity before adding to pid list.
++       if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
++            !(in_ps_userlist(psnotuser_list_head, username)) ) {
++          add_to_pid_list(pid, namebuf, demon);
++       }
++    }
++    sscanf(buf, "%s %d %*f %*f %*d %*d %s %*4c %*s %*s %s",
++          username, &pid,              tty,            namebuf);
++    if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
++      demon = true;
++    else
++      demon = false;
++  }
++
++// ******************** SOLARIS ********************
++#elif defined (__SVR4) && defined (__sun)
++
++  /* Solaris 2.6 (on my development machine, at least) had two versions of
++     'ps' installed.  One was in /usr/bin and the other in /usr/ucb.  The
++     version in /usr/bin seemed to have the better options of the two. */
++  /* 'ps' showing all processes (-A),
++          showing the username (-o user=),
++          showing the pid (-o pid=),
++          showing the tty (-o tty=),
++          showing the command (-o comm=).
++          headers are suppressed by appending an equal sign to the
++            display field name then starting another argument instead of
++            telling what header text to print.
++          unfortunately, there is no way to sort the processes, so we'll
++            just have to deal with spawning the process monster
++            representing 'ps' itself.
++     Sample output:
++root    302   1  pico
++root    334   2  ps
++root    321   2  -bash
++  */
++
++  f = popen("/usr/bin/ps -A -o user= -o pid= -o tty= -o comm=", "r");
++
++  if (!f) {
++    fprintf(stderr, "ERROR: pr_check could not open ps\n");
++    return;
++  }
++
++  /* Read in all process information.  Since we can't sort by process
++     start time, we can't tell which process is the 'ps' we just ran, so
++     that process will be spawned as a monster, too. */
++
++  while (fgets(buf, 255, f)) {
++    sscanf(buf, "%s %d %s %s",
++                 username, &pid, tty, namebuf);
++    if (tty[0]=='?')  /* if there is no tty, then it is a daemon */
++      demon = true;
++    else
++      demon = false;
++    // Check for username validity before adding to pid list.
++    if ( (psallusers || in_ps_userlist(psuser_list_head, username)) &&
++         !(in_ps_userlist(psnotuser_list_head, username)) ) {
++       add_to_pid_list(pid, namebuf, demon);
++    }
++  }
++
++// ******************** UNSUPPORTED OS ********************
++#else
++  fprintf(stderr, "ERROR: a version of 'ps' with the proper output formatting\n       is not available for this OS.\n");
++  return;
++#endif
++
++  pclose(f);
++
++}
++
++// add_to_pid_list
++//   The routine add_to_pid_list() does a lot.  It walks the
++// pid mobj linked list to check an actual process versus the
++// Doom monster status.  It is sorted in ascending pid order.
++//   If this process is not in the list, a monster is spawned
++// before linking it into the list.  Unset the delete flag to
++// ensure the process is not deleted from the list during cleanup.
++//   If this process is already in the list, unset the flag that says
++// "delete me from the list during next list cleanup" and update
++// the pid monster's name.  If the process is in the list and Doom
++// killed it since the last list cleanup, resurrect the monster like
++// the archvile does (because the process didn't really die).
++// If we can't resurrect it in that case, remove the body and spawn
++// a new monster.
++void add_to_pid_list(int pid, const char *name, int demon) {
++
++   mobj_t	*new_mobj = NULL;
++   int		name_length = 0;
++   boolean	position_ok = false;
++
++// If the list isn't empty and the new pid is larger than the largest
++// pid currently in the list, spawn the mobj and link it as the tail
++// of the list if we placed it on the map without a collision.
++   if ( pid_list_tail && pid > pid_list_tail->m_pid ) {
++      if ( (new_mobj = add_new_process(pid, name, demon)) != NULL ) {
++         new_mobj->ppid = pid_list_tail;
++         new_mobj->npid = NULL;
++         pid_list_tail->npid = new_mobj;
++         pid_list_tail = new_mobj;
++         new_mobj->m_del_from_pid_list = false;
++      }
++// If the list isn't empty and the new pid is smaller than the smallest
++// pid currently in the list, spawn the mobj and link it as the head
++// of the list if we placed it on the map without a collision.
++   } else if ( pid_list_head && pid < pid_list_head->m_pid ) {
++      if ( (new_mobj = add_new_process(pid, name, demon)) != NULL ) {
++         new_mobj->ppid = NULL;
++         new_mobj->npid = pid_list_head;
++         pid_list_head->ppid = new_mobj;
++         pid_list_head = new_mobj;
++         new_mobj->m_del_from_pid_list = false;
++      }
++// If the read-in pid is not larger or smaller than the extremes of
++// the list, walk down the list until the current pointer is at the
++// mobj with the pid ahead of the read-in pid.
++   } else {
++      pid_list_pos = pid_list_head;
++      while ( pid_list_pos != NULL && pid > pid_list_pos->m_pid ) {
++
++// NOTE:
++// If we were guaranteed that the pid's were coming in ascending order
++// from ps, we could do the deletion of unused nodes here and the code
++// would be much more efficient.  However, we sort ps output by the
++// process start time.  This could lead to smaller pid's coming first
++// when the pid counter wraps from the max back to smaller numbers.
++         pid_list_pos = pid_list_pos->npid;
++
++      }  // end while
++
++// Now, check why we stopped the walk down the list.
++// First, check to see if this is an empty list.  If it isn't empty,
++// check whether the mobj's pid is equal or if it's larger than the
++// read-in pid.
++// If the list is completely empty, spawn the mobj and make it the
++// only member of the list.
++      if ( pid_list_pos != NULL ) {  // if list isn't empty
++         if ( pid == pid_list_pos->m_pid ) {
++            // if the read-in pid is same as mobj's pid, set the
++            // delete flag to false so the mobj is not unlinked
++            // from the list during cleanup.
++            pid_list_pos->m_del_from_pid_list = false;
++
++            // copy the incoming pid's name over the mobj's name
++            // in case an exec() was called by the process.
++            // ie. mingetty --> bash
++// TODO: Make name change conditional?  Or is memcpy() fast enough
++//       that we can do it every time?
++            name_length = strlen( name );
++            if ( name_length <= 7 ) {
++               memcpy(pid_list_pos->m_pname, name, 8);
++            }
++            else {
++               memcpy(pid_list_pos->m_pname, name + name_length - 7, 8);
++            }
++
++            // if the process is still running on the machine, but
++            // the mobj has been killed in Doom (ie. the process
++            // trapped the kill signal or the user didn't have permission
++            // to kill the process), do an archvile-like resurrection
++            // on the mobj.  if we can't do the resurrection, remove the
++            // body and re-spawn the mobj normally.
++
++            // much of the following code is taken from the routines
++            // PIT_VileCheck() and A_VileChase() in p_enemy.c
++
++            if ( !(pid_list_pos->m_draw_pid_info) ) {  // if Doom thinks
++                                                       // the process is
++                                                       // dead
++
++               // ability to resurrect monster (from PIT_VileCheck).
++               pid_list_pos->momx = pid_list_pos->momy = 0;
++               pid_list_pos->height <<= 2;
++               position_ok = P_CheckPosition(pid_list_pos,
++                                             pid_list_pos->x,
++                                             pid_list_pos->y);
++               pid_list_pos->height >>= 2;
++
++               // if any of these conditions, we CAN'T resurrect
++               if ( !(pid_list_pos->flags & MF_CORPSE)  || 
++                     (pid_list_pos->tics != -1)  ||
++                     (pid_list_pos->info->raisestate == S_NULL) ||
++                    !(position_ok)  ) {  // can't raise it: delete and respawn
++
++                  // print status msg
++                  fprintf(stderr, "   process %d [%s] monster delete/respawn\n",
++                                 pid_list_pos->m_pid,
++                                 pid_list_pos->m_pname);
++
++                  // In this case, we need to respawn the monster
++                  // since we can't resurrect it.  We delete the mobj
++                  // from the pid linked list so it will re-spawn on
++                  // the next call to add_to_pid_list().
++                  pid_list_pos->m_del_from_pid_list = true;
++
++                  // trick cleanup_pid_list() into thinking it needs
++                  // to remove this body
++                  pid_list_pos->m_draw_pid_info = true;
++
++                  // remove this mobj from pid list (and remove body)
++                  cleanup_pid_list(pid_list_pos);
++
++                  // try to respawn monster
++                  add_to_pid_list(pid, name, demon);
++
++               } else {  // we can raise the monster's body
++
++                  // print status msg
++                  fprintf(stderr, "   process %d [%s] monster resurrect\n",
++                                 pid_list_pos->m_pid,
++                                 pid_list_pos->m_pname);
++
++                  // most of this is from A_VileChase()
++                  P_SetMobjState(pid_list_pos, pid_list_pos->info->raisestate);
++                  pid_list_pos->height <<= 2;
++                  pid_list_pos->flags = pid_list_pos->info->flags;
++                  pid_list_pos->health = pid_list_pos->info->spawnhealth;
++                  pid_list_pos->target = NULL;
++
++                  // draw the pid info again
++                  pid_list_pos->m_draw_pid_info = true;
++
++                  // need to unset the flag (again) to not count this
++                  // monster in end-of-level kill % -- it was reset when
++                  // the mobj flags were copied from the info record above
++                  pid_list_pos->flags &= ~MF_COUNTKILL;
++
++               }
++
++            }  // end 'if the monster's dead but not the process.'
++
++         } else {  // the read-in pid is smaller than the currently
++                   // pointed to mobj.  spawn a new mobj and link it
++                   // into the list if it is placed without a collision.
++            if ( (new_mobj = add_new_process(pid, name, demon)) != NULL ) {
++               new_mobj->ppid = pid_list_pos->ppid;
++               new_mobj->npid = pid_list_pos;
++               pid_list_pos->ppid->npid = new_mobj;
++               pid_list_pos->ppid = new_mobj;
++               new_mobj->m_del_from_pid_list = false;
++            }
++         }
++      } else {  // empty list.  spawn the mobj and make it the only
++                // member of the list if it is placed without a collision.
++         if ( (new_mobj = add_new_process(pid, name, demon)) != NULL ) {
++            pid_list_head = pid_list_tail = new_mobj;
++            new_mobj->npid = new_mobj->ppid = NULL;
++            new_mobj->m_del_from_pid_list = false;
++         }
++      }
++   }
++
++}
++
++// cleanup_pid_list
++// This routine deletes all processes from the linked list and (maybe)
++// Doom that weren't in the last run of 'ps'.  It also sets the delete
++// flag for all remaining processes in the pid linked list.
++// If a mobj pointer is passed to this routine, it tries to cleanup
++// that mobj only.  If NULL is passed in, it does cleanup on all
++// mobj's.
++// Note: If this routine is called with a NULL argument twice in a
++// row without calling add_to_pid_list() in between, all pid monsters
++// are deleted.
++void cleanup_pid_list(mobj_t *del_mobj) {
++
++   mobj_t	*pid_list_pos_npid_hold = NULL;
++
++   if ( del_mobj != NULL ) {
++      // jump directly to the passed-in mobj
++      pid_list_pos = del_mobj;
++   } else {
++      // start at the head of the list
++      pid_list_pos = pid_list_head;
++   }
++
++// walk down the list until the end
++   while ( pid_list_pos != NULL ) {
++
++      // assign the next mobj to a temporary pointer in case
++      // we have to mess with the current mobj pointer
++      if ( del_mobj != NULL ) {
++         // make the next pointer NULL, so the while loop stops
++         pid_list_pos_npid_hold = NULL;
++      } else {
++         // walk down the list
++         pid_list_pos_npid_hold = pid_list_pos->npid;
++      }
++
++      // if the process is flagged for deletion, delete it
++      // from the pid linked list.
++      if ( pid_list_pos->m_del_from_pid_list ) {
++
++         if ( pid_list_pos == pid_list_head ) {  // remove head
++            pid_list_head = pid_list_pos->npid;
++            if ( pid_list_pos->npid != NULL ){
++               pid_list_pos->npid->ppid = NULL;
++               pid_list_pos->npid = NULL;
++            }
++         } else if (pid_list_pos == pid_list_tail ) {  // remove tail
++            pid_list_tail = pid_list_pos->ppid;
++            if( pid_list_pos->ppid != NULL ) {
++               pid_list_pos->ppid->npid = NULL;
++               pid_list_pos->ppid = NULL;
++            }
++         } else {  // remove central node
++            pid_list_pos->ppid->npid = pid_list_pos->npid;
++            pid_list_pos->npid->ppid = pid_list_pos->ppid;
++            pid_list_pos->ppid = pid_list_pos->npid = NULL;
++         }
++
++         if ( pid_list_pos->m_draw_pid_info ) {
++            // if the pid info is still being drawn, Doom doesn't know
++            // that the process is gone (not killed in Doom).  remove it,
++            // without leaving a body or dropped weapon.
++// NOTE:
++// If only the P_SetMobjState() is used below, attackers of this process
++// will continue to attack the empty space.  So we have to kludge
++// around by setting the delete flag and then calling the kill routine.
++// Then, the only time the delete flag is true in P_KillMobj() is if
++// P_KillMobj() is called from this routine.
++// In P_KillMobj(), we check the delete flag and m_pid before sending
++// a system kill command and again before spawning a dropped object.
++            // print status msg
++            fprintf(stderr, "   process %d [%s] monster removed from engine\n",
++                                 pid_list_pos->m_pid,
++                                 pid_list_pos->m_pname);
++
++            // set flag to check for in the kill routine
++            pid_list_pos->m_del_from_pid_list = false;
++
++            // kill the monster, don't drop an item
++            P_KillMobj(NULL, pid_list_pos);
++
++            // remove the body
++            P_SetMobjState(pid_list_pos, S_NULL);
++         }
++      } else {
++         // if the process was in the last ps run, set it's delete flag
++         // so it will be cleaned up next time (unless it vouches
++         // for itself again next time ps is run).
++         pid_list_pos->m_del_from_pid_list = true;
++      }
++      // walk to the next node on the pid mobj list.
++      pid_list_pos = pid_list_pos_npid_hold;
++
++   }  // end while node walk
++
++}
++
++
++// add_new_process
++// Need to return the newly created mobj_t from this routine, or
++// NULL if the monster couldn't be spawned due to collisions.
++//
++mobj_t *add_new_process(int pid, const char *pname, int demon) {
++
++    mapthing_t	mt_ext;
++
++// Add a variable for pname's length
++    int			pname_length = 0;
++
++// Variables to hold original x,y of mt_ext.
++    int			orig_x = 0;
++    int			orig_y = 0;
++
++// Holds the radius of the monster in map units.
++    int			monster_radius = 0;
++
++// Variable to hold the pid mobj we just created.  Needed for collision
++// check function and possible removal of the mobj.
++    mobj_t		*pid_mobj;
++
++// Variables to control monster placement.  Use 3 nested for loops to
++// alter location by the monster radius.  A flag is used to break out
++// of the nested loop when we successfully place the monster.
++    int			i = 0;
++    int			j = 0;
++    int			k = 0;
++    boolean		monster_placed = false;
++
++// This holds the bounding box number for placement calculations.
++// Only assigned >= 0 if on a custom level.
++    short		box_num = -1;
++
++    /* make sure the unused data is zero */
++    memset((void*)&mt_ext, 0, sizeof(mt_ext));
++
++    if (demon){
++      mt_ext.type = mobjinfo[MT_SERGEANT].doomednum;  // demon, the pink dudes
++      monster_radius = mobjinfo[MT_SERGEANT].radius>>FRACBITS;
++    } else {
++      mt_ext.type = mobjinfo[MT_SHOTGUY].doomednum;  // sarge, with the shotguns
++      monster_radius = mobjinfo[MT_SHOTGUY].radius>>FRACBITS;
++    }
++
++    //mt_ext.flags = 7;
++    //mt_ext.flags |= (MTF_SINGLE | MTF_COOPERATIVE | MTF_DEATHMATCH);
++
++// If this is shareware (Doom 1), spawn pid monsters in the courtyard.
++// If this is retail (Ultimate Doom) or registered (Doom 1), use the
++// psdoom1.wad custom level.
++// If this is commercial (Doom 2), and not an add-on pack (Plutonia or TNT),
++// use the psdoom2.wad custom level.  Add-on pack condition is already taken
++// care of in pr_check().
++// NOTE: psdoom1.wad and psdoom2.wad both fit the criteria for a custom level
++// that is listed below.
++// Have the pid monsters spawn in the Doom 1 E1M1 courtyard or Doom2 Map01
++// courtyard if we didn't load the custom level.
++    if ( ps_level_loaded ) {
++
++       // This placement code places pid monsters properly in the custom
++       // levels I made for this program.  Any map that has 3 open areas of
++       // 1024x1024 map units, with the first's bottom left coordinates
++       // at (0,0), the second's at (2048,0), and the third's at (4096,0)
++       // will work.
++
++       /* place pid monsters on customized level */
++       box_num = pid % 3;
++
++       mt_ext.x = ( 2048 * box_num ) + ( (pid % 16) * 64 );
++       mt_ext.y = ( pid % 15 ) * 64;
++       mt_ext.angle = 315 - ( 45 * box_num );
++
++       // This routine is called for custom level processing only.
++       // It guarantees the mt_ext.x and mt_ext.y are at least
++       // the monster's radius inside its bounding spawn box.
++       clip_to_spawnbox(&mt_ext.x, &mt_ext.y, monster_radius, box_num * 2048);
++
++    } else {
++       switch ( gamemode ){
++          case commercial:  // Doom 2
++             /* place the guys in the hidden courtyard on MAP01 */
++             mt_ext.x = 300 + (pid%16)*40;
++             mt_ext.y = -300 + (pid%10)*40;
++             mt_ext.angle = 0;
++          break;
++
++          default:  // shareware, registered, and retail (Doom 1)
++             /* place the guys in the hidden courtyard on E1M1 */
++             mt_ext.x = 1800 + (pid%16)*40;
++             mt_ext.y =   -3600 + (pid%10)*40;
++             mt_ext.angle = 0;
++
++             /* place the guys near the player start point
++             mt_ext.x = 1070 + (pid%8)*30; //  + (pid%5)*40;// + i*40;
++             mt_ext.y =   -3500 + (pid%2)*30;; // + (pid/5)*40; //  + (pid&4)*40; //  + j*40;
++             */
++          break;
++       }  // end switch (gamemode)
++    } // end else (custom level not loaded)
++
++// Save original spawn point to use in alternate spawn point calcualtion.
++    orig_x = mt_ext.x;
++    orig_y = mt_ext.y;
++
++// Spawn the monster, then check if it's colliding with something.
++// If it's colliding, set the mobj's state to S_NULL (removing it),
++// re-position and respawn.  Try to reposition around the original
++// location by adding or subtracting the monster's radius to the
++// x and/or y values of the original spawn point.  If that doesn't
++// work, do it by twice the radius.
++// If none of those repositionings work, we'll put off spawning the
++// 'colliding' process until after other things have moved.
++// (the next call to pr_check())
++//
++// Maybe a customized level would help, too.
++// --> It would be neat, but not needed to prevent collisions.
++//
++// After the spawn, do the final monster pid setup
++// (assignment of the pid #, pid name, unset MF_COUNTKILL).
++// Also, after each spawn, decrement totalkills because it was incremented
++// in the spawn procedure.
++//
++
++// The second parameter is to tell the routine that it is spawning
++// a pid mobj and not to pay attention to the nomonsters flag.
++    pid_mobj = P_SpawnMapThing(&mt_ext, IS_PID_MOBJ);
++    
++	totalkills--;
++	fprintf(stderr, "   process %d [%s] monster at %d %d\n",
++			 pid, pname, mt_ext.x, mt_ext.y);
++	if ( !P_CheckPosition(pid_mobj, pid_mobj->x, pid_mobj->y) ) {
++	   monster_placed = false;
++	   for ( i = 0; i < 2 && !monster_placed; i++ ) {
++		  for ( j = 0; j < 3 && !monster_placed; j++ ) {
++			 for ( k = 0; k < 3 && !monster_placed; k++ ) {
++				if ( j == 1 && k == 1 ) {
++				   continue;
++				}
++				mt_ext.x = orig_x + ( (i + 1) * monster_radius * (k - 1) );
++				mt_ext.y = orig_y + ( (i + 1) * monster_radius * (j - 1) );
++				if ( box_num >= 0 ){  // if this is a custom level
++				   // This routine is called for custom level processing only.
++				   // It guarantees the mt_ext.x and mt_ext.y are at least
++				   // the monster's radius inside its bounding spawn box.
++				   clip_to_spawnbox(&mt_ext.x, &mt_ext.y,
++									monster_radius, box_num * 2048);
++				}
++				P_SetMobjState(pid_mobj, S_NULL);
++
++				// The second parameter is to tell the routine that it
++				// is spawning a pid mobj and not to pay attention to
++				// the nomonsters flag.
++				pid_mobj = P_SpawnMapThing(&mt_ext, IS_PID_MOBJ);
++
++				totalkills--;
++				fprintf(stderr, "      repositioned at %d %d\n",
++						 mt_ext.x, mt_ext.y);
++				if ( P_CheckPosition(pid_mobj, pid_mobj->x, pid_mobj->y) ) {
++				   monster_placed = true;
++				}
++			 }
++		  }
++	   }
++	   if ( !monster_placed ) {
++		  P_SetMobjState(pid_mobj, S_NULL);
++		  pid_mobj = NULL;
++		  fprintf(stderr, "      not spawned for now, try next time.\n" );
++	   }
++	}
++
++// If we spawned the monster without collisions
++    if ( pid_mobj != NULL ) {
++
++// Want the last 7 chars of the process name, not the first 7.
++// ie: '/sbin/mingetty' is shown as 'ingetty' rather than '/sbin/m'
++       pname_length = strlen( pname );
++       if ( pname_length <= 7 ) {
++          memcpy(pid_mobj->m_pname, pname, 8);
++       }
++       else {
++          memcpy(pid_mobj->m_pname, pname + pname_length - 7, 8);
++       }
++
++       pid_mobj->m_pid = pid;
++
++// Don't count the mobj in the level-end totals.
++       pid_mobj->flags &= ~MF_COUNTKILL;
++
++// Set the draw flag to true.
++       pid_mobj->m_draw_pid_info = true;
++
++    } // end (if we spawned the monster).
++
++// Return the new mobj.  It's NULL if we couldn't place it without collision.
++   return pid_mobj;
++
++}
++
++// clip_to_spawnbox
++// This routine is called for custom level processing only.
++// It guarantees the mt_ext.x and mt_ext.y are at least
++// the monster's radius inside its bounding spawn box.
++// The last argument is the lowest x coordinate for that
++// particular process' area.
++void clip_to_spawnbox(short *x, short *y, int radius, int box_min_x){
++   int		min_x;
++   int		max_x;
++   int		min_y;
++   int		max_y;
++
++   min_x = box_min_x + radius;
++   max_x = box_min_x + 1024 - radius;
++   min_y = 0 + radius;
++   max_y = 1024 - radius;
++
++   if ( *x < min_x ){
++      *x = min_x;
++   } else {
++      if ( *x > max_x ){
++         *x = max_x;
++      }
++   }
++   if ( *y < min_y ){
++      *y = min_y;
++   } else {
++      if ( *y > max_y ){
++         *y = max_y;
++      }
++   }
++
++}
++
++
++// add_to_ps_userlist
++// This routine adds the username passed in the second argument to the
++// userlist that is denoted by the first argument.
++void add_to_ps_userlist(ps_userlist_type_t listtype, char *username) {
++   ps_userlist_t	*new_user;
++   ps_userlist_t	*current_pos;
++
++   new_user = (ps_userlist_t *) malloc( sizeof(ps_userlist_t) );
++   if ( new_user == NULL ) {
++      fprintf(stderr, "ERROR: add_to_ps_userlist could not allocate memory\n");
++      return;
++   }
++   strncpy(new_user->name, username, 255);
++   new_user->next = NULL;
++
++   switch ( listtype ) {
++      case psuser:
++         if ( psuser_list_head == NULL ) {
++            psuser_list_head = new_user;
++         } else {
++            current_pos = psuser_list_head;
++            while ( current_pos->next != NULL ) {
++               current_pos = current_pos->next;
++            }
++            current_pos->next = new_user;
++         }
++         break;
++      case psnotuser:
++         if ( psnotuser_list_head == NULL ) {
++            psnotuser_list_head = new_user;
++         } else {
++            current_pos = psnotuser_list_head;
++            while ( current_pos->next != NULL ) {
++               current_pos = current_pos->next;
++            }
++            current_pos->next = new_user;
++         }
++         break;
++      default:
++         fprintf(stderr, "ERROR: illegal listtype '%d' passed to add_to_ps_userlist\n", listtype);
++         return;
++   }  // end switch listtype
++}
++
++// in_ps_userlist
++// This routine loops over the userlist pointed to by its first
++// argument looking for a username matching that pointed to
++// by its second argument.  Returns true if it finds the username.
++boolean in_ps_userlist(ps_userlist_t *list_head, char *username) {
++   ps_userlist_t	*current_pos;
++
++   current_pos = list_head;
++   while ( current_pos != NULL ) {
++      if ( !strcmp(username, current_pos->name) ){
++         return true;
++      }
++      current_pos = current_pos->next;
++   }
++   return false;
++}
++
++// pr_kill
++// kills the process
++void pr_kill(int pid) {
++  char buf[256];
++// If -nopsact was on the command line, don't actually kill the process
++  if ( nopsact ){
++     return;
++  }
++  sprintf(buf, "kill -9 %d", pid);
++  system(buf);
++}
++
++// pr_renice
++// renices the process
++void pr_renice(int pid) {
++  char buf[256];
++// If -nopsact was on the command line, don't actually re-nice the process
++  if ( nopsact ){
++     return;
++  }
++  sprintf(buf, "renice +5 %d", pid);
++  system(buf);
++}
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.h chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.h
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.h	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.h	2016-01-14 10:53:59.426096472 -0800
+@@ -0,0 +1,41 @@
++// pr_process.h
++// Copyright (C) 1999 by Dennis Chao
++// Copyright (C) 2000 by David Koppenhofer
++
++// Passed as second argument to P_SpawnMapThing() to tell it
++// if we're spawning a pid mobj or not.
++#define IS_NOT_PID_MOBJ		0
++#define IS_PID_MOBJ		1
++
++// All flags below are generally set up in d_main.c, D_DoomMain().
++
++// Need to have a flag to tell if we loaded the special process
++// management level.
++extern boolean ps_level_loaded;
++
++// Flag to prevent the 'ps' portion of the program from running.
++extern boolean nopsmon;
++
++// Flag to prevent the execution of process re-nicing and killing.
++extern boolean nopsact;
++
++// Flag to allow pid monsters to be damaged by things other than a player.
++extern boolean nopssafety;
++
++// Flag to show all users' processes.
++extern boolean psallusers;
++
++// Enumeration of types of user lists to have.
++// Passed to and used in add_to_ps_userlist().
++typedef enum
++{
++   psuser,
++   psnotuser
++} ps_userlist_type_t;
++
++// Functions
++void pr_check(void);
++void cleanup_pid_list(mobj_t *del_mobj);
++void pr_kill(int pid);
++void pr_renice(int pid);
++void add_to_ps_userlist(ps_userlist_type_t listtype, char *username);
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_setup.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_setup.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_setup.c	2016-01-14 10:46:30.940028434 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_setup.c	2016-01-14 10:55:50.678331017 -0800
+@@ -1,5 +1,6 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -41,7 +42,17 @@
+ #include "doomstat.h"
+ 
+ 
+-void	P_SpawnMapThing (mapthing_t*	mthing);
++// *** PID BEGIN ***
++// Needed for initialization functions.
++#include "pr_process.h"
++
++// Have this routine return a pointer to the pid mobj it creates.
++// Return NULL if nothing is created.
++// Also accept a parameter to tell if it is spawning a pid mobj.
++mobj_t *P_SpawnMapThing (mapthing_t*	mthing, boolean is_pid_mobj);
++// old code:
++//void	P_SpawnMapThing (mapthing_t*	mthing);
++// *** PID END ***
+ 
+ 
+ //
+@@ -378,7 +389,12 @@
+ 	spawnthing.type = SHORT(mt->type);
+ 	spawnthing.options = SHORT(mt->options);
+ 	
+-	P_SpawnMapThing(&spawnthing);
++// *** PID BEGIN ***
++// Added second parameter to tell the routine this is not a pid mobj.
++	P_SpawnMapThing(&spawnthing, IS_NOT_PID_MOBJ);
++// old code:
++//	P_SpawnMapThing(&spawnthing);
++// *** PID END ***
+     }
+ 
+     W_ReleaseLumpNum(lump);
+@@ -751,6 +767,17 @@
+     char	lumpname[9];
+     int		lumpnum;
+ 	
++// *** PID BEGIN ***
++// Print status message.
++    fprintf(stderr, "***** setup level: *****\n");
++
++// Do cleanup_pid_list() here, before anything is unallocated.
++// This used to be in g_game.c, G_PlayerReborn() -- after the
++// old level/mobj structures were destroyed and new ones created.
++// That type of memory fun caused crashes.
++    cleanup_pid_list(NULL);
++// *** PID END ***
++	
+     totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
+     wminfo.partime = 180;
+     for (i=0 ; i<MAXPLAYERS ; i++)
+@@ -838,6 +865,13 @@
+     if (precache)
+ 	R_PrecacheLevel ();
+ 
++// *** PID BEGIN ***
++// Do the initial check for processes; set them up on the level.
++// Mark them for deletion if they don't validate themselves again.
++    pr_check();
++    cleanup_pid_list(NULL);
++// *** PID END ***
++
+     //printf ("free memory: 0x%x\n", Z_FreeMemory());
+ 
+ }
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_tick.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_tick.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_tick.c	2016-01-14 10:46:30.940028434 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_tick.c	2016-01-14 10:55:26.262401664 -0800
+@@ -1,5 +1,7 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 1999 by Dennis Chao
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -23,6 +25,9 @@
+ 
+ #include "doomstat.h"
+ 
++// *** PID BEGIN ***
++#include "pr_process.h"
++// *** PID END ***
+ 
+ int	leveltime;
+ 
+@@ -148,6 +153,18 @@
+     P_UpdateSpecials ();
+     P_RespawnSpecials ();
+ 
++// *** PID BEGIN ***
++    if ( (leveltime != 0) && ( (leveltime & 255) == 0) ){
++      // Print status message.
++      fprintf(stderr, "***** game ticker: *****\n");
++
++      // Check for new processes / validate old ones.
++      // Mark them all for deletion unless they validate next time.
++      pr_check();
++      cleanup_pid_list(NULL);
++    } 
++// *** PID END ***
++
+     // for par times
+     leveltime++;	
+ }
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_defs.h chocolate-doom-chocolate-doom-2.2.1/src/doom/r_defs.h
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_defs.h	2016-01-14 10:46:30.941028472 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_defs.h	2016-01-14 10:55:02.279488804 -0800
+@@ -1,5 +1,7 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 1999 by Dennis Chao
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -368,6 +370,16 @@
+     lighttable_t*	colormap;
+    
+     int			mobjflags;
++
++// *** PID BEGIN ***
++    // the process id (0 if not a process)
++    int                 m_pid;
++    char                m_pname[8];
++
++    // Need another variable for advanced process management:
++    // A flag to tell whether to draw the pid info.
++    boolean             m_draw_pid_info;
++// *** PID END ***
+     
+ } vissprite_t;
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.c chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.c
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.c	2016-01-14 10:46:30.941028472 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.c	2016-01-14 10:54:45.127835969 -0800
+@@ -1,5 +1,7 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright (C) 1999 by Dennis Chao
++// Copyright (C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -21,7 +23,12 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-
++// *** PID BEGIN ***
++#include <string.h>
++ 
++/* from m_menu.c */
++void M_WriteText(int x, int y, char *string);
++// *** PID END ***
+ 
+ #include "deh_main.h"
+ #include "doomdef.h"
+@@ -340,11 +347,30 @@
+ fixed_t		spryscale;
+ fixed_t		sprtopscreen;
+ 
+-void R_DrawMaskedColumn (column_t* column)
++// *** PID BEGIN ***
++// Make a variable to keep track of the lowest dc_yl generated for a
++// sprite.  This will be the rendered top of the sprite, because y-values
++// increase down the screen.
++int		lowest_dc_yl = 0;
++
++// Have this function return a value denoting whether
++// it drew any columns for a sprite.
++// Return values are:
++//  0 if nothing was drawn
++//  1 if something was drawn
++boolean R_DrawMaskedColumn (column_t *column)
++// old code:
++// void R_DrawMaskedColumn (column_t* column)
++// *** PID END ***
+ {
+     int		topscreen;
+     int 	bottomscreen;
+     fixed_t	basetexturemid;
++
++// *** PID BEGIN ***
++// Added this var to keep track of whether drawing occurred.
++    boolean	drawing_occurred = 0;
++// *** PID END ***
+ 	
+     basetexturemid = dc_texturemid;
+ 	
+@@ -372,11 +398,28 @@
+ 	    // Drawn by either R_DrawColumn
+ 	    //  or (SHADOW) R_DrawFuzzColumn.
+ 	    colfunc ();	
++
++// *** PID BEGIN ***
++// This is where we tell if something was drawn.
++        drawing_occurred = 1;
++
++// Check to see if this dc_yl is higher on the screen (lower in value)
++// than the other columns so far for this sprite.  If so, reset the
++// lowest holder to the new value.
++        if ( lowest_dc_yl > dc_yl ){
++            lowest_dc_yl = dc_yl;
++        }
++// *** PID END ***
++
+ 	}
+ 	column = (column_t *)(  (byte *)column + column->length + 4);
+     }
+ 	
+     dc_texturemid = basetexturemid;
++
++// *** PID BEGIN ***
++    return drawing_occurred;
++// *** PID END ***
+ }
+ 
+ 
+@@ -396,6 +439,13 @@
+     fixed_t		frac;
+     patch_t*		patch;
+ 	
++// *** PID BEGIN ***
++// This flag tells whether any of the sprite was drawn in the function
++// R_DrawMaskedColumn().  That function returns a boolean to denote
++// if drawing took place.  This takes care of walls, ceilings, and
++// floors blocking a sprite.
++    boolean		drawing_occurred = 0;
++// *** PID END ***
+ 	
+     patch = W_CacheLumpNum (vis->patch+firstspritelump, PU_CACHE);
+ 
+@@ -419,6 +469,11 @@
+     spryscale = vis->scale;
+     sprtopscreen = centeryfrac - FixedMul(dc_texturemid,spryscale);
+ 	
++// *** PID BEGIN ***
++// Set the 'lowest' top of this sprite to the viewheight, initially.
++    lowest_dc_yl = viewheight;
++// *** PID END ***
++	
+     for (dc_x=vis->x1 ; dc_x<=vis->x2 ; dc_x++, frac += vis->xiscale)
+     {
+ 	texturecolumn = frac>>FRACBITS;
+@@ -428,10 +483,47 @@
+ #endif
+ 	column = (column_t *) ((byte *)patch +
+ 			       LONG(patch->columnofs[texturecolumn]));
+-	R_DrawMaskedColumn (column);
++
++// *** PID BEGIN ***
++// If something's been drawn already, don't reset the flag, but
++// call the drawing function.  Otherwise, grab the return value
++// of the function, too. 0 == nothing drawn, 1 == something drawn.
++    if ( drawing_occurred ){
++       R_DrawMaskedColumn (column);
++    } else {
++       drawing_occurred = R_DrawMaskedColumn(column);
++    }
++// old code:
++//        R_DrawMaskedColumn (column);
++// *** PID END ***
++
+     }
+ 
+     colfunc = basecolfunc;
++    
++// *** PID BEGIN ***
++// At this point, the flag 'drawing_occurred' will be 0 if no part of
++// this sprite was drawn in R_DrawMaskedColumn(), or 1 if something
++// was drawn.  Added it to the list of conditions to check for
++// drawing the pid info.
++// Also, don't use the fact that a vis has a pid to determine
++// whether to draw; use the m_draw_pid_info flag instead.
++    if (vis->m_draw_pid_info && vis->scale>18000 &&
++       vis->x1>SCREENWIDTH/8 && vis->x2<SCREENWIDTH*7/8 &&
++       drawing_occurred ) {
++
++       char buf[16];
++       sprintf(buf, "%d", vis->m_pid);
++
++// Change y-placement of text to the top of the current sprite.
++// Make sure the pid text doesn't extend onto the status bar.
++       if ( lowest_dc_yl + 13 > viewheight ){
++          lowest_dc_yl = viewheight - 13;
++       }
++       M_WriteText(vis->x1, lowest_dc_yl, buf);
++       M_WriteText(vis->x1, lowest_dc_yl + 6, vis->m_pname);
++    }
++// *** PID END ***
+ }
+ 
+ 
+@@ -540,6 +632,13 @@
+     
+     // store information in a vissprite
+     vis = R_NewVisSprite ();
++// *** PID BEGIN ***
++// Set the pid and name in the vissprite.
++    vis->m_pid = thing->m_pid;
++    memcpy(vis->m_pname, thing->m_pname, 8);
++// Also set flag that tells whether to draw the pid info or not.
++    vis->m_draw_pid_info = thing->m_draw_pid_info;
++// *** PID END ***
+     vis->mobjflags = thing->flags;
+     vis->scale = xscale<<detailshift;
+     vis->gx = thing->x;
+@@ -689,6 +788,12 @@
+     vis->x2 = x2 >= viewwidth ? viewwidth-1 : x2;	
+     vis->scale = pspritescale<<detailshift;
+     
++// *** PID BEGIN ***
++// Don't use the value of m_pid to determine whether to draw;
++// use the flag instead.
++    vis->m_draw_pid_info = false;
++// *** PID END ***
++    
+     if (flip)
+     {
+ 	vis->xiscale = -pspriteiscale;
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.h chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.h
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.h	2016-01-14 10:46:30.941028472 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.h	2016-01-14 10:54:27.448163041 -0800
+@@ -1,5 +1,6 @@
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005-2014 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or
+@@ -43,8 +44,16 @@
+ extern fixed_t		pspriteiscale;
+ 
+ 
+-void R_DrawMaskedColumn (column_t* column);
+-
++// *** PID BEGIN ***
++// Have this function return a value denoting whether
++// it drew any columns for a sprite.
++// Return values are:
++//  0 if nothing was drawn
++//  1 if something was drawn
++boolean R_DrawMaskedColumn (column_t *column);
++// old code:
++// void R_DrawMaskedColumn (column_t* column);
++// *** PID END ***
+ 
+ void R_SortVisSprites (void);
+ 
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/Makefile.am chocolate-doom-chocolate-doom-2.2.1/src/Makefile.am
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/Makefile.am	2016-01-14 10:46:30.933028167 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/Makefile.am	2016-01-14 21:47:33.624832722 -0800
+@@ -1,20 +1,11 @@
+ 
+-SUBDIRS = doom heretic hexen strife setup
++SUBDIRS = doom heretic hexen strife
+ 
+-execgamesdir = ${exec_prefix}/games
++execgamesdir = ${exec_prefix}/bin
+ 
+-execgames_PROGRAMS = @PROGRAM_PREFIX@doom     \
+-                     @PROGRAM_PREFIX@heretic  \
+-                     @PROGRAM_PREFIX@hexen    \
+-                     @PROGRAM_PREFIX@strife   \
+-                     @PROGRAM_PREFIX@server
+-
+-noinst_PROGRAMS = @PROGRAM_PREFIX@setup
+-
+-SETUP_BINARIES = @PROGRAM_PREFIX@doom-setup$(EXEEXT)    \
+-                 @PROGRAM_PREFIX@heretic-setup$(EXEEXT) \
+-                 @PROGRAM_PREFIX@hexen-setup$(EXEEXT)   \
+-                 @PROGRAM_PREFIX@strife-setup$(EXEEXT)
++execgames_PROGRAMS = psdoom-ng
++
++noinst_PROGRAMS = @PROGRAM_PREFIX@doom
+ 
+ execgames_SCRIPTS = $(SETUP_BINARIES)
+ 
+@@ -218,7 +209,8 @@
+         manifest.xml
+ 
+ appdatadir = $(prefix)/share/appdata
+-appdata_DATA =                              \
++appdata_DATA = psdoom-ng.appdata.xml
++noinst_DATA = \
+         @PROGRAM_PREFIX@doom.appdata.xml    \
+         @PROGRAM_PREFIX@heretic.appdata.xml \
+         @PROGRAM_PREFIX@hexen.appdata.xml   \
+@@ -238,6 +230,8 @@
+ 
+ appdir = $(prefix)/share/applications
+ app_DATA =                                 \
++            psdoom-ng.desktop
++noinst_DATA =                              \
+            @PROGRAM_PREFIX@doom.desktop    \
+            @PROGRAM_PREFIX@heretic.desktop \
+            @PROGRAM_PREFIX@hexen.desktop   \
+@@ -255,8 +249,8 @@
+ @PROGRAM_PREFIX@strife.desktop : strife.desktop
+ 	cp strife.desktop $@
+ 
+-screensaverdir = $(prefix)/share/applications/screensavers
+-screensaver_DATA = @PROGRAM_PREFIX@doom-screensaver.desktop
++#screensaverdir = $(prefix)/share/applications/screensavers
++#screensaver_DATA = @PROGRAM_PREFIX@doom-screensaver.desktop
+ 
+ @PROGRAM_PREFIX@doom-screensaver.desktop: doom-screensaver.desktop
+ 	cp doom-screensaver.desktop $@
+@@ -281,3 +275,5 @@
+ mus2mid : mus2mid.c memio.c z_native.c i_system.c m_argv.c m_misc.c
+ 	$(CC) -DSTANDALONE -I$(top_builddir) $(CFLAGS) @LDFLAGS@ $^ -o $@
+ 
++psdoom-ng : @PROGRAM_PREFIX@doom
++	cp @PROGRAM_PREFIX@doom $@
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.appdata.xml.in chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.appdata.xml.in
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.appdata.xml.in	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.appdata.xml.in	2016-01-14 13:07:03.848740326 -0800
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<component type="desktop">
++  <id>psdoom-ng.desktop</id>
++  <metadata_license>CC0-1.0</metadata_license>
++  <project_license>GPL-2.0+</project_license>
++  <developer_name>@PACKAGE_MAINTAINER@</developer_name>
++  <url type="homepage">@PACKAGE_URL@</url>
++  <url type="bugtracker">@PACKAGE_ISSUES@</url>
++  <description>
++    <p>
++      psdoom-ng is a process killer and monitor,
++    </p>
++  </description>
++</component>
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.desktop chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.desktop
+--- chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.desktop	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.desktop	2016-01-14 21:35:18.294162004 -0800
+@@ -0,0 +1,7 @@
++[Desktop Entry]
++Name=psdoom-ng
++Exec=psd
++Icon=psdoom-ng
++Type=Application
++Comment=psdoom-ng, personified process killer and monitor
++Categories=System;Monitor;
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/stamp-h1 chocolate-doom-chocolate-doom-2.2.1/stamp-h1
+--- chocolate-doom-chocolate-doom-2.2.1.orig/stamp-h1	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/stamp-h1	2016-01-14 10:53:59.429096586 -0800
+@@ -0,0 +1 @@
++timestamp for config.h
+diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/TODO.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/TODO.psdoom-ng
+--- chocolate-doom-chocolate-doom-2.2.1.orig/TODO.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/TODO.psdoom-ng	2016-01-14 10:53:59.419096205 -0800
+@@ -0,0 +1,173 @@
++Here are a few ideas to improve this process manager:
++  N == not planned
++  ? == possible, but not planned and/or is it necessary?
++  - == not started, but planned
++  O == in progress
++  X == done AFAIK
++
++X-display last 7 characters of process name rather than first 7
++    ie: '/sbin/mingetty' would appear as 'ingetty' rather than '/sbin/m'
++X-make text disappear when entire pid monster sprite is obstructed
++X-make text 'float' with the monster (adjust y-value of print)
++X-pid monsters don't count towards end-level 'kills' percent
++X-pid monsters don't spawn in/on other things
++N-toggle monster inter-fighting (ie. CacoDemon vs Imp on(default)/off )
++N-toggle monster intra-fighting (ie. Human vs Human on(default)/off
++                                   Demon vs Demon on/off(default) )
++X-OR as an alternative to the above 2, have pid monsters only take damage
++    from a player
++  O-command line flag to allow pid monsters to be damaged normally
++      (-nopssafety)
++X-better process management:
++  N-non-blocking process manager so pauses aren't as noticable
++    NOTE: pauses would still be there with the non-blocking
++          process manager - tested by disabling pr_poll() call
++          and running a sh script on a seperate terminal that
++          called 'ps' every 5 seconds: pauses were still noticable
++  X-if a process is killed/removed outside xdoom, remove it from xdoom
++  X-update process names (ie. mingetty --> -bash after login )
++    ?-compare pid monster name to incoming name and copy the name
++        as a result of that comparison
++      NOTE: right now, the name update happens to every pid monster
++            every time the ps list is updated.  would adding a check
++            to see if the name needs to change speed things up?  in other
++            words, how much faster is strncmp() than memcpy()?
++  X-if a process monster is killed in doom, but the actual process doesn't
++      die on the machine, resurrect the monster's body like the archvile
++      does; if we can't raise the monster, remove the body and respawn the
++      monster
++X-gracefully handle save and restore
++X-only re-nice a monster the first time it is damaged
++?-OR with successive damages, get the process' priority, and re-nice
++    to 2(?) more than the current level until it reaches 20 (the maximum)
++  NOTE: must be careful about shotgun and other rapid-file or
++        multiple damage weapons because one could re-nice monsters
++        to +20 really fast
++X-customized level map for managing processes
++  NOTE: *any* level that has 3 1024x1024 areas for monster spawning such
++        that the bottom left coordinates of the squares are at (0,0);
++        (2048,0); and (4096,0), respectively, will work
++  NOTE: current custom level details and decorations may need tweaking
++  X-if the custom level isn't (or can't) be loaded, use stock E1M1 in
++      doom 1 (or MAP01 in doom 2) for process management
++  X-custom level loads automatically, like xdoom.wad.  the custom doom 1
++      map must be named psdoom1.wad and the custom doom 2 map named
++      psdoom2.wad for the automatic loading to happen
++  X-command line flag to disable automatic loading of custom level; manage
++      processes on stock E1M1 or MAP01
++      (-nopslev)
++  ?-custom level for shareware doom (psdooms.wad); must get permission
++      from id software before doing this
++X-game acts like normal xdoom if not playing on E1M1/MAP01 or if playing
++    any 'Plutonia Experiment' or 'TNT - Evilution' level
++X-command line flag to entirely disable 'ps' portion of the program
++    (-nopsmon)
++X-command line flag to disable actual re-nice and kill of processes
++    (-nopsact)
++X-command line flag to make 'no monsters' persistant across new
++    games and warping
++    (-nomonsters.) == no monsters, period :-)
++X-pid monster spawning not affected by '-nomonsters' or '-nomonsters.'
++    command line flags
++X-command line flag to respawn items like in -altdeath games
++    (-respawnitems)
++    X-this flag should have no effect in demo recording or playback; it
++        would mess up the demo timing
++X-command line flags for determining which user processes to spawn
++    X-command line flag to cause every username to be added to the list of
++        users whose processes to display
++        (-psallusers)
++    X-command line flag to cause specified usernames to be added to the
++        list of users whose processes to display -- without any supplied
++        username(s), assume current user
++        (-psuser [username1[ username2...]])
++    X-command line flag to cause specified usernames to be added to the
++        list of users whose processes not to display -- without any
++        supplied username(s), assume current user
++        (-psnotuser [username1[ username2...]])
++    X-if none of the userlist-related command line flags are given, the
++        program defaults to showing only the current user's processes if
++        not running the program as root -- root sees all processes by
++        default -- current username is determined by looking at the
++        environment variables PSDOOMUSER, LOGNAME, USER, and USERNAME in
++        that order
++X-ensure that demo playing and recording do not use the 'ps' portion of
++    the program
++X-the demo that plays immediately after ending a game (options->end game)
++    on a level with pid monsters is messed up; fix it
++?-use c functions like setpriority() and kill() rather than the
++    system() call (would this speed things up significantly?) 
++--put command line options into an in-game menu
++--ability to have multi-admin netgames
++--ability to administer processes on a machine other than the one running
++    psdoom
++--more general format for custom level areas for pid monster spawning
++  --'PSINFO' lump in wads tells engine where to spawn pid monsters and on
++      what level(s)
++  --current behavior is used if no PSINFO lumps are given
++    NOTE: format of this textual lump is sorta in my head: one lump
++          specifies all maps and coordinates -- ExMy or MAPxx lines
++          seperate coordinate grouping lines within the lump
++          {ExMy or MAPxx}, {R, A, or U}     (one of these lines per level)
++            * to denote which map the info is for and the method by which
++              processes are placed in the spawnboxes of that level
++
++            * 'R' tells psdoom to spawn pid monsters in a
++              round-robin-esque manner among the given spawnboxes:
++              pid #'s are mod'ed by the total number of spawnboxes on
++              that level and the pid monster is spawned in the resulting
++              numbered box
++              ie. pid# 1432 is being spawned on a level with 5 boxes:
++              1432%5 = 2; pid monster will be spawned in the third
++              (0, 1, 2) box listed in the lump
++
++            * 'A' tells psdoom to use the relative area of the spawnboxes
++              to determine the chances of spawning a pid monster in each
++
++            * 'U' tells psdoom that there are user-specified percentages
++              for determining chances of pid monster spawning for the
++              spawnboxes
++
++          {x, y, dx, dy, nn}        (one or more of these lines per level)
++            * a point of origin and the length of the sides for a box (in
++              doom map units) on that level for processes to spawn in
++
++            * the final argument is a field that is only used if the 'U'
++              flag is given above: it gives the percent chance of a pid
++              monster spawning in this spawnbox
++              * if the running total of user-specified percentages becomes
++                greater than 100%, the remaining spawnboxes will not have
++                monsters spawn in them
++              * if the nn is not there for a given area, the remaining
++                part up to 100% is assigned to that spawnbox
++--make pid monsters less aggressive towards (afraid of?) player
++--pid text is not placed well when screen is not at largest or second
++    largest size; fix it
++--more info about processes
++  --monster type reflects cpu/mem usage
++  --more text information (space limited)
++    NOTE: perhaps could print more info as the monster gets closer
++          and takes up more of the view
++--shutdown/reboot machine with psdoom*.wad level exit switch(s)
++  NOTE: need to make a custom texture to notify user of this interface
++--type of weapon determines what signal to send with the kill command
++    on monster death (eg. pistol=kill -1, shotgun=kill -2, ...
++                                            plasma & BFG=kill -9 ???)
++  NOTE: rocket launcher probably not a good choice because of collateral
++        damage (maybe protect pid monsters?)
++O-modify xdlaunch (ps-xdlaunch) to run ps-xdoom
++  O-add psdoom-specific command line flags to ps-xdlaunch
++--incorporate the Back Orifice port of psdoom
++  --command line flag to use Back Orifice rather than local admining
++      (-psbo)
++O-support multiple operating systems (the ones xdoom supports)
++  --freebsd
++  X-linux
++  --openserver 5
++  --unixware 2
++  --unixware 7
++  O-solaris
++  --aix
++O-use ~/.psdoom rather than ~/.xdoom for savegames, config files, etc
++O-add references to psdoom in startup header text, X resources, and window
++    title bar

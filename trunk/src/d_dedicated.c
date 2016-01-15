@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,14 +11,10 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // Code specific to the standalone dedicated server.
 //
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 
@@ -41,29 +35,6 @@ void NET_CL_Run(void)
     // to let the client do some processing if it needs to.
     // In a standalone dedicated server, we don't have a client.
 }
-
-//
-// I_Error
-//
-// We have our own I_Error function for the dedicated server.  
-// The normal one does extra things like shutdown graphics, etc.
-
-void I_Error (char *error, ...)
-{
-    va_list	argptr;
-
-    // Message first.
-    va_start(argptr,error);
-    fprintf(stderr, "Error: ");
-    vfprintf(stderr,error,argptr);
-    fprintf(stderr, "\n");
-    va_end(argptr);
-
-    fflush(stderr);
-
-    exit(-1);
-}
-
 
 void D_DoomMain(void)
 {

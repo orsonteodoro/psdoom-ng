@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -12,11 +10,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
 //
 
 #include <stdlib.h>
@@ -40,15 +33,16 @@ static void TXT_CheckBoxSizeCalc(TXT_UNCAST_ARG(checkbox))
     checkbox->widget.h = 1;
 }
 
-static void TXT_CheckBoxDrawer(TXT_UNCAST_ARG(checkbox), int selected)
+static void TXT_CheckBoxDrawer(TXT_UNCAST_ARG(checkbox))
 {
     TXT_CAST_ARG(txt_checkbox_t, checkbox);
+    txt_saved_colors_t colors;
     int i;
     int w;
 
     w = checkbox->widget.w;
 
-    TXT_BGColor(TXT_WINDOW_BACKGROUND, 0);
+    TXT_SaveColors(&colors);
     TXT_FGColor(TXT_COLOR_BRIGHT_CYAN);
     TXT_DrawString("(");
 
@@ -67,11 +61,10 @@ static void TXT_CheckBoxDrawer(TXT_UNCAST_ARG(checkbox), int selected)
 
     TXT_DrawString(") ");
 
-    TXT_SetWidgetBG(checkbox, selected);
-    TXT_FGColor(TXT_COLOR_BRIGHT_WHITE);
-
+    TXT_RestoreColors(&colors);
+    TXT_SetWidgetBG(checkbox);
     TXT_DrawString(checkbox->label);
-    
+
     for (i=strlen(checkbox->label); i < w-5; ++i)
     {
         TXT_DrawString(" ");

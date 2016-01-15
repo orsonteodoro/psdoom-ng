@@ -1,5 +1,0 @@
-tables.o: tables.c tables.h m_fixed.h
-
-tables.h:
-
-m_fixed.h:

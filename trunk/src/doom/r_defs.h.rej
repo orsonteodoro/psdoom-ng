@@ -1,0 +1,11 @@
+--- src/doom/r_defs.h	2016-01-14 10:28:08.783135721 -0800
++++ src/doom/r_defs.h	2016-01-14 10:29:21.973909054 -0800
+@@ -2,6 +2,8 @@
+ //-----------------------------------------------------------------------------
+ //
+ // Copyright(C) 1993-1996 Id Software, Inc.
++// Copyright(C) 1999 by Dennis Chao
++// Copyright(C) 2000 by David Koppenhofer
+ // Copyright(C) 2005 Simon Howard
+ //
+ // This program is free software; you can redistribute it and/or

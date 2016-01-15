@@ -59,31 +59,31 @@
 #define HAVE_UNISTD_H 1
 
 /* Name of package */
-#define PACKAGE "psdoom"
+#define PACKAGE "psdoom-ng"
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "orsonteodoro@yahoo.com"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "psdoom"
+#define PACKAGE_NAME "psdoom-ng"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "psdoom 2012.02.05-1.6.0"
+#define PACKAGE_STRING "psdoom-ng 2.2.1"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "psdoom"
+#define PACKAGE_TARNAME "psdoom-ng"
 
 /* Define to the home page for this package. */
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2012.02.05-1.6.0"
+#define PACKAGE_VERSION "2.2.1"
 
 /* Change this when you create your awesome forked version */
-#define PROGRAM_PREFIX "ps"
+#define PROGRAM_PREFIX "psdng"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "2012.02.05-1.6.0"
+#define VERSION "2.2.1"

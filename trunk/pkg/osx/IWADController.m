@@ -1,7 +1,5 @@
-/* ... */
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2009 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,12 +11,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
-//-----------------------------------------------------------------------------
 
 #include <stdlib.h>
 #include <string.h>
@@ -33,6 +25,9 @@ typedef enum
     IWAD_TNT,
     IWAD_PLUTONIA,
     IWAD_CHEX,
+    IWAD_HERETIC,
+    IWAD_HEXEN,
+    IWAD_STRIFE,
     NUM_IWAD_TYPES
 } IWAD;
 
@@ -42,7 +37,10 @@ static NSString *IWADLabels[NUM_IWAD_TYPES] =
     @"Doom II: Hell on Earth",
     @"Final Doom: TNT: Evilution",
     @"Final Doom: Plutonia Experiment",
-    @"Chex Quest"
+    @"Chex Quest",
+    @"Heretic",
+    @"Hexen",
+    @"Strife"
 };
 
 static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
@@ -52,6 +50,9 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
     @"tnt.wad",
     @"plutonia.wad",
     @"chex.wad",
+    @"heretic.wad",
+    @"hexen.wad",
+    @"strife.wad",
     @"undefined"
 };
 
@@ -64,6 +65,9 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
     iwadList[IWAD_TNT] = self->tnt;
     iwadList[IWAD_PLUTONIA] = self->plutonia;
     iwadList[IWAD_CHEX] = self->chex;
+    iwadList[IWAD_HERETIC] = self->heretic;
+    iwadList[IWAD_HEXEN] = self->hexen;
+    iwadList[IWAD_STRIFE] = self->strife;
 }
 
 - (IWAD) getSelectedIWAD
@@ -100,6 +104,31 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
 
 	return [iwadList[selectedIWAD] getLocation];
     }
+}
+
+static const char *NameForIWAD(IWAD iwad)
+{
+    switch (iwad)
+    {
+        case IWAD_HERETIC:
+            return "heretic";
+
+        case IWAD_HEXEN:
+            return "hexen";
+
+        case IWAD_STRIFE:
+            return "strife";
+
+        default:
+            return "doom";
+    }
+}
+
+// Get the name used for the executable for the selected IWAD.
+
+- (const char *) getGameName
+{
+    return NameForIWAD([self getSelectedIWAD]);
 }
 
 - (void) setIWADConfig
@@ -272,15 +301,15 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
     IWADLocation *iwadList[NUM_IWAD_TYPES];
     NSString *location;
     unsigned int i;
-    unsigned int len;
     BOOL first;
     char *env;
+    size_t env_len;
 
     [self getIWADList: iwadList];
 
     // Calculate length of environment string.
 
-    len = 0;
+    env_len = 0;
 
     for (i=0; i<NUM_IWAD_TYPES; ++i)
     {
@@ -288,14 +317,14 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
 
         if (location != nil && [location length] > 0)
         {
-            len += [location length] + 1;
+            env_len += [location length] + 1;
         }
     }
 
     // Build string.
 
-    env = malloc(len);
-    strcpy(env, "");
+    env = malloc(env_len);
+    strlcpy(env, "", env_len);
 
     first = YES;
 
@@ -307,10 +336,10 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
         {
             if (!first)
             {
-                strcat(env, ":");
+                strlcat(env, ":", env_len);
             }
 
-            strcat(env, [location UTF8String]);
+            strlcat(env, [location UTF8String], env_len);
             first = NO;
         }
     }
@@ -330,9 +359,7 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
 
     doomwadpath = [self doomWadPath];
 
-    env = malloc(strlen(doomwadpath) + 15);
-
-    sprintf(env, "DOOMWADPATH=%s", doomwadpath);
+    asprintf(&env, "DOOMWADPATH=%s", doomwadpath);
 
     free(doomwadpath);
 
@@ -379,6 +406,41 @@ static NSString *IWADFilenames[NUM_IWAD_TYPES + 1] =
 
     // No IWAD found with this name.
 
+    return NO;
+}
+
+- (BOOL) selectGameByName: (const char *) name
+{
+    IWADLocation *iwadList[NUM_IWAD_TYPES];
+    NSString *location;
+    const char *name2;
+    int i;
+
+    // Already selected an IWAD of the desired type? Just return
+    // success.
+    if (!strcmp(name, [self getGameName]))
+    {
+        return YES;
+    }
+
+    // Search through the configured IWADs and try to select the
+    // desired game.
+    [self getIWADList: iwadList];
+
+    for (i = 0; i < NUM_IWAD_TYPES; ++i)
+    {
+        location = [iwadList[i] getLocation];
+        name2 = NameForIWAD(i);
+
+        if (!strcmp(name, name2)
+         && location != nil && [location length] > 0)
+        {
+            [self->iwadSelector selectItemWithTitle:IWADLabels[i]];
+            return YES;
+        }
+    }
+
+    // User hasn't configured any WAD(s) for the desired game type.
     return NO;
 }
 

@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2006 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,11 +11,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +19,7 @@
 #include "txt_gui.h"
 #include "txt_io.h"
 #include "txt_main.h"
+#include "txt_utf8.h"
 #include "txt_window.h"
 
 static void TXT_LabelSizeCalc(TXT_UNCAST_ARG(label))
@@ -36,7 +30,7 @@ static void TXT_LabelSizeCalc(TXT_UNCAST_ARG(label))
     label->widget.h = label->h;
 }
 
-static void TXT_LabelDrawer(TXT_UNCAST_ARG(label), int selected)
+static void TXT_LabelDrawer(TXT_UNCAST_ARG(label))
 {
     TXT_CAST_ARG(txt_label_t, label);
     unsigned int x, y;
@@ -46,8 +40,14 @@ static void TXT_LabelDrawer(TXT_UNCAST_ARG(label), int selected)
 
     w = label->widget.w;
 
-    TXT_BGColor(label->bgcolor, 0);
-    TXT_FGColor(label->fgcolor);
+    if (label->bgcolor >= 0)
+    {
+        TXT_BGColor(label->bgcolor, 0);
+    }
+    if (label->fgcolor >= 0)
+    {
+        TXT_FGColor(label->fgcolor);
+    }
 
     TXT_GetXY(&origin_x, &origin_y);
 
@@ -68,7 +68,7 @@ static void TXT_LabelDrawer(TXT_UNCAST_ARG(label), int selected)
                 align_indent = label->w - strlen(label->lines[y]);
                 break;
         }
-        
+
         // Draw this line
 
         TXT_GotoXY(origin_x, origin_y + y);
@@ -82,8 +82,8 @@ static void TXT_LabelDrawer(TXT_UNCAST_ARG(label), int selected)
 
         // The string itself
 
-        TXT_DrawString(label->lines[y]);
-        x += strlen(label->lines[y]);
+        TXT_DrawUTF8String(label->lines[y]);
+        x += TXT_UTF8_Strlen(label->lines[y]);
 
         // Gap at the end
 
@@ -123,7 +123,7 @@ void TXT_SetLabel(txt_label_t *label, char *value)
     free(label->label);
     free(label->lines);
 
-    // Set the new value 
+    // Set the new value
 
     label->label = strdup(value);
 
@@ -144,7 +144,7 @@ void TXT_SetLabel(txt_label_t *label, char *value)
     label->lines = malloc(sizeof(char *) * label->h);
     label->lines[0] = label->label;
     y = 1;
-    
+
     for (p = label->label; *p != '\0'; ++p)
     {
         if (*p == '\n')
@@ -159,8 +159,12 @@ void TXT_SetLabel(txt_label_t *label, char *value)
 
     for (y=0; y<label->h; ++y)
     {
-        if (strlen(label->lines[y]) > label->w)
-            label->w = strlen(label->lines[y]);
+        unsigned int line_len;
+
+        line_len = TXT_UTF8_Strlen(label->lines[y]);
+
+        if (line_len > label->w)
+            label->w = line_len;
     }
 }
 
@@ -176,8 +180,8 @@ txt_label_t *TXT_NewLabel(char *text)
 
     // Default colors
 
-    label->bgcolor = TXT_WINDOW_BACKGROUND;
-    label->fgcolor = TXT_COLOR_BRIGHT_WHITE;
+    label->bgcolor = -1;
+    label->fgcolor = -1;
 
     TXT_SetLabel(label, text);
 

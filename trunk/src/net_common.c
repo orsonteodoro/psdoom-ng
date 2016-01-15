@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,27 +11,24 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // Common code shared between the client and server
 //
 
-#include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "doomdef.h"
+#include "doomtype.h"
+#include "d_mode.h"
 #include "i_timer.h"
 
 #include "net_common.h"
 #include "net_io.h"
 #include "net_packet.h"
+#include "net_structrw.h"
 
-// connections time out after 10 seconds
+// connections time out after 30 seconds
 
-#define CONNECTION_TIMEOUT_LEN 10
+#define CONNECTION_TIMEOUT_LEN 30
 
 // maximum time between sending packets
 
@@ -511,44 +506,6 @@ unsigned int NET_ExpandTicNum(unsigned int relative, unsigned int b)
     return result;
 }
 
-// "Safe" version of puts, for displaying messages received from the
-// network.
-
-void NET_SafePuts(char *s)
-{
-    char *p;
-
-    // Do not do a straight "puts" of the string, as this could be
-    // dangerous (sending control codes to terminals can do all
-    // kinds of things)
-
-    for (p=s; *p; ++p)
-    {
-        if (isprint(*p))
-            putchar(*p);
-    }
-
-    putchar('\n');
-}
-
-// Check that a gamemode+gamemission received over the network is valid.
-
-boolean NET_ValidGameMode(GameMode_t mode, GameMission_t mission)
-{
-    if (mode == shareware || mode == registered || mode == retail)
-    {
-        return true;
-    }
-    else if (mode == commercial)
-    {
-        return mission == doom2 || mission == pack_tnt || mission == pack_plut;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 // Check that game settings are valid
 
 boolean NET_ValidGameSettings(GameMode_t mode, GameMission_t mission,
@@ -566,36 +523,12 @@ boolean NET_ValidGameSettings(GameMode_t mode, GameMission_t mission,
     if (settings->skill < sk_noitems || settings->skill > sk_nightmare)
         return false;
 
-    if (settings->gameversion < exe_doom_1_9 || settings->gameversion > exe_chex)
+    if (!D_ValidGameVersion(mission, settings->gameversion))
         return false;
 
-    if (mode == shareware || mode == retail || mode == registered)
-    {
-        if (settings->map < 1 || settings->map > 9)
-            return false;
-    }
-    else
-    {
-        if (settings->map < 1 || settings->map > 32)
-            return false;
-    }
-    
-    if (mode == shareware)
-    {
-        if (settings->episode != 1)
-            return false;
-    }
-    else if (mode == registered)
-    {
-        if (settings->episode < 1 || settings->episode > 3)
-            return false;
-    }
-    else if (mode == retail)
-    {
-        if (settings->episode < 1 || settings->episode > 4)
-            return false;
-    }
-    
+    if (!D_ValidEpisodeMap(mission, mode, settings->episode, settings->map))
+        return false;
+
     return true;
 }
 

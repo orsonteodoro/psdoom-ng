@@ -1,8 +1,7 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 1993-2008 Raven Software
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,11 +12,6 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
 //
 // DESCRIPTION:
 //	Lookup tables.
@@ -35,13 +29,12 @@
 //	int tantoangle[2049]	- ArcTan LUT,
 //	  maps tan(angle) to angle fast. Gotta search.	
 //    
-//-----------------------------------------------------------------------------
 
 
 #ifndef __TABLES__
 #define __TABLES__
 
-
+#include "doomtype.h"
 
 #include "m_fixed.h"
 	
@@ -62,12 +55,24 @@ extern const fixed_t *finecosine;
 // Effective size is 4096.
 extern const fixed_t finetangent[FINEANGLES/2];
 
-// Binary Angle Measument, BAM.
-#define ANG45			0x20000000
-#define ANG90			0x40000000
-#define ANG180		0x80000000
-#define ANG270		0xc0000000
+// Gamma correction tables.
+extern const byte gammatable[5][256];
 
+// Binary Angle Measument, BAM.
+
+#define ANG45           0x20000000
+#define ANG90           0x40000000
+#define ANG180          0x80000000
+#define ANG270          0xc0000000
+#define ANG_MAX         0xffffffff
+
+#define ANG1            (ANG45 / 45)
+#define ANG60           (ANG180 / 3)
+
+// Heretic code uses this definition as though it represents one 
+// degree, but it is not!  This is actually ~1.40 degrees.
+
+#define ANG1_X          0x01000000
 
 #define SLOPERANGE		2048
 #define SLOPEBITS		11
@@ -84,10 +89,7 @@ extern const angle_t tantoangle[SLOPERANGE+1];
 
 // Utility function,
 //  called by R_PointToAngle.
-int
-SlopeDiv
-( unsigned	num,
-  unsigned	den);
+int SlopeDiv(unsigned int num, unsigned int den);
 
 
 #endif

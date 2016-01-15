@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,18 +11,17 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 
 #ifndef NET_STRUCTRW_H
 #define NET_STRUCTRW_H
 
-#include "md5.h"
+#include "aes_prng.h"
+#include "sha1.h"
 #include "net_defs.h"
 #include "net_packet.h"
+
+void NET_WriteConnectData(net_packet_t *packet, net_connect_data_t *data);
+boolean NET_ReadConnectData(net_packet_t *packet, net_connect_data_t *data);
 
 extern void NET_WriteSettings(net_packet_t *packet, net_gamesettings_t *settings);
 extern boolean NET_ReadSettings(net_packet_t *packet, net_gamesettings_t *settings);
@@ -40,8 +37,15 @@ extern void NET_TiccmdPatch(ticcmd_t *src, net_ticdiff_t *diff, ticcmd_t *dest);
 boolean NET_ReadFullTiccmd(net_packet_t *packet, net_full_ticcmd_t *cmd, boolean lowres_turn);
 void NET_WriteFullTiccmd(net_packet_t *packet, net_full_ticcmd_t *cmd, boolean lowres_turn);
 
-boolean NET_ReadMD5Sum(net_packet_t *packet, md5_digest_t digest);
-void NET_WriteMD5Sum(net_packet_t *packet, md5_digest_t digest);
+boolean NET_ReadSHA1Sum(net_packet_t *packet, sha1_digest_t digest);
+void NET_WriteSHA1Sum(net_packet_t *packet, sha1_digest_t digest);
+
+void NET_WriteWaitData(net_packet_t *packet, net_waitdata_t *data);
+boolean NET_ReadWaitData(net_packet_t *packet, net_waitdata_t *data);
+
+void NET_SafePuts(char *msg);
+
+boolean NET_ReadPRNGSeed(net_packet_t *packet, prng_seed_t seed);
+void NET_WritePRNGSeed(net_packet_t *packet, prng_seed_t seed);
 
 #endif /* #ifndef NET_STRUCTRW_H */
-

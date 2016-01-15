@@ -3,61 +3,94 @@ AUX_DIST_GEN =                          \
         $(ac_aux_dir)/missing
 
 MSVC_FILES=                             \
-        msvc/README                     \
+        msvc/chocolate.sln              \
         msvc/config.h                   \
+        msvc/doom.vcproj                \
+        msvc/heretic.vcproj             \
+        msvc/hexen.vcproj               \
         msvc/inttypes.h                 \
+        msvc/libpcsound.vcproj          \
+        msvc/libtextscreen.vcproj       \
+        msvc/README                     \
+        msvc/server.vcproj              \
+        msvc/setup.vcproj               \
         msvc/stdint.h                   \
-        msvc/win32.rc                   \
-        msvc/ChocolateDoom.sln          \
-        msvc/ChocolateDoom.vcproj
+        msvc/win32.rc
 
 CODEBLOCKS_FILES=                              \
-	codeblocks/config.h                    \
-	codeblocks/game.cbp                    \
-	codeblocks/game-res.rc                 \
-	codeblocks/libpcsound.cbp              \
-	codeblocks/main.workspace              \
-	codeblocks/README                      \
-	codeblocks/server.cbp                  \
-	codeblocks/setup.cbp                   \
-	codeblocks/setup-res.rc                \
-	codeblocks/textscreen.cbp
+        codeblocks/chocolate.workspace         \
+        codeblocks/config.h                    \
+        codeblocks/doom.cbp                    \
+        codeblocks/game-res.rc                 \
+        codeblocks/heretic.cbp                 \
+        codeblocks/hexen.cbp                   \
+        codeblocks/libpcsound.cbp              \
+        codeblocks/libtextscreen.cbp           \
+        codeblocks/README                      \
+        codeblocks/server.cbp                  \
+        codeblocks/setup.cbp                   \
+        codeblocks/setup-res.rc
 
 DOC_FILES=                              \
-        CMDLINE                         \
         README                          \
-        README.OPL                      \
+        README.Music                    \
         NEWS                            \
-        ChangeLog                       \
-        NOT-BUGS
+        PHILOSOPHY                      \
+        ChangeLog
 
 EXTRA_DIST=                             \
         $(AUX_DIST_GEN)                 \
         $(MSVC_FILES)                   \
         $(CODEBLOCKS_FILES)             \
         $(DOC_FILES)                    \
+        NOT-BUGS                        \
+        README.Strife                   \
         .lvimrc                         \
         HACKING                         \
         TODO                            \
         rpm.spec
 
-docdir=$(prefix)/share/doc/@PACKAGE@
-doc_DATA=$(DOC_FILES)
+PSDO0M_DOC_FILES=                       \
+        CHANGELOG.psdoom-ng             \
+        COPYING.psdoom-ng               \
+        CREDITS.psdoom-ng               \
+        README.psdoom-ng                \
+        TODO.psdoom-ng
+
+psdoomngdocsdir = ${docdir}/../psdoom-ng
+psdoomngdocs_DATA = $(DOC_FILES) $(PSDO0M_DOC_FILES)
+
+#doomdocsdir = ${docdir}/../${PROGRAM_PREFIX}doom
+#doomdocs_DATA = $(DOC_FILES) NOT-BUGS
+
+#hereticdocsdir = ${docdir}/../${PROGRAM_PREFIX}heretic
+#hereticdocs_DATA = $(DOC_FILES)
+
+#hexendocsdir = ${docdir}/../${PROGRAM_PREFIX}hexen
+#hexendocs_DATA = $(DOC_FILES)
+
+#strifedocsdir = ${docdir}/../${PROGRAM_PREFIX}strife
+#strifedocs_DATA = $(DOC_FILES) README.Strife
 
 MAINTAINERCLEANFILES =  $(AUX_DIST_GEN)
 
-SUBDIRS=wince textscreen opl pcsound data src man setup
+SUBDIRS=textscreen opl pcsound data src man
+
 DIST_SUBDIRS=pkg $(SUBDIRS)
 
 if HAVE_PYTHON
 
-noinst_DATA=CMDLINE
-
-CMDLINE : src/
-	./man/docgen -p man/CMDLINE.template src/ > $@
-
 INSTALL : man/INSTALL.template man/simplecpp
-	./man/simplecpp < man/INSTALL.template > $@
+	./man/simplecpp -DDOOM -DHERETIC -DHEXEN -DSTRIFE \
+	                < man/INSTALL.template > $@
 
 endif
 
+psdoomngcfgdir = ${prefix}/share/psdoom-ng
+psdoomngcfg_DATA = psdoom-ng.conf.example
+
+psdoomngwrapperdir = ${prefix}/bin
+psdoomngwrapper_PROGRAMS = psd
+
+psd : psd.in
+	cp psd.in psd

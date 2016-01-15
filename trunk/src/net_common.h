@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,17 +11,13 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // Common code shared between the client and server
 //
 
 #ifndef NET_COMMON_H
 #define NET_COMMON_H
 
+#include "d_mode.h"
 #include "net_defs.h"
 #include "net_packet.h"
 
@@ -109,10 +103,7 @@ net_packet_t *NET_Conn_NewReliable(net_connection_t *conn, int packet_type);
 
 // Other miscellaneous common functions
 
-void NET_SafePuts(char *msg);
 unsigned int NET_ExpandTicNum(unsigned int relative, unsigned int b);
-
-boolean NET_ValidGameMode(GameMode_t mode, GameMission_t mission);
 boolean NET_ValidGameSettings(GameMode_t mode, GameMission_t mission, 
                               net_gamesettings_t *settings);
 

@@ -1,0 +1,208 @@
+.TH psdoom-ng 1
+.SH NAME
+psdoom-ng \- a process killer and monitor that personifies processes
+.SH SYNOPSIS
+.B psdoom-ng [\fIOPTIONS\fR] -iwad <path-to-wad-file>
+.SH DESCRIPTION
+.PP
+psdoom-ng is a process killer and monitor based on psDooM.  Much of psDooM has been ported to Chocolate Doom since XDoom is no longer maintained.  The command psd is the wrapper script used to automatically run psdoom-ng.
+.PP
+Wounding a monster renices a process by +5.  Killing a monster sends a "kill -9."  The floating text infront of it corresponds to the process identifier (PID).
+
+.SH MONSTER LOCATIONS
+.PP
+Locations of the 'pid monsters' within the levels are as follows:
+.PP
+For shareware Doom 1, and registered Doom 1 or Ultimite Doom without the custom level:
+.RS
+psdoom-ng spawns the 'pid monsters' in the 'hidden' courtyard on E1M1. To get there, go through the room with the zig-zag floor with poison around it and open the miscolored wall on the right, before the door to leave that room.
+.RE
+.PP
+For Doom 2 without the custom level:
+.RS
+psdoom-ng spawns the 'pid monsters' in the 'hidden' courtyard on MAP01. To get there, activate the switch to (and get on) the lift in the room before the exit.  Then, once the lift raises, activate the rear wall and walk into that secret alcove. When you leave the lift, a door to the courtyard will have opened on the right side of the room, past the window on the right.
+.RE
+.PP
+For the custom levels:
+.RS
+psdoom-ng spawns you in a room with equiptment and weapons.  The switch ahead of you exits the level, and the three doors take you to rooms containing 'pid monsters'.
+.RE
+
+.SH NOTES
+.PP
+Using killing processes in DWM or any other tiling manager may screw up the game visually.  You will need to run in window mode to prevent this problem.  
+.PP
+The custom maps may not spawn the pid monsters in a reachable place.  You will need to edit the source code.
+
+.SH OPTIONS
+.PP
+-nopssafety
+.RS
+Causes the 'pid monsters' to not be protected against damage from each other, normal Doom monsters, and the environment.  Normally, only the player may inflict damage on 'pid monsters'.
+.RE
+.PP
+-psallusers
+.RS
+Effectively adds every username to the list of users whose processes to show.
+.RE
+.PP
+-psuser [username [username]...]
+.RS
+Adds username(s) to the list of users whose processes to show.  If no username is specified, the current username (as determined by the environment variables listed above) is added to this list.
+.RE
+.PP
+-psnotuser [username [username]...]
+.RS
+Adds username(s) to the list of users whose processes NOT to show.  If no username is specified, the current username (as determined by the environment variables listed above) is added to this list.
+.RE
+.PP
+-nopslev
+.RS
+Suppresses the automatic loading of the custom level psdoom*.wad and makes psDooM assume pid monster coordinates for the stock E1M1 or MAP01.  It has no effect if you don't have the custom level or if you're using shareware Doom 1.
+.RE
+.PP
+-nopsmon
+.RS
+Disables process monitoring entirely.  Nice if you want to play an E1M1 or MAP01 level that isn't set up for process monitoring.
+.RE
+.PP
+-nopsact
+.RS
+Disables the system calls to 'renice' and 'kill' when 'pid monsters' are wounded and killed.  This is good if you only want to monitor processes, not manage them.
+.RE
+.PP
+-nomonsters.
+.RS
+Yes, there is a period at the end of this command.  It does the same thing as the '-nomonsters' flag, but is persistant across new games and level warps. NOTE: 'pid monsters' are NOT affected by the '-nomonsters' and '-nomonsters.' flags; use -nopsmon to turn them off instead.
+.RE
+.PP
+-respawnitems
+.RS
+Like you think it may work, this flag causes items to respawn as they do in '-altdeath' games (Invun, Invis, and dropped items don't respawn; everything else does).  This flag has no effect when recording or playing a demo because it messes up timing.
+.RE
+.PP
+-fullscreen
+.RS
+Runs psdoom-ng into full screen mode.
+.RE
+.PP
+-window
+.RS
+Runs psdoom-ng into windowed screen mode.
+.RE
+.PP
+-iwad
+.RS
+Loads the main wad file.  You need to specify one
+.RE
+.PP
+-merge
+.RS
+Appends total conversion wad file.  You can specify more than one file.
+.RE
+.PP
+-nosound
+.RS
+Disables all sound.
+.RE
+.PP
+-nosfx
+.RS
+Disables sound effects.
+.RE
+.PP
+-nomusic
+.RS
+Disables music
+.RE
+.PP
+-warp [ x y | xy ]
+.RS
+Start immediately in ExMy or MAPxy
+.RE
+.PP
+-grabmouse
+.RS
+Grab mouse in windowed mode.
+.RE
+.PP
+-nograbmouse
+.RS
+Disables mouse grab in window mode.
+.RE
+.PP
+-geometry WxH[wf]
+.RS
+Sets the size of the window's width (W) and height (H).  Optional w appended runs in window mode and f means fullscreen mode.
+.RE
+
+.SH EXAMPLES
+.PP
+psdoom-ng -psallusers -iwad /usr/share/psdoom-ng/doom.wad
+.RS
+This command will show every user's processes.
+.RE
+.PP
+psdoom-ng -psallusers -psuser jschmoe jdoe -iwad /usr/share/psdoom-ng/doom.wad
+.RS
+The '-psuser jschmoe jdoe' is extraneous here; users jschmoe and jdoe are included in '-psallusers'.
+.RE
+.PP
+psdoom-ng -psallusers -psnotuser -iwad /usr/share/psdoom-ng/doom.wad
+.RS
+This will show everybody's processes except your own.  Remember, your username is determined automatically by psdoom-ng according to what PSDOOMUSER, LOGNAME, USER, or USERNAME is set to in the environment.
+.RE
+.PP
+psdoom-ng -psnotuser jdoe -iwad /usr/share/psdoom-ng/doom.wad
+.RS
+This will show no processes, even if you're running psDooM as root. Remember, specifying any 'userlist' command line option causes the defaults to not be us
+.RE
+.PP
+psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom.wad -merge /usr/share/psdoom-ng/psdoom1.wad
+.RS
+This will show process belonging to orson and the psDooM custom level for Doom 1 or Ultimate Doom.
+.RE
+.PP
+psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom2.wad -merge /usr/share/psdoom-ng/psdoom2.wad
+.RS
+This will show process belonging to orson and the psDooM custom level for Doom 2.
+.RE
+
+.SH CONFIGURATION
+.PP
+/etc/psdoom-ng.conf
+.RS
+Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.
+.RE
+.PP
+/home/${USER}/.psdoom-ng/psdoom-ng.conf
+.RS
+Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  The user options override the system options.
+.RE
+
+.br
+.SH AUTHOR
+.PP
+Dennis Chao came up with the original idea and wrote much of the mod.
+.PP
+David Koppenhofer was the previous maintainer of mod.
+.PP
+Simon Howard wrote Chocolate Doom.
+.SH MAINTAINER
+.PP
+Orson Teodoro is the maintainer of psdoom-ng.
+.SH COPYRIGHT
+.PP
+Copyright \(co id Software Inc.
+.PP
+Copyright \(co 1999 Dennis Chao
+.PP
+Copyright \(co 2000 David Koppenhofer
+.PP
+Copyright \(co 2005-2013 Simon Howard.
+.PP
+Copyright \(co 2012-2016 Orson Teodoro.
+.PP
+.br
+This is free software.  You may redistribute copies of it under the terms of the GNU General Public License <http://www.gnu.org/licenses/gpl.html>. There is NO WARRANTY, to the extent permitted by law.
+

@@ -1,8 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,14 +12,8 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //
-//-----------------------------------------------------------------------------
 
 
 #include <ctype.h>
@@ -29,9 +21,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "doomdef.h"
+#include "doomtype.h"
 #include "i_system.h"
 #include "m_misc.h"
+#include "m_argv.h"  // haleyjd 20110212: warning fix
 
 int		myargc;
 char**		myargv;
@@ -60,13 +53,25 @@ int M_CheckParmWithArgs(char *check, int num_args)
     return 0;
 }
 
+//
+// M_ParmExists
+//
+// Returns true if the given parameter exists in the program's command
+// line arguments, false if not.
+//
+
+boolean M_ParmExists(char *check)
+{
+    return M_CheckParm(check) != 0;
+}
+
 int M_CheckParm(char *check)
 {
     return M_CheckParmWithArgs(check, 0);
 }
 
 #define MAXARGVS        100
-	
+
 static void LoadResponseFile(int argv_index)
 {
     FILE *handle;
@@ -95,14 +100,23 @@ static void LoadResponseFile(int argv_index)
 
     // Read in the entire file
     // Allocate one byte extra - this is in case there is an argument
-    // at the end of the response file, in which case a '\0' will be 
+    // at the end of the response file, in which case a '\0' will be
     // needed.
 
     file = malloc(size + 1);
 
-    if (fread(file, 1, size, handle) < size)
+    i = 0;
+
+    while (i < size)
     {
-        I_Error("Failed to read entire response file");
+        k = fread(file + i, 1, size - i, handle);
+
+        if (k < 0)
+        {
+            I_Error("Failed to read full contents of '%s'", response_filename);
+        }
+
+        i += k;
     }
 
     fclose(handle);
@@ -120,7 +134,7 @@ static void LoadResponseFile(int argv_index)
         newargv[i] = myargv[i];
         ++newargc;
     }
-    
+
     infile = file;
     k = 0;
 
@@ -131,7 +145,7 @@ static void LoadResponseFile(int argv_index)
         while(k < size && isspace(infile[k]))
         {
             ++k;
-        } 
+        }
 
         if (k >= size)
         {
@@ -142,7 +156,7 @@ static void LoadResponseFile(int argv_index)
         // the contents as a single argument.  This allows long filenames
         // to be specified.
 
-        if (infile[k] == '\"') 
+        if (infile[k] == '\"')
         {
             // Skip the first character(")
             ++k;
@@ -156,9 +170,9 @@ static void LoadResponseFile(int argv_index)
                 ++k;
             }
 
-            if (k >= size || infile[k] == '\n') 
+            if (k >= size || infile[k] == '\n')
             {
-                I_Error("Quotes unclosed in response file '%s'", 
+                I_Error("Quotes unclosed in response file '%s'",
                         response_filename);
             }
 
@@ -184,7 +198,7 @@ static void LoadResponseFile(int argv_index)
 
             ++k;
         }
-    } 
+    }
 
     // Add arguments following the response file argument
 
@@ -224,6 +238,24 @@ void M_FindResponseFile(void)
         {
             LoadResponseFile(i);
         }
+    }
+}
+
+// Return the name of the executable used to start the program:
+
+char *M_GetExecutableName(void)
+{
+    char *sep;
+
+    sep = strrchr(myargv[0], DIR_SEPARATOR);
+
+    if (sep == NULL)
+    {
+        return myargv[0];
+    }
+    else
+    {
+        return sep + 1;
     }
 }
 

@@ -1,8 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -14,15 +12,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //	Handles WAD file header, directory, lump I/O.
 //
-//-----------------------------------------------------------------------------
 
 
 
@@ -32,9 +24,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "doomdef.h"
 #include "doomtype.h"
 
+#include "config.h"
+#include "d_iwad.h"
 #include "i_swap.h"
 #include "i_system.h"
 #include "i_video.h"
@@ -46,7 +39,7 @@
 typedef struct
 {
     // Should be "IWAD" or "PWAD".
-    char		identification[4];		
+    char		identification[4];
     int			numlumps;
     int			infotableofs;
 } PACKEDATTR wadinfo_t;
@@ -64,53 +57,20 @@ typedef struct
 //
 
 // Location of each lump on disk.
-
-lumpinfo_t *lumpinfo;		
+lumpinfo_t *lumpinfo;
 unsigned int numlumps = 0;
 
 // Hash table for fast lookups
-
 static lumpinfo_t **lumphash;
 
-static void ExtractFileBase(char *path, char *dest)
-{
-    char *src;
-    char *filename;
-    int length;
-
-    src = path + strlen(path) - 1;
-
-    // back up until a \ or the start
-    while (src != path && *(src - 1) != DIR_SEPARATOR)
-    {
-	src--;
-    }
-
-    filename = src;
-
-    // Copy up to eight characters
-    // Note: Vanilla Doom exits with an error if a filename is specified
-    // with a base of more than eight characters.  To remove the 8.3
-    // filename limit, instead we simply truncate the name.
-
-    length = 0;
-    memset(dest, 0, 8);
-
-    while (*src != '\0' && *src != '.')
-    {
-        if (length >= 8)
-        {
-            printf("Warning: Truncated '%s' lump name to '%.8s'.\n",
-                   filename, dest);
-            break;
-        }
-
-	dest[length++] = toupper((int)*src++);
-    }
-}
+// Variables for the reload hack: filename of the PWAD to reload, and the
+// lumps from WADs before the reload file, so we can resent numlumps and
+// load the file again.
+static wad_file_t *reloadhandle = NULL;
+static char *reloadname = NULL;
+static int reloadlump = -1;
 
 // Hash function used for lump names.
-
 unsigned int W_LumpNameHash(const char *s)
 {
     // This is the djb2 string hash function, modded to work on strings
@@ -125,6 +85,46 @@ unsigned int W_LumpNameHash(const char *s)
     }
 
     return result;
+}
+
+// Increase the size of the lumpinfo[] array to the specified size.
+static void ExtendLumpInfo(int newnumlumps)
+{
+    lumpinfo_t *newlumpinfo;
+    unsigned int i;
+
+    newlumpinfo = calloc(newnumlumps, sizeof(lumpinfo_t));
+
+    if (newlumpinfo == NULL)
+    {
+	I_Error ("Couldn't realloc lumpinfo");
+    }
+
+    // Copy over lumpinfo_t structures from the old array. If any of
+    // these lumps have been cached, we need to update the user
+    // pointers to the new location.
+    for (i = 0; i < numlumps && i < newnumlumps; ++i)
+    {
+        memcpy(&newlumpinfo[i], &lumpinfo[i], sizeof(lumpinfo_t));
+
+        if (newlumpinfo[i].cache != NULL)
+        {
+            Z_ChangeUser(newlumpinfo[i].cache, &newlumpinfo[i].cache);
+        }
+
+        // We shouldn't be generating a hash table until after all WADs have
+        // been loaded, but just in case...
+        if (lumpinfo[i].next != NULL)
+        {
+            int nextlumpnum = lumpinfo[i].next - lumpinfo;
+            newlumpinfo[i].next = &newlumpinfo[nextlumpnum];
+        }
+    }
+
+    // All done.
+    free(lumpinfo);
+    lumpinfo = newlumpinfo;
+    numlumps = newnumlumps;
 }
 
 //
@@ -150,19 +150,45 @@ wad_file_t *W_AddFile (char *filename)
     int startlump;
     filelump_t *fileinfo;
     filelump_t *filerover;
-    
-    // open the file and add to directory
+    int newnumlumps;
 
+    // If the filename begins with a ~, it indicates that we should use the
+    // reload hack.
+    if (filename[0] == '~')
+    {
+        if (reloadname != NULL)
+        {
+            I_Error("Prefixing a WAD filename with '~' indicates that the "
+                    "WAD should be reloaded\n"
+                    "on each level restart, for use by level authors for "
+                    "rapid development. You\n"
+                    "can only reload one WAD file, and it must be the last "
+                    "file in the -file list.");
+        }
+
+        reloadname = strdup(filename);
+        reloadlump = numlumps;
+        ++filename;
+    }
+
+    // Open the file and add to directory
     wad_file = W_OpenFile(filename);
-		
+
     if (wad_file == NULL)
     {
 	printf (" couldn't open %s\n", filename);
 	return NULL;
     }
 
-    startlump = numlumps;
-	
+    // If this is the reload file, we need to save the file handle so that we
+    // can close it later on when we do a reload.
+    if (reloadname)
+    {
+        reloadhandle = wad_file;
+    }
+
+    newnumlumps = numlumps;
+
     if (strcasecmp(filename+strlen(filename)-3 , "wad" ) )
     {
 	// single lump file
@@ -179,8 +205,8 @@ wad_file_t *W_AddFile (char *filename)
         // Name the lump after the base of the filename (without the
         // extension).
 
-	ExtractFileBase (filename, fileinfo->name);
-	numlumps++;
+	M_ExtractFileBase (filename, fileinfo->name);
+	newnumlumps++;
     }
     else 
     {
@@ -205,19 +231,15 @@ wad_file_t *W_AddFile (char *filename)
 	fileinfo = Z_Malloc(length, PU_STATIC, 0);
 
         W_Read(wad_file, header.infotableofs, fileinfo, length);
-	numlumps += header.numlumps;
+	newnumlumps += header.numlumps;
     }
 
-    // Fill in lumpinfo
-    lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
-
-    if (lumpinfo == NULL)
-    {
-	I_Error ("Couldn't realloc lumpinfo");
-    }
+    // Increase size of numlumps array to accomodate the new file.
+    startlump = numlumps;
+    ExtendLumpInfo(newnumlumps);
 
     lump_p = &lumpinfo[startlump];
-	
+
     filerover = fileinfo;
 
     for (i=startlump; i<numlumps; ++i)
@@ -231,7 +253,7 @@ wad_file_t *W_AddFile (char *filename)
         ++lump_p;
         ++filerover;
     }
-	
+
     Z_Free(fileinfo);
 
     if (lumphash != NULL)
@@ -546,8 +568,7 @@ void W_GenerateHashTable(void)
 {
     unsigned int i;
 
-    // Free the old hash table, if there is one
-
+    // Free the old hash table, if there is one:
     if (lumphash != NULL)
     {
         Z_Free(lumphash);
@@ -573,5 +594,89 @@ void W_GenerateHashTable(void)
     }
 
     // All done!
+}
+
+// The Doom reload hack. The idea here is that if you give a WAD file to -file
+// prefixed with the ~ hack, that WAD file will be reloaded each time a new
+// level is loaded. This lets you use a level editor in parallel and make
+// incremental changes to the level you're working on without having to restart
+// the game after every change.
+// But: the reload feature is a fragile hack...
+void W_Reload(void)
+{
+    char *filename;
+    int i;
+
+    if (reloadname == NULL)
+    {
+        return;
+    }
+
+    // We must release any lumps being held in the PWAD we're about to reload:
+    for (i = reloadlump; i < numlumps; ++i)
+    {
+        if (lumpinfo[i].cache != NULL)
+        {
+            W_ReleaseLumpNum(i);
+        }
+    }
+
+    // Reset numlumps to remove the reload WAD file:
+    numlumps = reloadlump;
+
+    // Now reload the WAD file.
+    filename = reloadname;
+
+    W_CloseFile(reloadhandle);
+    reloadname = NULL;
+    reloadlump = -1;
+    reloadhandle = NULL;
+    W_AddFile(filename);
+    free(filename);
+
+    // The WAD directory has changed, so we have to regenerate the
+    // fast lookup hashtable:
+    W_GenerateHashTable();
+}
+
+// Lump names that are unique to particular game types. This lets us check
+// the user is not trying to play with the wrong executable, eg.
+// chocolate-doom -iwad hexen.wad.
+static const struct
+{
+    GameMission_t mission;
+    char *lumpname;
+} unique_lumps[] = {
+    { doom,    "POSSA1" },
+    { heretic, "IMPXA1" },
+    { hexen,   "ETTNA1" },
+    { strife,  "AGRDA1" },
+};
+
+void W_CheckCorrectIWAD(GameMission_t mission)
+{
+    int i;
+    int lumpnum;
+
+    for (i = 0; i < arrlen(unique_lumps); ++i)
+    {
+        if (mission != unique_lumps[i].mission)
+        {
+            lumpnum = W_CheckNumForName(unique_lumps[i].lumpname);
+
+            if (lumpnum >= 0)
+            {
+                I_Error("\nYou are trying to use a %s IWAD file with "
+                        "the %s%s binary.\nThis isn't going to work.\n"
+                        "You probably want to use the %s%s binary.",
+                        D_SuggestGameName(unique_lumps[i].mission,
+                                          indetermined),
+                        PROGRAM_PREFIX,
+                        D_GameMissionString(mission),
+                        PROGRAM_PREFIX,
+                        D_GameMissionString(unique_lumps[i].mission));
+            }
+        }
+    }
 }
 

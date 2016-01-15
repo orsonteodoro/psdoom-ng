@@ -1,7 +1,5 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// Copyright(C) 2009 Simon Howard
+// Copyright(C) 2005-2014 Simon Howard
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -13,22 +11,15 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-// 02111-1307, USA.
-//
 // DESCRIPTION:
 //    Reading of MIDI files.
 //
-//-----------------------------------------------------------------------------
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-#include "doomdef.h"
 #include "doomtype.h"
 #include "i_swap.h"
 #include "midifile.h"
@@ -36,6 +27,11 @@
 #define HEADER_CHUNK_ID "MThd"
 #define TRACK_CHUNK_ID  "MTrk"
 #define MAX_BUFFER_SIZE 0x10000
+
+// haleyjd 09/09/10: packing required
+#ifdef _MSC_VER
+#pragma pack(push, 1)
+#endif
 
 typedef struct
 {
@@ -50,6 +46,11 @@ typedef struct
     unsigned short num_tracks;
     unsigned short time_division;
 } PACKEDATTR midi_header_t;
+
+// haleyjd 09/09/10: packing off.
+#ifdef _MSC_VER
+#pragma pack(pop)
+#endif
 
 typedef struct
 {
@@ -129,7 +130,7 @@ static boolean ReadByte(byte *result, FILE *stream)
 static boolean ReadVariableLength(unsigned int *result, FILE *stream)
 {
     int i;
-    byte b;
+    byte b = 0;
 
     *result = 0;
 
@@ -167,9 +168,10 @@ static void *ReadByteSequence(unsigned int num_bytes, FILE *stream)
     unsigned int i;
     byte *result;
 
-    // Allocate a buffer:
+    // Allocate a buffer. Allocate one extra byte, as malloc(0) is
+    // non-portable.
 
-    result = malloc(num_bytes);
+    result = malloc(num_bytes + 1);
 
     if (result == NULL)
     {
@@ -201,7 +203,7 @@ static boolean ReadChannelEvent(midi_event_t *event,
                                 byte event_type, boolean two_param,
                                 FILE *stream)
 {
-    byte b;
+    byte b = 0;
 
     // Set basics:
 
@@ -267,7 +269,7 @@ static boolean ReadSysExEvent(midi_event_t *event, int event_type,
 
 static boolean ReadMetaEvent(midi_event_t *event, FILE *stream)
 {
-    byte b;
+    byte b = 0;
 
     event->event_type = MIDI_EVENT_META;
 
@@ -306,7 +308,7 @@ static boolean ReadMetaEvent(midi_event_t *event, FILE *stream)
 static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type,
                          FILE *stream)
 {
-    byte event_type;
+    byte event_type = 0;
 
     if (!ReadVariableLength(&event->delta_time, stream))
     {
@@ -697,7 +699,19 @@ int MIDI_GetNextEvent(midi_track_iter_t *iter, midi_event_t **event)
 
 unsigned int MIDI_GetFileTimeDivision(midi_file_t *file)
 {
-    return file->header.time_division;
+    short result = SDL_SwapBE16(file->header.time_division);
+
+    // Negative time division indicates SMPTE time and must be handled
+    // differently.
+    if (result < 0)
+    {
+        return (signed int)(-(result/256))
+             * (signed int)(result & 0xFF);
+    }
+    else
+    {
+        return result;
+    }
 }
 
 void MIDI_RestartIterator(midi_track_iter_t *iter)
