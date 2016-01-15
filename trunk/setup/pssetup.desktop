@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=psdoom-ng Setup
-Exec=psdoom-ng-setup
-Icon=psdoom-ng-setup
-Type=Application
-Comment=Setup tool for psdoom-ng
-Categories=Settings;ConsoleOnly;
