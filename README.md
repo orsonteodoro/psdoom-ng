@@ -9,15 +9,24 @@ Compile and usage
 
 Quick guide: 
 
- 1. Install all dependencies: gcc, make, libsdl, sdl_mixer, sdl_net, python.
- 2. `cd trunk && ./configure && make`
+ 1. Install all dependencies: gcc, make, libsdl, sdl_mixer, sdl_net, bash.
+ 2. `cd trunk`
+ 3. `./configure --help` #review your prefix, other paths, and extra options
+ 4. `make`
+ 5. `make install`
+ 6. `man psdoom-ng` #read up on how to set it up the wrapper script psd
  4. Get a copy of Doom, to copy the file Doom2.wad.
- 3. Action! `./src/psdoom`
+ 3. Action! `psd` or `psdoom-ng`
 
 Find more information in:
+ * man psdoom-ng
  * trunk/COMPILE
  * trunk/CMDLINE
  * trunk/psdoom/README (specific options and instructions to find your processess)
+
+Gentoo Linux
+------------
+You can find the ebuild at https://github.com/orsonteodoro/oiledmachine-overlay
 
 Mac OS X
 ---------
@@ -63,3 +72,23 @@ For example, in contrib you can find a script that interacts with cloudfoundry:
 NOTE: psdoom does a synchronous call to the external commands (mono-thread). If your
 command takes too long, you will feel hipcuts in the game. Try to make your commands
 respond really fast! 
+
+The example script can be installed by adding --enable-cloudfoundry on configure and is installed in /usr/local/portage/psdoom-ng-cf-ctl
+
+Custom map
+----------
+The custom wads referred in psDooM readme can be found at extras/psdoom-2000.05.03-data.tar.gz
+
+Contributors
+------------
+Dennis Chao came up with the original idea and wrote much of the mod.
+David Koppenhofer was the previous maintainer of mod psDooM.
+Simon Howard wrote Chocolate Doom which is the current game engine used.
+Hector Rivas Gandara added support for external sources and cloud services.
+Jesse Speilman added support for Mac OS X
+
+License
+-------
+psDooM was based on GNU General Public License 2.0.
+Chocolate Doom was based on GNU General Public License 2.0.
+You can view more about the GPL-2 at http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
