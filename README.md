@@ -82,14 +82,21 @@ The custom wads referred in psDooM readme can be found at extras/psdoom-2000.05.
 Contributors
 ------------
  Dennis Chao came up with the original idea and wrote much of the mod.
+
  David Koppenhofer was the previous maintainer of the mod psDooM.
+
  Simon Howard wrote Chocolate Doom which is the current game engine used.
+
  Hector Rivas Gandara added support for external sources and cloud services.
+
  Jesse Speilman added support for Mac OS X.
+
  Orson Teodoro was responsible for making psDooM mod work on Chocolate Doom.
 
 License
 -------
  psDooM was based on GNU General Public License 2.0.
+
  Chocolate Doom was based on GNU General Public License 2.0.
+
  You can view more about the GPL-2 at http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
