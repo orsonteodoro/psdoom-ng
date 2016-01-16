@@ -4,5 +4,13 @@ if [[ -f /home/${USER}/.psdoom-ng/psdoom-ng.conf ]]; then
 elif [[ -f /etc/psdoom-ng.conf ]]; then
 	source /etc/psdoom-ng.conf
 fi
-PSDOOMPSCMD="${PSDOOMPSCMD}" PSDOOMRENICECMD="${PSDOOMRENICECMD}" PSDOOMKILLCMD="${PSDOOMKILLCMD}" \
-DOOMWADPATH="${DOOMWADPATH}" /usr/bin/psdoom-ng ${DEFAULT_ARGS} $@
+
+[[ ! -v PSDOOMPSCMD || -z $PSDOOMPSCMD  ]] && Z="$(unset PSDOOMPSCMD)" || export PSDOOMPSCMD="${PSDOOMPSCMD}"
+[[ ! -v PSDOOMRENICECMD || -z $PSDOOMRENICECMD ]] && Z="$(unset PSDOOMRENICECMD)" || export PSDOOMRENICECMD="${PSDOOMRENICECMD}"
+[[ ! -v PSDOOMKILLCMD || -z $PSDOOMKILLCMD ]] && Z="$(unset PSDOOMKILLCMD)" || export PSDOOMKILLCMD="${PSDOOMKILLCMD}"
+[[ ! -v DOOMWADPATH || -z $DOOMWADPATH ]] && Z="$(unset DOOMWADPATH)" || export DOOMWADPATH="${DOOMWADPATH}"
+echo "PSDOOMPSCMD=${PSDOOMPSCMD}"
+echo "PSDOOMRENICECMD=${PSDOOMRENICECMD}"
+echo "PSDOOMKILLCMD=${PSDOOMKILLCMD}"
+echo "DOOMWADPATH=${DOOMWADPATH}"
+/usr/bin/psdoom-ng ${DEFAULT_ARGS} $@
