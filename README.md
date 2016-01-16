@@ -20,9 +20,9 @@ Quick guide:
 
 Find more information in:
  * man psdoom-ng
- * trunk/COMPILE
- * trunk/CMDLINE
- * trunk/psdoom/README (specific options and instructions to find your processess)
+ * [trunk/INSTALL](https://github.com/orsonteodoro/psdoom-ng/blob/1.6.0/trunk/INSTALL)
+ * [trunk/CMDLINE](https://github.com/orsonteodoro/psdoom-ng/blob/1.6.0/trunk/CMDLINE)
+ * [trunk/README.psdoom-ng](https://github.com/orsonteodoro/psdoom-ng/blob/master/trunk/README.psdoom-ng) 
 
 Gentoo Linux
 ------------
@@ -82,14 +82,21 @@ The custom wads referred in psDooM readme can be found at extras/psdoom-2000.05.
 Contributors
 ------------
  Dennis Chao came up with the original idea and wrote much of the mod.
+
  David Koppenhofer was the previous maintainer of the mod psDooM.
+
  Simon Howard wrote Chocolate Doom which is the current game engine used.
+
  Hector Rivas Gandara added support for external sources and cloud services.
+
  Jesse Speilman added support for Mac OS X.
+
  Orson Teodoro was responsible for making psDooM mod work on Chocolate Doom.
 
 License
 -------
  psDooM was based on GNU General Public License 2.0.
+
  Chocolate Doom was based on GNU General Public License 2.0.
+
  You can view more about the GPL-2 at http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
