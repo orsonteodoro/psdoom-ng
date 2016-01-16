@@ -1,10 +1,19 @@
-Changelog for psDooM:
+Changelog for psdoom-ng:
 
-Release 2012.02.05 - Migrate psDooM into Chocoloate Doom
+Release 2016.01.15.2.2.1 - Changes since 2012.02.05
+  -Upgrade to Chocolate Doom 2.2.1
+  -Add man pages
+  -Fix loading of psDooM custom maps.
+  -Add -godstart option to start in god mode
+  -Add -telestartf and -telestarti to teleport player on map load
+  -Add wrapper script psd to load psdoom-ng fast and easy
+
+Release 2012.02.05 - Changes since 2000.05.03.b
+  - Migrate psDooM into Chocoloate Doom 1.6.0
   -Merge 2000.05.03-2000.05.03b psDooM patches into Chocolate Doom 1.6.0 
    but reject branding, save file changes, xd-launch, versioning 
    from psDooM.
-  -Rebrand Chocolate Doom to psdoom
+  -Rebrand Chocolate Doom to psdoom-ng
   -Fix linux detection broken by 2000.05.03a.  Solaris needs testing.
 
 Release 2000.05.03.b - Changes since 2000.05.03.a

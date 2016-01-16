@@ -1,4 +1,4 @@
-AC_INIT(psdoom-ng, 2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
+AC_INIT(psdoom-ng, 2016.01.15.2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
 
 PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
 PACKAGE_SHORTDESC="psdoom-ng based on Chocolate Doom and psDooM"

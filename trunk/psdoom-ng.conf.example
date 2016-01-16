@@ -1,1 +1,2 @@
-DEFAULT_ARGS="-iwad /usr/share/games/doom-data/doom.wad -psuser ${USER} -episode 1"
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng"
+DEFAULT_ARGS="-psuser ${USER} -episode 1 -godstart"

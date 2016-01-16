@@ -2,6 +2,7 @@
 // Copyright(C) 1993-1996 Id Software, Inc.
 // Copyright(C) 2000 by David Koppenhofer
 // Copyright(C) 2005-2014 Simon Howard
+// Copyright(C) 2012-2016 Orson Teodoro
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1565,35 +1566,35 @@ void D_DoomMain (void)
     D_AddFile(iwadfile);
     numiwadlumps = numlumps;
    
-// *** PID BEGIN ***
-// If the command-line flag to suppress auto-loading of custom
-// ps management levels is *not* there, load the appropriate level.
-    p = M_CheckParm ("-nopslev");
-    if (p)
-    {
-// Add psdoom1.wad if this is registered (Doom 1) or retail (Ultimite Doom).
-// If we loaded it, set the flag to true so we can place the monsters in the
-// correct positions.
-		if ( gamemode == registered || gamemode == retail ){
-			D_AddFile(iwadfile);
-			ps_level_loaded = true;
-		}
-// Add psdoom2.wad if this is commercial (Doom 2) and not an add-on pack.
-// If we loaded it, set the flag to true so we can place the monsters in the
-// correct positions.
-		if ( gamemode == commercial && gamemission == doom2 ) {
-			D_AddFile(iwadfile);
-			ps_level_loaded = true;
-		}
-    }
-// *** PID END ***
-
     W_CheckCorrectIWAD(doom);
 
     // Now that we've loaded the IWAD, we can figure out what gamemission
     // we're playing and which version of Vanilla Doom we need to emulate.
     D_IdentifyVersion();
     InitGameVersion();
+
+// *** PID BEGIN ***
+// If the command-line flag to suppress auto-loading of custom
+// ps management levels is *not* there, load the appropriate level.
+    p = M_CheckParm ("-nopslev");
+    if (!p)
+    {
+// Add psdoom1.wad if this is registered (Doom 1) or retail (Ultimite Doom).
+// If we loaded it, set the flag to true so we can place the monsters in the
+// correct positions.
+		if ( gamemode == registered || gamemode == retail ){
+			D_AddFile(psdoom1wad);
+			ps_level_loaded = true;
+		}
+// Add psdoom2.wad if this is commercial (Doom 2) and not an add-on pack.
+// If we loaded it, set the flag to true so we can place the monsters in the
+// correct positions.
+		if ( gamemode == commercial && gamemission == doom2 ) {
+			D_AddFile(psdoom2wad);
+			ps_level_loaded = true;
+		}
+    }
+// *** PID END ***
 
     //!
     // @category mod
@@ -2044,6 +2045,38 @@ void D_DoomMain (void)
 	    G_InitNew (startskill, startepisode, startmap);
 	else
 	    D_StartTitle ();                // start up intro loop
+    }
+
+    if (autostart) {
+            fixed_t telestartx;
+            fixed_t telestarty;
+            //psdoom-ng features
+            p = M_CheckParmWithArgs("-telestartf", 1); //fixed float
+            if (p)
+            {
+                fprintf(stderr,"BEFORE x=%d y=%d\n",players[consoleplayer].mo->x, players[consoleplayer].mo->y);
+                telestartx = atoi(myargv[p+1]);
+                telestarty = atoi(myargv[p+2]);
+                fprintf(stderr,"AFTER x=%d y=%d\n",atoi(myargv[p+1]),atoi(myargv[p+2]));
+                P_TeleportMove(players[consoleplayer].mo,telestartx,telestarty);
+            }
+
+            p = M_CheckParmWithArgs("-telestarti", 1); //integer
+            if (p)
+            {
+                fprintf(stderr,"BEFORE x=%d y=%d\n",players[consoleplayer].mo->x>>FRACBITS, players[consoleplayer].mo->y>>FRACBITS);
+                telestartx = atoi(myargv[p+1]);
+                telestarty = atoi(myargv[p+2]);
+                fprintf(stderr,"AFTER x=%d y=%d\n",atoi(myargv[p+1])<<FRACBITS,atoi(myargv[p+2])<<FRACBITS);
+                P_TeleportMove(players[consoleplayer].mo,telestartx,telestarty);
+            }
+
+            p = M_CheckParm("-godstart");
+
+            if (p)
+            {
+                players[consoleplayer].cheats |= CF_GODMODE;
+            }
     }
 
     D_DoomLoop ();  // never returns

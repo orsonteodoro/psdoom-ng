@@ -1,14 +1,23 @@
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/CHANGELOG.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/CHANGELOG.psdoom-ng
 --- chocolate-doom-chocolate-doom-2.2.1.orig/CHANGELOG.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/CHANGELOG.psdoom-ng	2016-01-14 10:53:59.417096129 -0800
-@@ -0,0 +1,194 @@
-+Changelog for psDooM:
++++ chocolate-doom-chocolate-doom-2.2.1/CHANGELOG.psdoom-ng	2016-01-15 18:43:43.413464138 -0800
+@@ -0,0 +1,203 @@
++Changelog for psdoom-ng:
 +
-+Release 2012.02.05 - Migrate psDooM into Chocoloate Doom
++Release 2016.01.15.2.2.1 - Changes since 2012.02.05
++  -Upgrade to Chocolate Doom 2.2.1
++  -Add man pages
++  -Fix loading of psDooM custom maps.
++  -Add -godstart option to start in god mode
++  -Add -telestartf and -telestarti to teleport player on map load
++  -Add wrapper script psd to load psdoom-ng fast and easy
++
++Release 2012.02.05 - Changes since 2000.05.03.b
++  - Migrate psDooM into Chocoloate Doom 1.6.0
 +  -Merge 2000.05.03-2000.05.03b psDooM patches into Chocolate Doom 1.6.0 
 +   but reject branding, save file changes, xd-launch, versioning 
 +   from psDooM.
-+  -Rebrand Chocolate Doom to psdoom
++  -Rebrand Chocolate Doom to psdoom-ng
 +  -Fix linux detection broken by 2000.05.03a.  Solaris needs testing.
 +
 +Release 2000.05.03.b - Changes since 2000.05.03.a
@@ -198,7 +207,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +    the edge of the screen.
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/config.h chocolate-doom-chocolate-doom-2.2.1/config.h
 --- chocolate-doom-chocolate-doom-2.2.1.orig/config.h	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/config.h	2016-01-14 11:23:08.283914008 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/config.h	2016-01-15 18:41:28.999364085 -0800
 @@ -0,0 +1,89 @@
 +/* config.h.  Generated from config.hin by configure.  */
 +/* config.hin.  Generated from configure.in by autoheader.  */
@@ -270,7 +279,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +#define PACKAGE_NAME "psdoom-ng"
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "psdoom-ng 2.2.1"
++#define PACKAGE_STRING "psdoom-ng 2016.01.15.2.2.1"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "psdoom-ng"
@@ -291,10 +300,10 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +#define VERSION "2.2.1"
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/configure.ac chocolate-doom-chocolate-doom-2.2.1/configure.ac
 --- chocolate-doom-chocolate-doom-2.2.1.orig/configure.ac	2016-01-14 10:46:30.929028015 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/configure.ac	2016-01-14 13:11:43.844773899 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/configure.ac	2016-01-15 18:37:39.994678215 -0800
 @@ -1,12 +1,12 @@
 -AC_INIT(Chocolate Doom, 2.2.1, fraggle@gmail.com, chocolate-doom)
-+AC_INIT(psdoom-ng, 2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
++AC_INIT(psdoom-ng, 2016.01.15.2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
  
  PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
 -PACKAGE_SHORTDESC="Conservative source port"
@@ -321,7 +330,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  src/doom-screensaver.desktop
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/COPYING.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/COPYING.psdoom-ng
 --- chocolate-doom-chocolate-doom-2.2.1.orig/COPYING.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/COPYING.psdoom-ng	2016-01-14 10:53:59.418096167 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/COPYING.psdoom-ng	2016-01-15 17:14:57.422473165 -0800
 @@ -0,0 +1,339 @@
 +		    GNU GENERAL PUBLIC LICENSE
 +		       Version 2, June 1991
@@ -664,7 +673,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +Public License instead of this License.
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/CREDITS.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/CREDITS.psdoom-ng
 --- chocolate-doom-chocolate-doom-2.2.1.orig/CREDITS.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/CREDITS.psdoom-ng	2016-01-14 10:53:59.418096167 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/CREDITS.psdoom-ng	2016-01-15 17:14:57.422473165 -0800
 @@ -0,0 +1,27 @@
 +This list of credits for psDooM is in no particular order, save for id
 +Software coming first.  I'll try to keep it more or less cronological.
@@ -695,7 +704,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +David Koppenhofer (djk@users.sourceforge.net)
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/data/Makefile.am chocolate-doom-chocolate-doom-2.2.1/data/Makefile.am
 --- chocolate-doom-chocolate-doom-2.2.1.orig/data/Makefile.am	2016-01-14 10:46:30.929028015 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/data/Makefile.am	2016-01-14 17:15:05.387151023 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/data/Makefile.am	2016-01-15 17:14:57.422473165 -0800
 @@ -9,9 +9,9 @@
          setup.png        \
          convert-icon
@@ -747,7 +756,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 -
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/Makefile.am chocolate-doom-chocolate-doom-2.2.1/Makefile.am
 --- chocolate-doom-chocolate-doom-2.2.1.orig/Makefile.am	2016-01-14 10:46:30.928027977 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/Makefile.am	2016-01-14 22:07:39.653061468 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/Makefile.am	2016-01-15 17:14:57.423473204 -0800
 @@ -50,17 +50,27 @@
          TODO                            \
          rpm.spec
@@ -798,7 +807,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +	cp psd.in psd
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/man/Makefile.am chocolate-doom-chocolate-doom-2.2.1/man/Makefile.am
 --- chocolate-doom-chocolate-doom-2.2.1.orig/man/Makefile.am	2016-01-14 10:46:30.930028053 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/man/Makefile.am	2016-01-14 16:58:46.734745004 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/man/Makefile.am	2016-01-15 17:14:57.423473204 -0800
 @@ -8,6 +8,7 @@
                      default.cfg.template  \
                      extra.cfg.template
@@ -856,8 +865,8 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/man/psdoom-ng.1 chocolate-doom-chocolate-doom-2.2.1/man/psdoom-ng.1
 --- chocolate-doom-chocolate-doom-2.2.1.orig/man/psdoom-ng.1	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/man/psdoom-ng.1	2016-01-14 21:29:16.892301250 -0800
-@@ -0,0 +1,208 @@
++++ chocolate-doom-chocolate-doom-2.2.1/man/psdoom-ng.1	2016-01-15 18:12:16.099801905 -0800
+@@ -0,0 +1,254 @@
 +.TH psdoom-ng 1
 +.SH NAME
 +psdoom-ng \- a process killer and monitor that personifies processes
@@ -887,6 +896,24 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +.RS
 +psdoom-ng spawns you in a room with equiptment and weapons.  The switch ahead of you exits the level, and the three doors take you to rooms containing 'pid monsters'.
 +.RE
++
++.SH TELEPORT COORDINATES
++.PP
++Here is the specific locations to accelerate finding monsters for use for -telestartf or -telestarti
++.PP
++psDooM doom custom map (door to pid monster pit): x_fp=167993976 y_fp=-9414819
++.PP
++psDooM doom custom map (window to pid monster pit): x_fp=136145346 y_fp=-1573872
++.PP
++psDooM doom2 custom map (door to pid monster pit): x_fp=167633441 y_fp=-14137105
++.PP
++psDoom doom2 custom map (window to pid monster pit): x_fp=132356086 y_fp=-5202436
++.PP
++doom e1m1 (door to pid monster pit): x_fp=136310834 y_fp=-257677815
++.PP
++doom2 map01 (edge of pid monster pit): x_fp=62008780 y_fp=28333935
++.PP
++doom2 map01 (window to pid monster pit) x_fp=51671154 y_fp=35243725 x_int=788
 +
 +.SH NOTES
 +.PP
@@ -995,35 +1022,63 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +.RS
 +Sets the size of the window's width (W) and height (H).  Optional w appended runs in window mode and f means fullscreen mode.
 +.RE
++.PP
++-devparm
++.RS
++Developer mode.  F1 saves a screenshot in the current directory.  It also prints out the location of the player on the map in the console for use for -telestarf or -telestarti.
++.RE
++.PP
++-godstart
++.RS
++Start psdoom-ng with god mode.  The option depends on -episode or -warp.
++.RE
++.PP
++-telestartf x y
++.RS
++Teleports the player to a specific loation on the start of the load of the map as a fixed float at location x and y.  The option depends on -episode or -warp.
++.RE
++.PP
++-telestarti x y
++.RS
++Teleports the player to a close to specific loation on the start of the load of the map as a integer at location x and y.  The option depends on -episode or -warp.
++.RE
++
++
++.SH ENVIRONMENTAL VARIABLES
++.PP
++DOOMWADPATH
++.RS
++A list of paths to search for wads seperated by a colon.
++.RE
 +
 +.SH EXAMPLES
 +.PP
-+psdoom-ng -psallusers -iwad /usr/share/psdoom-ng/doom.wad
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers
 +.RS
 +This command will show every user's processes.
 +.RE
 +.PP
-+psdoom-ng -psallusers -psuser jschmoe jdoe -iwad /usr/share/psdoom-ng/doom.wad
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers -psuser jschmoe jdoe
 +.RS
 +The '-psuser jschmoe jdoe' is extraneous here; users jschmoe and jdoe are included in '-psallusers'.
 +.RE
 +.PP
-+psdoom-ng -psallusers -psnotuser -iwad /usr/share/psdoom-ng/doom.wad
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers -psnotuser
 +.RS
 +This will show everybody's processes except your own.  Remember, your username is determined automatically by psdoom-ng according to what PSDOOMUSER, LOGNAME, USER, or USERNAME is set to in the environment.
 +.RE
 +.PP
-+psdoom-ng -psnotuser jdoe -iwad /usr/share/psdoom-ng/doom.wad
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psnotuser jdoe
 +.RS
 +This will show no processes, even if you're running psDooM as root. Remember, specifying any 'userlist' command line option causes the defaults to not be us
 +.RE
 +.PP
-+psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom.wad -merge /usr/share/psdoom-ng/psdoom1.wad
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psuser orson -iwad doom.wad
 +.RS
 +This will show process belonging to orson and the psDooM custom level for Doom 1 or Ultimate Doom.
 +.RE
 +.PP
-+psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom2.wad -merge /usr/share/psdoom-ng/psdoom2.wad
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psuser orson -iwad doom2.wad
 +.RS
 +This will show process belonging to orson and the psDooM custom level for Doom 2.
 +.RE
@@ -1032,12 +1087,12 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +.PP
 +/etc/psdoom-ng.conf
 +.RS
-+Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.
++Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.
 +.RE
 +.PP
 +/home/${USER}/.psdoom-ng/psdoom-ng.conf
 +.RS
-+Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  The user options override the system options.
++Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.  The user options override the system options.
 +.RE
 +
 +.br
@@ -1068,7 +1123,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/pkg/config.make chocolate-doom-chocolate-doom-2.2.1/pkg/config.make
 --- chocolate-doom-chocolate-doom-2.2.1.orig/pkg/config.make	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/pkg/config.make	2016-01-14 11:25:08.153506186 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/pkg/config.make	2016-01-15 18:41:53.191281893 -0800
 @@ -0,0 +1,29 @@
 +# Shared file included by the makefiles used to build packages.
 +# This contains various information needed by the makefiles,
@@ -1085,9 +1140,9 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +PROGRAM_PREFIX = psdng
 +PACKAGE = psdoom-ng
 +PACKAGE_NAME = psdoom-ng
-+PACKAGE_STRING = psdoom-ng 2.2.1
++PACKAGE_STRING = psdoom-ng 2016.01.15.2.2.1
 +PACKAGE_TARNAME = psdoom-ng
-+PACKAGE_VERSION = 2.2.1
++PACKAGE_VERSION = 2016.01.15.2.2.1
 +
 +# Documentation files to distribute with packages.
 +
@@ -1101,20 +1156,20 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info-gnustep.plist chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info-gnustep.plist
 --- chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info-gnustep.plist	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info-gnustep.plist	2016-01-14 11:18:43.776779498 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info-gnustep.plist	2016-01-15 18:44:48.483933582 -0800
 @@ -0,0 +1,36 @@
 +{
 +    ApplicationName = "psdoom-ng";
 +    ApplicationDescription = "psdoom-ng based on psDooM and Chocolate Doom";
 +    ApplicationIcon = app.png;
-+    ApplicationRelease = 2.2.1;
++    ApplicationRelease = 2016.01.15.2.2.1;
 +    ApplicationURL = "https://github.com/orsonteodoro/psdoom-ng/";
 +    Authors = (
 +        "Orson Teodoro <orsonteodoro@yahoo.com>"
 +    );
 +    Copyright = "Copyright (C) 1993-2016";
 +    CopyrightDescription = "GNU General Public License, version 2";
-+    FullVersionID = 2.2.1;
++    FullVersionID = 2016.01.15.2.2.1;
 +    GSMainMarkupFile = "";
 +    NSExecutable = "launcher";
 +    NSIcon = app.png;
@@ -1141,7 +1196,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +}
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info.plist chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info.plist
 --- chocolate-doom-chocolate-doom-2.2.1.orig/pkg/osx/Info.plist	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info.plist	2016-01-14 11:25:53.321236459 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/pkg/osx/Info.plist	2016-01-15 18:40:38.856461872 -0800
 @@ -0,0 +1,60 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -1154,7 +1209,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +	<key>CFBundleExecutable</key>
 +	<string>launcher</string>
 +	<key>CFBundleGetInfoString</key>
-+	<string>psdoom-ng 2.2.1</string>
++	<string>psdoom-ng 2016.01.15.2.2.1</string>
 +	<key>CFBundleIconFile</key>
 +	<string>app.icns</string>
 +	<key>CFBundleInfoDictionaryVersion</key>
@@ -1205,7 +1260,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +</plist>
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/psd.in chocolate-doom-chocolate-doom-2.2.1/psd.in
 --- chocolate-doom-chocolate-doom-2.2.1.orig/psd.in	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/psd.in	2016-01-14 21:28:25.756319474 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/psd.in	2016-01-15 18:18:05.342084096 -0800
 @@ -0,0 +1,7 @@
 +#!/bin/bash
 +if [[ -f /home/${USER}/.psdoom-ng/psdoom-ng.conf ]]; then
@@ -1213,15 +1268,16 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +elif [[ -f /etc/psdoom-ng.conf ]]; then
 +	source /etc/psdoom-ng.conf
 +fi
-+/usr/bin/psdoom-ng ${DEFAULT_ARGS} $@
++DOOMWADPATH="${DOOMWADPATH}" /usr/bin/psdoom-ng ${DEFAULT_ARGS} $@
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/psdoom-ng.conf.example chocolate-doom-chocolate-doom-2.2.1/psdoom-ng.conf.example
 --- chocolate-doom-chocolate-doom-2.2.1.orig/psdoom-ng.conf.example	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/psdoom-ng.conf.example	2016-01-14 21:40:52.639801381 -0800
-@@ -0,0 +1 @@
-+DEFAULT_ARGS="-iwad /usr/share/games/doom-data/doom.wad -psuser ${USER} -episode 1"
++++ chocolate-doom-chocolate-doom-2.2.1/psdoom-ng.conf.example	2016-01-15 17:33:22.890958903 -0800
+@@ -0,0 +1,2 @@
++DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng"
++DEFAULT_ARGS="-psuser ${USER} -episode 1 -godstart"
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/README.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/README.psdoom-ng
 --- chocolate-doom-chocolate-doom-2.2.1.orig/README.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/README.psdoom-ng	2016-01-14 10:53:59.418096167 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/README.psdoom-ng	2016-01-15 17:14:57.424473242 -0800
 @@ -0,0 +1,311 @@
 +psDooM is a process monitor and manager for *nix systems.
 +It could be considered a graphical interface to the 'ps', 'renice', and
@@ -1536,7 +1592,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +pressing a button in ps-xdlaunch.  This utility requires TCL/TK.
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/setup/setup-manifest.xml chocolate-doom-chocolate-doom-2.2.1/setup/setup-manifest.xml
 --- chocolate-doom-chocolate-doom-2.2.1.orig/setup/setup-manifest.xml	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/setup/setup-manifest.xml	2016-01-14 10:53:59.419096205 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/setup/setup-manifest.xml	2016-01-15 17:14:57.424473242 -0800
 @@ -0,0 +1,33 @@
 +<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 +
@@ -1573,15 +1629,17 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/d_main.c chocolate-doom-chocolate-doom-2.2.1/src/doom/d_main.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/d_main.c	2016-01-14 10:46:30.938028358 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/d_main.c	2016-01-14 11:01:26.897129750 -0800
-@@ -1,5 +1,6 @@
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/d_main.c	2016-01-15 18:55:10.938570891 -0800
+@@ -1,6 +1,8 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
 +// Copyright(C) 2000 by David Koppenhofer
  // Copyright(C) 2005-2014 Simon Howard
++// Copyright(C) 2012-2016 Orson Teodoro
  //
  // This program is free software; you can redistribute it and/or
-@@ -75,6 +76,21 @@
+ // modify it under the terms of the GNU General Public License
+@@ -75,6 +77,21 @@
  
  #include "d_main.h"
  
@@ -1603,7 +1661,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  //
  // D-DoomLoop()
  // Not a globally visible function,
-@@ -94,6 +110,15 @@
+@@ -94,6 +111,15 @@
  
  char *          iwadfile;
  
@@ -1619,7 +1677,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
  boolean		devparm;	// started game with -devparm
  boolean         nomonsters;	// checkparm of -nomonsters
-@@ -593,6 +618,18 @@
+@@ -593,6 +619,18 @@
  {
      gameaction = ga_nothing;
      demosequence = -1;
@@ -1638,7 +1696,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
      D_AdvanceDemo ();
  }
  
-@@ -1165,6 +1202,15 @@
+@@ -1165,6 +1203,15 @@
      char file[256];
      char demolumpname[9];
      int numiwadlumps;
@@ -1654,7 +1712,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
      I_AtExit(D_Endoom, false);
  
-@@ -1242,6 +1288,145 @@
+@@ -1242,6 +1289,145 @@
  	
      nomonsters = M_CheckParm ("-nomonsters");
  
@@ -1800,7 +1858,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
      //!
      // @vanilla
      //
-@@ -1361,6 +1546,10 @@
+@@ -1361,6 +1547,10 @@
  
      // Find main IWAD file and load it.
      iwadfile = D_FindIWAD(IWAD_MASK_DOOM, &gamemission);
@@ -1811,39 +1869,87 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
      // None found?
  
-@@ -1375,6 +1564,29 @@
+@@ -1375,7 +1565,7 @@
      DEH_printf("W_Init: Init WADfiles.\n");
      D_AddFile(iwadfile);
      numiwadlumps = numlumps;
+-
 +   
+     W_CheckCorrectIWAD(doom);
+ 
+     // Now that we've loaded the IWAD, we can figure out what gamemission
+@@ -1383,6 +1573,29 @@
+     D_IdentifyVersion();
+     InitGameVersion();
+ 
 +// *** PID BEGIN ***
 +// If the command-line flag to suppress auto-loading of custom
 +// ps management levels is *not* there, load the appropriate level.
 +    p = M_CheckParm ("-nopslev");
-+    if (p)
++    if (!p)
 +    {
 +// Add psdoom1.wad if this is registered (Doom 1) or retail (Ultimite Doom).
 +// If we loaded it, set the flag to true so we can place the monsters in the
 +// correct positions.
 +		if ( gamemode == registered || gamemode == retail ){
-+			D_AddFile(iwadfile);
++			D_AddFile(psdoom1wad);
 +			ps_level_loaded = true;
 +		}
 +// Add psdoom2.wad if this is commercial (Doom 2) and not an add-on pack.
 +// If we loaded it, set the flag to true so we can place the monsters in the
 +// correct positions.
 +		if ( gamemode == commercial && gamemission == doom2 ) {
-+			D_AddFile(iwadfile);
++			D_AddFile(psdoom2wad);
 +			ps_level_loaded = true;
 +		}
 +    }
 +// *** PID END ***
++
+     //!
+     // @category mod
+     //
+@@ -1834,6 +2047,38 @@
+ 	    D_StartTitle ();                // start up intro loop
+     }
  
-     W_CheckCorrectIWAD(doom);
++    if (autostart) {
++            fixed_t telestartx;
++            fixed_t telestarty;
++            //psdoom-ng features
++            p = M_CheckParmWithArgs("-telestartf", 1); //fixed float
++            if (p)
++            {
++                fprintf(stderr,"BEFORE x=%d y=%d\n",players[consoleplayer].mo->x, players[consoleplayer].mo->y);
++                telestartx = atoi(myargv[p+1]);
++                telestarty = atoi(myargv[p+2]);
++                fprintf(stderr,"AFTER x=%d y=%d\n",atoi(myargv[p+1]),atoi(myargv[p+2]));
++                P_TeleportMove(players[consoleplayer].mo,telestartx,telestarty);
++            }
++
++            p = M_CheckParmWithArgs("-telestarti", 1); //integer
++            if (p)
++            {
++                fprintf(stderr,"BEFORE x=%d y=%d\n",players[consoleplayer].mo->x>>FRACBITS, players[consoleplayer].mo->y>>FRACBITS);
++                telestartx = atoi(myargv[p+1]);
++                telestarty = atoi(myargv[p+2]);
++                fprintf(stderr,"AFTER x=%d y=%d\n",atoi(myargv[p+1])<<FRACBITS,atoi(myargv[p+2])<<FRACBITS);
++                P_TeleportMove(players[consoleplayer].mo,telestartx,telestarty);
++            }
++
++            p = M_CheckParm("-godstart");
++
++            if (p)
++            {
++                players[consoleplayer].cheats |= CF_GODMODE;
++            }
++    }
++
+     D_DoomLoop ();  // never returns
+ }
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/doomstat.h chocolate-doom-chocolate-doom-2.2.1/src/doom/doomstat.h
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/doomstat.h	2016-01-14 10:46:30.939028396 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/doomstat.h	2016-01-14 10:58:21.268063215 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/doomstat.h	2016-01-15 17:14:57.425473281 -0800
 @@ -1,5 +1,6 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -1871,7 +1977,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/g_game.c chocolate-doom-chocolate-doom-2.2.1/src/doom/g_game.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/g_game.c	2016-01-14 10:46:30.939028396 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/g_game.c	2016-01-14 10:57:56.132106386 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/g_game.c	2016-01-15 17:25:05.250883626 -0800
 @@ -1,5 +1,6 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -1894,7 +2000,28 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  boolean		netdemo; 
  byte*		demobuffer;
  byte*		demo_p;
-@@ -651,7 +660,23 @@
+@@ -346,6 +355,20 @@
+          || joybuttons[joybspeed];
+  
+     forward = side = 0;
++
++    if (devparm) {
++        if (mousebuttons[mousebfire])
++            fprintf(stderr,"\nplayer fired gun at is at x_fp=%d y_fp=%d  x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
++
++        if (gamekeydown[key_right]) 
++            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
++        if (gamekeydown[key_left]) 
++            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
++        if (gamekeydown[key_up]) 
++            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
++        if (gamekeydown[key_down]) 
++            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
++    }
+     
+     // use two stage accelerative turning
+     // on the keyboard and joystick
+@@ -651,7 +674,23 @@
  	memset (players[i].frags,0,sizeof(players[i].frags)); 
      } 
  		 
@@ -1919,7 +2046,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
      displayplayer = consoleplayer;		// view the guy you are playing    
      gameaction = ga_nothing; 
      Z_CheckHeap ();
-@@ -1690,13 +1715,27 @@
+@@ -1690,13 +1729,27 @@
  void G_DoNewGame (void) 
  {
      demoplayback = false; 
@@ -1948,7 +2075,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
      consoleplayer = 0;
      G_InitNew (d_skill, d_episode, d_map); 
      gameaction = ga_nothing; 
-@@ -2158,6 +2197,12 @@
+@@ -2158,6 +2211,12 @@
  	netdemo = true;
      }
  
@@ -1961,7 +2088,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
      // don't spend a lot of time in loadlevel 
      precache = false;
      G_InitNew (skill, episode, map); 
-@@ -2230,7 +2275,12 @@
+@@ -2230,7 +2289,12 @@
  	playeringame[1] = playeringame[2] = playeringame[3] = 0;
  	respawnparm = false;
  	fastparm = false;
@@ -1977,7 +2104,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
          if (singledemo) 
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/Makefile.am chocolate-doom-chocolate-doom-2.2.1/src/doom/Makefile.am
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/Makefile.am	2016-01-14 10:46:30.938028358 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/Makefile.am	2016-01-14 10:57:34.676289655 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/Makefile.am	2016-01-15 17:14:57.426473319 -0800
 @@ -43,6 +43,7 @@
  p_telept.c                      \
  p_tick.c           p_tick.h     \
@@ -1988,7 +2115,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
                     r_defs.h     \
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_inter.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_inter.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_inter.c	2016-01-14 10:46:30.940028434 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_inter.c	2016-01-14 10:56:46.405452220 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_inter.c	2016-01-15 17:14:57.426473319 -0800
 @@ -1,5 +1,7 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -2122,7 +2249,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  	 && !(target->flags&MF_SKULLFLY) )
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.c	2016-01-14 10:46:30.940028434 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.c	2016-01-14 10:56:29.702816444 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.c	2016-01-15 17:14:57.427473358 -0800
 @@ -1,5 +1,6 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -2320,7 +2447,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.h chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.h
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_mobj.h	2016-01-14 10:46:30.940028434 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.h	2016-01-14 10:56:10.566088020 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_mobj.h	2016-01-15 17:14:57.427473358 -0800
 @@ -1,5 +1,7 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -2356,7 +2483,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.c chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.c	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.c	2016-01-14 10:53:59.425096434 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.c	2016-01-15 17:14:57.428473396 -0800
 @@ -0,0 +1,814 @@
 +/* pr_process.c
 + * by Dennis Chao
@@ -3174,7 +3301,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +}
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.h chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.h
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/pr_process.h	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.h	2016-01-14 10:53:59.426096472 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/pr_process.h	2016-01-15 17:14:57.428473396 -0800
 @@ -0,0 +1,41 @@
 +// pr_process.h
 +// Copyright (C) 1999 by Dennis Chao
@@ -3219,7 +3346,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +void add_to_ps_userlist(ps_userlist_type_t listtype, char *username);
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_setup.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_setup.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_setup.c	2016-01-14 10:46:30.940028434 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_setup.c	2016-01-14 10:55:50.678331017 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_setup.c	2016-01-15 17:14:57.428473396 -0800
 @@ -1,5 +1,6 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -3294,7 +3421,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  }
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_tick.c chocolate-doom-chocolate-doom-2.2.1/src/doom/p_tick.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/p_tick.c	2016-01-14 10:46:30.940028434 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_tick.c	2016-01-14 10:55:26.262401664 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/p_tick.c	2016-01-15 17:14:57.428473396 -0800
 @@ -1,5 +1,7 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -3334,7 +3461,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  }
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_defs.h chocolate-doom-chocolate-doom-2.2.1/src/doom/r_defs.h
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_defs.h	2016-01-14 10:46:30.941028472 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_defs.h	2016-01-14 10:55:02.279488804 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_defs.h	2016-01-15 17:14:57.429473435 -0800
 @@ -1,5 +1,7 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -3362,7 +3489,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.c chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.c
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.c	2016-01-14 10:46:30.941028472 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.c	2016-01-14 10:54:45.127835969 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.c	2016-01-15 17:14:57.429473435 -0800
 @@ -1,5 +1,7 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -3550,7 +3677,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  	vis->xiscale = -pspriteiscale;
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.h chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.h
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/doom/r_things.h	2016-01-14 10:46:30.941028472 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.h	2016-01-14 10:54:27.448163041 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/doom/r_things.h	2016-01-15 17:14:57.429473435 -0800
 @@ -1,5 +1,6 @@
  //
  // Copyright(C) 1993-1996 Id Software, Inc.
@@ -3579,7 +3706,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
  
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/Makefile.am chocolate-doom-chocolate-doom-2.2.1/src/Makefile.am
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/Makefile.am	2016-01-14 10:46:30.933028167 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/Makefile.am	2016-01-14 21:47:33.624832722 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/Makefile.am	2016-01-15 17:14:57.430473473 -0800
 @@ -1,20 +1,11 @@
  
 -SUBDIRS = doom heretic hexen strife setup
@@ -3644,7 +3771,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +	cp @PROGRAM_PREFIX@doom $@
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.appdata.xml.in chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.appdata.xml.in
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.appdata.xml.in	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.appdata.xml.in	2016-01-14 13:07:03.848740326 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.appdata.xml.in	2016-01-15 17:14:57.430473473 -0800
 @@ -0,0 +1,15 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +
@@ -3663,7 +3790,7 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +</component>
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.desktop chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.desktop
 --- chocolate-doom-chocolate-doom-2.2.1.orig/src/psdoom-ng.desktop	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.desktop	2016-01-14 21:35:18.294162004 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/src/psdoom-ng.desktop	2016-01-15 17:14:57.430473473 -0800
 @@ -0,0 +1,7 @@
 +[Desktop Entry]
 +Name=psdoom-ng
@@ -3674,12 +3801,12 @@ diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.deskto
 +Categories=System;Monitor;
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/stamp-h1 chocolate-doom-chocolate-doom-2.2.1/stamp-h1
 --- chocolate-doom-chocolate-doom-2.2.1.orig/stamp-h1	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/stamp-h1	2016-01-14 10:53:59.429096586 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/stamp-h1	2016-01-15 17:14:57.430473473 -0800
 @@ -0,0 +1 @@
 +timestamp for config.h
 diff -u -r -N -x doom-screensaver.desktop -x pssetup.desktop -x psd-setup.desktop -x setup.desktop -x chocolate-doom-screensaver.desktop -x chocolate-doom.desktop -x doom.desktop -x psd-setup.desktop -x chocolate-setup.desktop -x '*.orig' -x '*.rej' -x config.status -x config.log -x traces.1 -x traces.0 -x requests -x '*.Po' -x Makefile -x output.0 -x output.1 chocolate-doom-chocolate-doom-2.2.1.orig/TODO.psdoom-ng chocolate-doom-chocolate-doom-2.2.1/TODO.psdoom-ng
 --- chocolate-doom-chocolate-doom-2.2.1.orig/TODO.psdoom-ng	1969-12-31 16:00:00.000000000 -0800
-+++ chocolate-doom-chocolate-doom-2.2.1/TODO.psdoom-ng	2016-01-14 10:53:59.419096205 -0800
++++ chocolate-doom-chocolate-doom-2.2.1/TODO.psdoom-ng	2016-01-15 17:14:57.430473473 -0800
 @@ -0,0 +1,173 @@
 +Here are a few ideas to improve this process manager:
 +  N == not planned

@@ -355,6 +355,20 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
          || joybuttons[joybspeed];
  
     forward = side = 0;
+
+    if (devparm) {
+        if (mousebuttons[mousebfire])
+            fprintf(stderr,"\nplayer fired gun at is at x_fp=%d y_fp=%d  x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
+
+        if (gamekeydown[key_right]) 
+            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
+        if (gamekeydown[key_left]) 
+            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
+        if (gamekeydown[key_up]) 
+            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
+        if (gamekeydown[key_down]) 
+            fprintf(stderr,"\nplayer is at x_fp=%d  y_fp=%d x_int=%d y_int=%d\n",players[consoleplayer].mo->x,players[consoleplayer].mo->y, players[consoleplayer].mo->x>>FRACBITS,players[consoleplayer].mo->y>>FRACBITS);
+    }
     
     // use two stage accelerative turning
     // on the keyboard and joystick

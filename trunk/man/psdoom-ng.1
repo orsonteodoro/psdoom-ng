@@ -28,6 +28,24 @@ For the custom levels:
 psdoom-ng spawns you in a room with equiptment and weapons.  The switch ahead of you exits the level, and the three doors take you to rooms containing 'pid monsters'.
 .RE
 
+.SH TELEPORT COORDINATES
+.PP
+Here is the specific locations to accelerate finding monsters for use for -telestartf or -telestarti
+.PP
+psDooM doom custom map (door to pid monster pit): x_fp=167993976 y_fp=-9414819
+.PP
+psDooM doom custom map (window to pid monster pit): x_fp=136145346 y_fp=-1573872
+.PP
+psDooM doom2 custom map (door to pid monster pit): x_fp=167633441 y_fp=-14137105
+.PP
+psDoom doom2 custom map (window to pid monster pit): x_fp=132356086 y_fp=-5202436
+.PP
+doom e1m1 (door to pid monster pit): x_fp=136310834 y_fp=-257677815
+.PP
+doom2 map01 (edge of pid monster pit): x_fp=62008780 y_fp=28333935
+.PP
+doom2 map01 (window to pid monster pit) x_fp=51671154 y_fp=35243725 x_int=788
+
 .SH NOTES
 .PP
 Using killing processes in DWM or any other tiling manager may screw up the game visually.  You will need to run in window mode to prevent this problem.  
@@ -135,35 +153,63 @@ Disables mouse grab in window mode.
 .RS
 Sets the size of the window's width (W) and height (H).  Optional w appended runs in window mode and f means fullscreen mode.
 .RE
+.PP
+-devparm
+.RS
+Developer mode.  F1 saves a screenshot in the current directory.  It also prints out the location of the player on the map in the console for use for -telestarf or -telestarti.
+.RE
+.PP
+-godstart
+.RS
+Start psdoom-ng with god mode.  The option depends on -episode or -warp.
+.RE
+.PP
+-telestartf x y
+.RS
+Teleports the player to a specific loation on the start of the load of the map as a fixed float at location x and y.  The option depends on -episode or -warp.
+.RE
+.PP
+-telestarti x y
+.RS
+Teleports the player to a close to specific loation on the start of the load of the map as a integer at location x and y.  The option depends on -episode or -warp.
+.RE
+
+
+.SH ENVIRONMENTAL VARIABLES
+.PP
+DOOMWADPATH
+.RS
+A list of paths to search for wads seperated by a colon.
+.RE
 
 .SH EXAMPLES
 .PP
-psdoom-ng -psallusers -iwad /usr/share/psdoom-ng/doom.wad
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers
 .RS
 This command will show every user's processes.
 .RE
 .PP
-psdoom-ng -psallusers -psuser jschmoe jdoe -iwad /usr/share/psdoom-ng/doom.wad
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers -psuser jschmoe jdoe
 .RS
 The '-psuser jschmoe jdoe' is extraneous here; users jschmoe and jdoe are included in '-psallusers'.
 .RE
 .PP
-psdoom-ng -psallusers -psnotuser -iwad /usr/share/psdoom-ng/doom.wad
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers -psnotuser
 .RS
 This will show everybody's processes except your own.  Remember, your username is determined automatically by psdoom-ng according to what PSDOOMUSER, LOGNAME, USER, or USERNAME is set to in the environment.
 .RE
 .PP
-psdoom-ng -psnotuser jdoe -iwad /usr/share/psdoom-ng/doom.wad
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psnotuser jdoe
 .RS
 This will show no processes, even if you're running psDooM as root. Remember, specifying any 'userlist' command line option causes the defaults to not be us
 .RE
 .PP
-psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom.wad -merge /usr/share/psdoom-ng/psdoom1.wad
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psuser orson -iwad doom.wad
 .RS
 This will show process belonging to orson and the psDooM custom level for Doom 1 or Ultimate Doom.
 .RE
 .PP
-psdoom-ng -psuser orson -iwad /usr/share/psdoom-ng/doom2.wad -merge /usr/share/psdoom-ng/psdoom2.wad
+DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psuser orson -iwad doom2.wad
 .RS
 This will show process belonging to orson and the psDooM custom level for Doom 2.
 .RE
@@ -172,12 +218,12 @@ This will show process belonging to orson and the psDooM custom level for Doom 2
 .PP
 /etc/psdoom-ng.conf
 .RS
-Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.
+Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.
 .RE
 .PP
 /home/${USER}/.psdoom-ng/psdoom-ng.conf
 .RS
-Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  The user options override the system options.
+Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.  The user options override the system options.
 .RE
 
 .br

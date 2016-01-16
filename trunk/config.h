@@ -68,7 +68,7 @@
 #define PACKAGE_NAME "psdoom-ng"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "psdoom-ng 2.2.1"
+#define PACKAGE_STRING "psdoom-ng 2016.01.15.2.2.1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "psdoom-ng"
