@@ -63,11 +63,13 @@ For that, you only need to override these environment variables:
 
 For example, in contrib you can find a script that interacts with cloudfoundry:
 
+```bash
     cd trunk
     PSDOOMPSCMD="./contrib/psdoom-cf-ctl ps" \
     PSDOOMRENICECMD="true" \
     PSDOOMKILLCMD="./contrib/psdoom-cf-ctl kill" \
     ./src/psdoom
+```
 
 
 NOTE: psdoom does a synchronous call to the external commands (mono-thread). If your
