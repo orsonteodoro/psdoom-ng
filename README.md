@@ -23,7 +23,6 @@ Find more information in:
  * [trunk/INSTALL](https://github.com/orsonteodoro/psdoom-ng/blob/1.6.0/trunk/INSTALL)
  * [trunk/CMDLINE](https://github.com/orsonteodoro/psdoom-ng/blob/1.6.0/trunk/CMDLINE)
  * [specific options and instructions to find your processess](https://github.com/orsonteodoro/psdoom-ng/blob/master/trunk/README.psdoom-ng trunk/README.psdoom-ng) 
- * [Chocolate Doom command line arguments](http://www.chocolate-doom.org/wiki/index.php/Command_line_arguments)
 
 Gentoo Linux
 ------------
