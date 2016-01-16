@@ -44,7 +44,7 @@ doom e1m1 (door to pid monster pit): x_fp=136310834 y_fp=-257677815
 .PP
 doom2 map01 (edge of pid monster pit): x_fp=62008780 y_fp=28333935
 .PP
-doom2 map01 (window to pid monster pit) x_fp=51671154 y_fp=35243725 x_int=788
+doom2 map01 (window to pid monster pit) x_fp=51671154 y_fp=35243725
 
 .SH NOTES
 .PP
@@ -166,7 +166,7 @@ Start psdoom-ng with god mode.  The option depends on -episode or -warp.
 .PP
 -telestartf x y
 .RS
-Teleports the player to a specific loation on the start of the load of the map as a fixed float at location x and y.  The option depends on -episode or -warp.
+Teleports the player to a specific location on the start of the load of the map as a fixed float at location x and y.  The option depends on -episode or -warp.
 .RE
 .PP
 -telestarti x y
@@ -243,9 +243,9 @@ DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psuser 
 This will show process belonging to orson and the psDooM custom level for Doom 2.
 .RE
 .PP
-PSDOOMPSCMD="/usr/share/local/bin/psdoom-cf-ctl ps" PSDOOMRENICECMD="true" PSDOOMKILLCMD="/usr/share/local/bin/psdoom-cf-ctl kill" DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng
+PSDOOMPSCMD="/usr/share/local/bin/psdoom-ng-cf-ctl ps" PSDOOMRENICECMD="true" PSDOOMKILLCMD="/usr/share/local/bin/psdoom-ng-cf-ctl kill" DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng
 .RS
-For this use case, psdoom-ng will delete an app in a remote cloud service with a user provided script psdoom-cf-ctl.  This will show specific instances of that application on that machine.  The nice command will be ignored in this case.  The kill command deletes the application on that remote machine.
+For this use case, psdoom-ng will delete an app in a remote cloud service with a user provided script psdoom-ng-cf-ctl.  This will show specific instances of that application on that machine.  The nice command will be ignored in this case.  The kill command deletes the application on that remote machine.
 .RE
 
 
@@ -253,7 +253,7 @@ For this use case, psdoom-ng will delete an app in a remote cloud service with a
 .PP
 /etc/psdoom-ng.conf, /home/${USER}/.psdoom-ng/psdoom-ng.conf
 .RS
-Both files contains the default arguments and environmental variables used for the wrapper script.  The first file contains the system-wide default.  The second file is the user defaults.  The user options override the system options.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.  See the envirionmental variables for more details which all environmental variables are supported.
+Both files contains the default arguments and environmental variables used for the wrapper script.  The first file contains the system-wide default.  The second file is the user defaults.  The user options override the system options.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" which provides the wad search paths seperated by colons.  See the envirionmental variables for more details.  All environmental variables mentioned are supported.
 .RE
 
 .br
