@@ -19,7 +19,7 @@ Quick guide:
  3. Action! `psd` or `psdoom-ng`
 
 Find more information in:
- * man psdoom-ng
+ * [man psdoom-ng](https://github.com/orsonteodoro/psdoom-ng/blob/master/extras/psdoom-ng.pdf)
  * [trunk/INSTALL](https://github.com/orsonteodoro/psdoom-ng/blob/1.6.0/trunk/INSTALL)
  * [trunk/CMDLINE](https://github.com/orsonteodoro/psdoom-ng/blob/1.6.0/trunk/CMDLINE)
  * [trunk/README.psdoom-ng](https://github.com/orsonteodoro/psdoom-ng/blob/master/trunk/README.psdoom-ng) 
