@@ -4,4 +4,5 @@ if [[ -f /home/${USER}/.psdoom-ng/psdoom-ng.conf ]]; then
 elif [[ -f /etc/psdoom-ng.conf ]]; then
 	source /etc/psdoom-ng.conf
 fi
+PSDOOMPSCMD="${PSDOOMPSCMD}" PSDOOMRENICECMD="${PSDOOMRENICECMD}" PSDOOMKILLCMD="${PSDOOMKILLCMD}" \
 DOOMWADPATH="${DOOMWADPATH}" /usr/bin/psdoom-ng ${DEFAULT_ARGS} $@

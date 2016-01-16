@@ -90,6 +90,7 @@ boolean nopssafety;  // checkparm for -nopssafety
 // To automagically add psdoom1.wad and psdoom2.wad upon load.
 static char *psdoom1wad;
 static char *psdoom2wad;
+extern boolean P_TeleportMove (mobj_t* thing, fixed_t x, fixed_t y);
 // *** PID END ***
 
 //

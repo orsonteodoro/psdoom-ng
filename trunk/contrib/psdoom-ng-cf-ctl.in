@@ -6,10 +6,10 @@
 #
 # Kill the process in psdoom means delete the app.
 #
-#   PSDOOMPSCMD="./contrib/psdoom-cf-ctl ps" \
+#   PSDOOMPSCMD="/usr/local/bin/psdoom-cf-ctl ps" \
 #   PSDOOMRENICECMD="true" \
-#   PSDOOMKILLCMD="./contrib/psdoom-cf-ctl kill" \
-#   ./trunk/src/psdoom
+#   PSDOOMKILLCMD="/usr/local/bin/psdoom-cf-ctl kill" \
+#   /usr/bin/psdoom-ng
 #
 
 export CF_COLOR=false

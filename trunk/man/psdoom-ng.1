@@ -2,7 +2,7 @@
 .SH NAME
 psdoom-ng \- a process killer and monitor that personifies processes
 .SH SYNOPSIS
-.B psdoom-ng [\fIOPTIONS\fR] -iwad <path-to-wad-file>
+.B psdoom-ng [\fIOPTIONS\fR]
 .SH DESCRIPTION
 .PP
 psdoom-ng is a process killer and monitor based on psDooM.  Much of psDooM has been ported to Chocolate Doom since XDoom is no longer maintained.  The command psd is the wrapper script used to automatically run psdoom-ng.
@@ -111,7 +111,7 @@ Runs psdoom-ng into windowed screen mode.
 .PP
 -iwad
 .RS
-Loads the main wad file.  You need to specify one
+Loads the main wad file.  You need to specify one if you do not specify the DOOMWADPATH environmental variable.  The game engine will automatically load an official wad.
 .RE
 .PP
 -merge
@@ -181,8 +181,37 @@ DOOMWADPATH
 .RS
 A list of paths to search for wads seperated by a colon.
 .RE
+.PP
+PSDOOMPSCMD
+.RS
+Replaces 'ps' with an alternative command to produce the process list allowing a person to provide for example a list generated for external computers on cloud services or a whitelist for specific processes.  The called command will output the single space sperated output one pid per line in this format:
+.PP
+<user> <pid> <processname> <is_daemon=[1|0]>
+.PP
+keymon 29 web4 1
+.br
+keymon 30 web3 1
+.br
+keymon 31 adis3 1
+.br
+keymon 32 core15 1
+.br
+keymon 32 core15 1
+.RE
+.PP
+PSDOOMRENICECMD
+.RS
+Replaces the default if not defined 'nice +5' with a command to renice a pid.  You could for example renice by 1 or -1 instead.  The argument is pid and will be appended to the end of the command with a space.
+.RE
+.PP
+PSDOOMKILLCMD
+.RS
+Replaces the default if not defined 'kill -9' with the command assigned to it.  The argument is a pid and will be appended to the end of the command with a space.
+.RE
 
 .SH EXAMPLES
+.PP
+It is tedious to repeatively type out all of this long hand.  This is why the wrapper script 'psd' is provided.
 .PP
 DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psallusers
 .RS
@@ -213,27 +242,32 @@ DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng -psuser 
 .RS
 This will show process belonging to orson and the psDooM custom level for Doom 2.
 .RE
+.PP
+PSDOOMPSCMD="/usr/share/local/bin/psdoom-cf-ctl ps" PSDOOMRENICECMD="true" PSDOOMKILLCMD="/usr/share/local/bin/psdoom-cf-ctl kill" DOOMWADPATH="/usr/share/games/doom-data:/usr/share/psdoom-ng" psdoom-ng
+.RS
+For this use case, psdoom-ng will delete an app in a remote cloud service with a user provided script psdoom-cf-ctl.  This will show specific instances of that application on that machine.  The nice command will be ignored in this case.  The kill command deletes the application on that remote machine.
+.RE
+
 
 .SH CONFIGURATION
 .PP
-/etc/psdoom-ng.conf
+/etc/psdoom-ng.conf, /home/${USER}/.psdoom-ng/psdoom-ng.conf
 .RS
-Contains the system-wide default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.
-.RE
-.PP
-/home/${USER}/.psdoom-ng/psdoom-ng.conf
-.RS
-Contains the user default arguments used for the wrapper script.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.  The user options override the system options.
+Both files contains the default arguments and environmental variables used for the wrapper script.  The first file contains the system-wide default.  The second file is the user defaults.  The user options override the system options.  Define DEFAULT_ARGS="" for the default options.  Define DOOMWADPATH="" define wad search paths seperated by colons.  See the envirionmental variables for more details which all environmental variables are supported.
 .RE
 
 .br
-.SH AUTHOR
+.SH AUTHORS
 .PP
 Dennis Chao came up with the original idea and wrote much of the mod.
 .PP
 David Koppenhofer was the previous maintainer of mod.
 .PP
 Simon Howard wrote Chocolate Doom.
+.PP
+Hector Rivas Gandara added support for external sources and cloud services.
+.PP
+Jesse Speilman added support for Mac OS X
 .SH MAINTAINER
 .PP
 Orson Teodoro is the maintainer of psdoom-ng.
@@ -249,6 +283,9 @@ Copyright \(co 2005-2013 Simon Howard.
 .PP
 Copyright \(co 2012-2016 Orson Teodoro.
 .PP
-.br
+Copyright \(co 2014 Hector Rivas Gandara
+.PP
+Copyright \(co 2014 Jesse Spielman
+.PP
 This is free software.  You may redistribute copies of it under the terms of the GNU General Public License <http://www.gnu.org/licenses/gpl.html>. There is NO WARRANTY, to the extent permitted by law.
 

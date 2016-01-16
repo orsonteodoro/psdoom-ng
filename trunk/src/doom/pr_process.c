@@ -4,6 +4,8 @@
  */
 // Copyright (C) 1999 by Dennis Chao
 // Copyright (C) 2000 by David Koppenhofer
+// Copyright (C) 2014 by Jesse Spielman
+// Copyright (C) 2014 by Hector Rivas Gandara
 
 #include <stdlib.h>
 #include <math.h>

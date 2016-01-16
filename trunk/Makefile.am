@@ -93,4 +93,14 @@ psdoomngwrapperdir = ${prefix}/bin
 psdoomngwrapper_PROGRAMS = psd
 
 psd : psd.in
-	cp psd.in psd
+	cp psd.in $@
+	chmod +x $@
+
+if ENABLE_CLOUDFOUNDRY
+psdoomngcfdir = ${prefix}/local/bin
+psdoomngcf_PROGRAMS = psdoom-ng-cf-ctl
+
+psdoom-ng-cf-ctl : contrib/psdoom-ng-cf-ctl.in
+	cp contrib/psdoom-ng-cf-ctl.in $@
+	chmod +x $@
+endif

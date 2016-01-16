@@ -1,4 +1,4 @@
-AC_INIT(psdoom-ng, 2016.01.15.2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
+AC_INIT(psdoom-ng, 2016.01.16.2.2.1, orsonteodoro@yahoo.com, psdoom-ng)
 
 PACKAGE_SHORTNAME=${PACKAGE_NAME% Doom}
 PACKAGE_SHORTDESC="psdoom-ng based on Chocolate Doom and psDooM"
@@ -116,6 +116,17 @@ AC_CHECK_TOOL(STRIP, strip, )
 
 AM_CONDITIONAL(HAVE_WINDRES, test "$WINDRES" != "")
 AM_CONDITIONAL(HAVE_PYTHON, $HAVE_PYTHON)
+AC_ARG_ENABLE([cloudfoundry],
+  AS_HELP_STRING([--enable-cloudfoundry], [Install the Cloud Foundry pid finder and app deleter script]),
+  [case "${enableval}" in
+    yes) enable_cloudfoundry=yes ;;
+    no)  enable_cloudfoundry=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-cloudfactory]) ;;
+  esac],
+  [enable_cloudfoundry="no"]
+)
+AM_CONDITIONAL(ENABLE_CLOUDFOUNDRY, test "x$enable_cloudfoundry" = "xyes")
+
 
 dnl Automake v1.8.0 is required, please upgrade!
 
@@ -153,8 +164,11 @@ AC_SUBST(PACKAGE_MAINTAINER)
 AC_SUBST(PACKAGE_URL)
 AC_SUBST(PACKAGE_ISSUES)
 
+
 dnl Shut up the datarootdir warnings.
 AC_DEFUN([AC_DATAROOTDIR_CHECKED])
+
+
 
 AC_OUTPUT([
 Makefile

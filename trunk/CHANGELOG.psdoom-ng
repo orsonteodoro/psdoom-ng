@@ -1,5 +1,11 @@
 Changelog for psdoom-ng:
 
+Release 2016.01.16.2.2.1 - Changes since 2016.01.15.2.2.1
+  -Merge support for Mac OS X thanks Jesse Spielman
+  -Merge support for killing and monitoring on remote machines or cloud services with
+   PSDOOMPSCMD, PSDOOMRENICECMD, PSDOOMKILLCMD thanks Hector Rivas Gandara
+  -Updated man page
+
 Release 2016.01.15.2.2.1 - Changes since 2012.02.05
   -Upgrade to Chocolate Doom 2.2.1
   -Add man pages
