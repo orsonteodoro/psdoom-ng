@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# Command line tool to use psdoom-ng (patched to support external commands)
+# with cloudfoundry. This is just a small proof of concept, it will show
+# all the apps in the current space as processes. 
+#
+# Kill the process in psdoom means delete the app.
+#
+#   PSDOOMPSCMD="./contrib/psdoom-cf-ctl ps" \
+#   PSDOOMRENICECMD="true" \
+#   PSDOOMKILLCMD="./contrib/psdoom-cf-ctl kill" \
+#   ./trunk/src/psdoom
+#
+
+export CF_COLOR=false
+APPS_CACHE_FILE=/tmp/psdoom-cf_apps_pids.txt
+CF_APPS_OUTPUT=/tmp/psdoom-cf_apps_output.txt
+
+# Hacky function to get an pid per app
+get_pid_for_app() {
+	app=$1
+	grep -qe "^$1\$" $APPS_CACHE_FILE &> /dev/null || echo $app >> $APPS_CACHE_FILE
+	nl $APPS_CACHE_FILE | awk "/\t$app\$/ { print \$1 }"
+}
+get_app_for_pid() {
+	pid=$1
+	nl $APPS_CACHE_FILE | awk "/^[ \t]*$pid\t/ { print \$2 }"
+}
+
+if [ "$1" == "ps" ]; then
+        # We use always a cached output, because it is just easier
+	[ ! -f $CF_APPS_OUTPUT ] && touch $CF_APPS_OUTPUT
+	
+	# The running ones are deamons, the stopped ones, are normal guys
+	for app in $(cat $CF_APPS_OUTPUT | grep -e 'started' | cut -f 1 -d ' '); do
+		pid=$(get_pid_for_app $app)
+		echo "$USER $pid $app 1"
+	done
+	for app in $(cat $CF_APPS_OUTPUT | grep -e 'stopped' | cut -f 1 -d ' '); do
+		pid=$(get_pid_for_app $app)
+		echo "$USER $pid $app 0"
+	done
+
+	# Refresh the cache
+	nohup cf apps > $CF_APPS_OUTPUT &
+
+elif [ "$1" == "kill" ]; then
+	app=$(get_app_for_pid $2)
+	get_app_for_pid $2
+	if [ ! -z "$app" ]; then 
+		# delete it from CF
+		cf delete $app -f 1>&2
+		# And from the cache
+		sed -i ""  "/^$app /d" $CF_APPS_OUTPUT 
+	fi
+fi
+echo $0 $@ 1>&2 
