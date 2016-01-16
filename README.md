@@ -49,14 +49,11 @@ For that, you only need to override these environment variables:
  * PSDOOMPSCMD List the processes. The command must print one space separated 
    line per process with the format: `<user> <pid> <processname> <is_daemon=[1|0]>`
 
+
     keymon 29 web4 1
-    
     keymon 30 web3 1
-    
     keymon 31 adis3 1
-    
     keymon 32 core15 1
-    
     keymon 20 core2 1
 
  * PSDOOMRENICECMD Command to renice the process. Will get the pid as argument
