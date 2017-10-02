@@ -340,13 +340,14 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
 {
     SRC_DATA src_data;
     uint32_t i, abuf_index=0, clipped=0;
-//    uint32_t alen;
+    floar *data_in;
     int retn;
     int16_t *expanded;
     Mix_Chunk *chunk;
 
     src_data.input_frames = length;
-    src_data.data_in = malloc(length * sizeof(float));
+    data_in = malloc(length * sizeof(float));
+    src_data.data_in = data_in;
     src_data.src_ratio = (double)mixer_freq / samplerate;
 
     // We include some extra space here in case of rounding-up.
@@ -362,7 +363,7 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
         // Unclear whether 128 should be interpreted as "zero" or whether a
         // symmetrical range should be assumed.  The following assumes a
         // symmetrical range.
-        src_data.data_in[i] = data[i] / 127.5 - 1;
+        data_in[i] = data[i] / 127.5 - 1;
     }
 
     // Do the sound conversion
@@ -430,7 +431,7 @@ static boolean ExpandSoundData_SRC(sfxinfo_t *sfxinfo,
         expanded[abuf_index++] = cvtval_i;
     }
 
-    free(src_data.data_in);
+    free(data_in);
     free(src_data.data_out);
 
     if (clipped > 0)
