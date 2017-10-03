@@ -1,3 +1,5 @@
+This repository has moved to https://github.com/orsonteodoro/psdoom-ng1 .
+
 psdoom-ng
 =========
 
